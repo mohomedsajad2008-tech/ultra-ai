@@ -11,7 +11,6 @@ export async function onRequestPost(context) {
       });
     }
 
-    // නිවැරදි කරන ලද Llama මෝඩල් නම
     const response = await env.AI.run('@cf/meta/llama-3.1-8b-instruct', {
       messages: [
         { role: 'system', content: 'You are ULTRA AI, a helpful and smart academic assistant.' },
