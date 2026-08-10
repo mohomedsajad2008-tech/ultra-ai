@@ -20,8 +20,8 @@ export async function onRequestPost(context) {
       { role: 'user', content: userMessage }
     ];
 
-    // Forcefully use the working model, ignoring any old/deprecated names from frontend
-    const response = await env.AI.run('@cf/meta/llama-3.1-8b-instruct', {
+    // Using the current active Cloudflare model
+    const response = await env.AI.run('@cf/meta/llama-3.2-3b-instruct', {
       messages: messages
     });
 
