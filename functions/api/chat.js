@@ -11,12 +11,12 @@ export async function onRequestPost(context) {
       });
     }
 
-    // Cloudflare Workers AI මඟින් Llama මෝඩල් එක ධාවනය කිරීම
-    const response = await env.AI.run('@cf/meta/llama-3-8b-instruct', {
+    // අලුත් සහ වැඩ කරන Llama මෝඩල් නම යොදා ඇත
+    const response = await env.AI.run('@cf/meta/llama-3.1-8b-instruct', {
       messages: [
-            { role: 'system', content: 'You are ULTRA AI, a helpful and smart academic assistant.' },
-            { role: 'user', content: userMessage }
-          ]
+        { role: 'system', content: 'You are ULTRA AI, a helpful and smart academic assistant.' },
+        { role: 'user', content: userMessage }
+      ]
     });
 
     const aiReply = response.response || "No response generated";
