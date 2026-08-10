@@ -11,28 +11,10 @@
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.8/dist/purify.min.js"></script>
 <style>
-:root{
-    --bg:#080c14;
-    --bg2:#0d1422;
-    --surface:rgba(20,30,48,.78);
-    --surface2:rgba(15,23,42,.92);
-    --border:rgba(255,255,255,.09);
-    --accent:#00f2fe;
-    --accent2:#4facfe;
-    --glow:rgba(0,242,254,.22);
-    --text:#f8fafc;
-    --muted:#94a3b8;
-    --danger:#ef4444;
-    --success:#10b981;
-    --warning:#f59e0b;
-    --radius:16px;
-    --font:Inter,-apple-system,BlinkMacSystemFont,sans-serif;
-    --base:15px;
-}
+:root{--bg:#080c14;--bg2:#0d1422;--surface:rgba(20,30,48,.78);--surface2:rgba(15,23,42,.92);--border:rgba(255,255,255,.09);--accent:#00f2fe;--accent2:#4facfe;--glow:rgba(0,242,254,.22);--text:#f8fafc;--muted:#94a3b8;--danger:#ef4444;--success:#10b981;--warning:#f59e0b;--radius:16px;--font:Inter,-apple-system,BlinkMacSystemFont,sans-serif;--base:15px;}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{width:100%;height:100%;overflow:hidden;background:radial-gradient(circle at 50% 0%,#17243b 0%,#0d1422 45%,#080c14 100%);color:var(--text);font-family:var(--font);font-size:var(--base);}
-button,input,textarea,select{font-family:inherit;}
-button{cursor:pointer;}
+button,input,textarea,select{font-family:inherit;}button{cursor:pointer;}
 #app{width:100%;height:100%;max-width:1100px;margin:auto;display:flex;flex-direction:column;overflow:hidden;background:rgba(7,12,22,.5);}
 .glass{background:var(--surface);border:1px solid var(--border);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);}
 .header{min-height:62px;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);z-index:20;}
@@ -366,8 +348,8 @@ if(!window.UltraAPI){
             if(!response.ok){
                 throw new Error(data.error || "Server request failed.");
             }
-            if(!data.text){ throw new Error("Received empty response from server."); }
-            return data.text;
+            if(!data.reply){ throw new Error("Received empty response from server."); }
+            return data.reply;
         }
     };
 }
@@ -759,5 +741,4 @@ if(document.readyState === "loading"){
 })();
 </script>
 </body>
-</html>  
-<!-- update -->
+</html>
