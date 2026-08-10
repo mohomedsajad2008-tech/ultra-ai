@@ -20,6 +20,7 @@ export async function onRequestPost(context) {
       { role: 'user', content: userMessage }
     ];
 
+    // Forcefully use the working model, ignoring any old/deprecated names from frontend
     const response = await env.AI.run('@cf/meta/llama-3.1-8b-instruct', {
       messages: messages
     });
