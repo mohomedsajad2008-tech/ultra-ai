@@ -11,11 +11,17 @@ export async function onRequestPost(context) {
       });
     }
 
-    const response = await env.AI.run('@cf/meta/llama-3.1-8b-instruct', {
-      messages: [
-        { role: 'system', content: 'You are ULTRA AI, a helpful and smart academic assistant.' },
-        { role: 'user', content: userMessage }
-      ]
+    const systemPrompt = body.systemPrompt || 'You are ULTRA AI, a helpful and smart academic assistant.';
+    const conversation = body.conversation || [];
+
+    const messages = [
+      { role: 'system', content: systemPrompt },
+      ...conversation,
+      { role: 'user', content: userMessage }
+    ];
+
+    const response = await env.AI.run('@cf/meta/llama-3.3-70b-instruct-fp8', {
+      messages: messages
     });
 
     const aiReply = response.response || "No response generated";
