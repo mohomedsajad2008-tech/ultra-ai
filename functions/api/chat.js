@@ -20,7 +20,7 @@ export async function onRequestPost(context) {
       { role: 'user', content: userMessage }
     ];
 
-    const response = await env.AI.run('@cf/meta/llama-3.3-70b-instruct-fp8', {
+    const response = await env.AI.run('@cf/meta/llama-3.1-8b-instruct', {
       messages: messages
     });
 
