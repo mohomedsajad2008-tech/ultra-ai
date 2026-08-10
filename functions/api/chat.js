@@ -23,7 +23,11 @@ export async function onRequestPost(context) {
     });
 
     const data = await response.json();
-    return new Response(JSON.stringify(data), {
+
+    // Gemini API එකෙන් එන පිළිතුර නිවැරදිව ලබා ගැනීම
+    const aiReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response generated";
+
+    return new Response(JSON.stringify({ reply: aiReply }), {
       headers: { "Content-Type": "application/json" }
     });
   } catch (err) {
@@ -33,4 +37,3 @@ export async function onRequestPost(context) {
     });
   }
 }
-
