@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="si">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
@@ -184,7 +184,7 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
     </div>
     <div class="input-area">
         <div class="input-wrap">
-            <textarea id="userInput" class="chat-input" rows="1" maxlength="10000" placeholder="Ask ULTRA AI anything..."></textarea>
+            <textarea id="userInput" class="chat-input" rows="1" maxlength="10000" placeholder="Ask ULTRA AI anything (සිංහලෙන් හෝ ඉංග්‍රීසියෙන්)..."></textarea>
             <button id="sendBtn" class="send" onclick="sendMessage()">➤</button>
         </div>
         <div style="display:flex;justify-content:space-between;padding:5px 5px 0;font-size:.62rem;color:var(--muted);">
@@ -276,8 +276,8 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
     <div class="setting-title">🌍 Language</div>
     <div class="field">
         <select id="language" class="select">
+            <option value="sinhala" selected>සිංහල (Sinhala)</option>
             <option value="auto">Auto Detect</option>
-            <option value="sinhala">Sinhala</option>
             <option value="english">English</option>
         </select>
     </div>
@@ -320,7 +320,7 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
 <script>
 (function(){
 "use strict";
-const defaultSettings = { theme:"cyan", font:"15px", density:"normal", language:"auto", academicLevel:"University Student", responseStyle:"balanced", customInstructions:"", motion:true, tts:true, memory:true, defaultSkill:"quick" };
+const defaultSettings = { theme:"cyan", font:"15px", density:"normal", language:"sinhala", academicLevel:"University Student", responseStyle:"balanced", customInstructions:"", motion:true, tts:true, memory:true, defaultSkill:"quick" };
 function localLoad(key,fallback){ try{ const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : fallback; }catch(e){ return fallback; } }
 function localSave(key,value){ try{ localStorage.setItem(key, JSON.stringify(value)); }catch(e){} }
 function localRemove(key){ try{ localStorage.removeItem(key); }catch(e){} }
@@ -372,14 +372,14 @@ window.switchView = function(name){
 };
 
 const modeInstructions = {
-    quick: "Answer accurately and directly.",
-    deep: "Use rigorous reasoning. Break complex problems into logical stages, inspect assumptions, compare possible interpretations, verify important conclusions, and present a clear result.",
-    learn: "Teach like an excellent professor. Explain concepts progressively with examples, analogies, definitions and checks for understanding.",
-    research: "Act as an academic research assistant. Separate established facts from uncertainty, avoid fabricated sources, compare evidence and identify limitations.",
-    solve: "Solve systematically. Show necessary calculations and reasoning, check the result, and identify possible mistakes.",
-    writer: "Act as an expert academic writer and editor. Improve clarity, structure, grammar, argumentation and academic quality.",
+    quick: "Answer accurately and directly in Sinhala.",
+    deep: "Use rigorous reasoning. Break complex problems into logical stages, inspect assumptions, compare possible interpretations, verify important conclusions, and present a clear result in Sinhala.",
+    learn: "Teach like an excellent professor. Explain concepts progressively with examples, analogies, definitions and checks for understanding in Sinhala.",
+    research: "Act as an academic research assistant. Separate established facts from uncertainty, avoid fabricated sources, compare evidence and identify limitations in Sinhala.",
+    solve: "Solve systematically. Show necessary calculations and reasoning, check the result, and identify possible mistakes in Sinhala.",
+    writer: "Act as an expert academic writer and editor. Improve clarity, structure, grammar, argumentation and academic quality in Sinhala.",
     coder: "Act as a senior software engineer. Review architecture, correctness, security, edge cases, maintainability and performance.",
-    debate: "Analyze multiple perspectives fairly. Identify arguments, counterarguments, assumptions, evidence and logical weaknesses."
+    debate: "Analyze multiple perspectives fairly. Identify arguments, counterarguments, assumptions, evidence and logical weaknesses in Sinhala."
 };
 
 let currentMode = UltraSettings.get().defaultSkill || "quick";
@@ -448,8 +448,8 @@ if(!window.UltraChat){
         document.getElementById("sendBtn").disabled = true;
         try{
             const settings = UltraSettings.get();
-            const languageInstruction = settings.language === "sinhala" ? "Respond primarily in Sinhala." : settings.language === "english" ? "Respond primarily in English." : "Respond using the language used by the user.";
-            const systemPrompt = `You are ULTRA AI, an advanced academic and productivity assistant.\n\nCurrent skill:\n${currentMode}\n\nSkill instructions:\n${modeInstructions[currentMode] || modeInstructions.quick}\n\nAcademic level:\n${settings.academicLevel}\n\nResponse style:\n${settings.responseStyle}\n\nLanguage:\n${languageInstruction}\n\nCustom user instructions:\n${settings.customInstructions || "None"}\n\nCore quality requirements:\n- Be accurate and useful.\n- Do not fabricate facts.\n- Do not fabricate citations.\n- Clearly indicate uncertainty.\n- Verify calculations when possible.\n- For programming requests, consider security and edge cases.\n- Protect private information.\n- Adapt explanations to the user's level.`;
+            const languageInstruction = "Respond fully and completely in Sinhala language unless the user asks in another language.";
+            const systemPrompt = `You are ULTRA AI, an advanced academic and productivity assistant.\n\nCurrent skill:\n${currentMode}\n\nSkill instructions:\n${modeInstructions[currentMode] || modeInstructions.quick}\n\nAcademic level:\n${settings.academicLevel}\n\nResponse style:\n${settings.responseStyle}\n\nLanguage:\n${languageInstruction}\n\nCustom user instructions:\n${settings.customInstructions || "None"}\n\nCore quality requirements:\n- Complete the full answer without stopping abruptly.\n- Be accurate and useful.\n- Do not fabricate facts.\n- Do not fabricate citations.\n- Clearly indicate uncertainty.\n- Verify calculations when possible.\n- For programming requests, consider security and edge cases.\n- Protect private information.\n- Adapt explanations to the user's level.`;
             const history = messages.slice(-20).map(item=>({ role: item.role === "ai" ? "assistant" : "user", content: item.text }));
             const response = await UltraAPI.chat({ message:text, mode:currentMode, language:settings.language, systemPrompt, customInstructions:settings.customInstructions, conversation:history });
             typing.remove();
@@ -742,4 +742,3 @@ if(document.readyState === "loading"){
 </script>
 </body>
 </html>
-
