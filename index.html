@@ -1,5 +1,4 @@
-                                
-            <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="si">
 <head>
 <meta charset="UTF-8">
@@ -19,7 +18,7 @@ html,body{width:100%;height:100%;height:100dvh;overflow:hidden;background:radial
 /* Custom Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
 /* Selection Color */
@@ -150,9 +149,12 @@ textarea.chat-input{flex:1;min-height:25px;max-height:130px;resize:none;border:0
 .modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px;}
 .modal-head h3{font-size:1rem;}
 .setting-title{color:var(--accent);font-size:.78rem;font-weight:700;margin:15px 0 7px;}
-.theme-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
-.theme{padding:9px 5px;border-radius:9px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text);font-size:.7px;transition:all 0.2s ease;}
-.theme:hover{border-color:var(--accent);background:var(--glow);}
+
+/* Fixed Theme Grid Styles with clear font size */
+.theme-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.theme{padding:10px 8px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text);font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s ease;text-align:center;}
+.theme:hover{border-color:var(--accent);background:var(--glow);transform:translateY(-2px);box-shadow:0 4px 12px var(--glow);}
+
 .toggle-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;}
 .toggle-row span{font-size:.8rem;}
 .toggle{width:42px;height:23px;border-radius:20px;border:1px solid var(--border);background:#1e293b;position:relative;cursor:pointer;transition:background 0.2s ease;}
@@ -344,7 +346,14 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
         <select id="language" class="select">
             <option value="auto" selected>Auto Detect (භාෂාව ස්වයංක්‍රීයව හඳුනාගන්න)</option>
             <option value="sinhala">සිංහල (Sinhala Only)</option>
+            <option value="tamil">தமிழ் (Tamil Only)</option>
             <option value="english">English Only</option>
+            <option value="spanish">Español (Spanish Only)</option>
+            <option value="french">Français (French Only)</option>
+            <option value="german">Deutsch (German Only)</option>
+            <option value="chinese">中文 (Chinese Only)</option>
+            <option value="japanese">日本語 (Japanese Only)</option>
+            <option value="hindi">हिन्दी (Hindi Only)</option>
         </select>
     </div>
     <div class="setting-title">🧠 AI Preferences</div>
@@ -645,15 +654,25 @@ if(!window.UltraChat){
         try{
             const settings = UltraSettings.get();
             let langRule = "";
-            if(settings.language === "sinhala"){
-                langRule = "CRITICAL REQUIREMENT: You MUST respond FULLY and EXCLUSIVELY in Sinhala language (සිංහලෙන් පමණක් පිළිතුරු දෙන්න).";
-            } else if(settings.language === "english"){
-                langRule = "CRITICAL REQUIREMENT: You MUST respond FULLY and EXCLUSIVELY in English language.";
+            const langMap = {
+                sinhala: "Sinhala (සිංහල)",
+                tamil: "Tamil (தமிழ்)",
+                english: "English",
+                spanish: "Spanish (Español)",
+                french: "French (Français)",
+                german: "German (Deutsch)",
+                chinese: "Mandarin Chinese (中文)",
+                japanese: "Japanese (日本語)",
+                hindi: "Hindi (हिन्दी)"
+            };
+
+            if(settings.language && settings.language !== "auto" && langMap[settings.language]){
+                langRule = `CRITICAL REQUIREMENT: You MUST respond FULLY and EXCLUSIVELY in ${langMap[settings.language]} language. Do not mix with other languages.`;
             } else {
-                langRule = "CRITICAL REQUIREMENT: Detect the language of the user's latest query and respond in that exact language (Sinhala for Sinhala, English for English).";
+                langRule = "CRITICAL REQUIREMENT: Automatically detect the exact language of the user's prompt and respond FULLY and EXCLUSIVELY in that exact same language.";
             }
 
-            const systemPrompt = `You are ULTRA AI, a secure, highly advanced academic and productivity assistant.\n\nCurrent Mode:\n${currentMode}\n\nMode Instructions:\n${modeInstructions[currentMode] || modeInstructions.quick}\n\nAcademic Level:\n${settings.academicLevel}\n\nResponse Style:\n${settings.responseStyle}\n\nLanguage Policy:\n${langRule}\n\nCustom Instructions:\n${settings.customInstructions || "None"}\n\nGuidelines:\n- Complete responses fully without truncation.\n- Provide accurate, verifiable information.\n- Avoid fabricating facts or citations.\n- Tailor complexity to the academic level.`;
+            const systemPrompt = `You are ULTRA AI, a secure, highly advanced academic and productivity assistant.\n\nCurrent Mode:\n${currentMode}\n\nMode Instructions:\n${modeInstructions[currentMode] || modeInstructions.quick}\n\nAcademic Level:\n${settings.academicLevel}\n\nResponse Style:\n${settings.responseStyle}\n\nLanguage Policy:\n${langRule}\n\nCustom Instructions:\n${settings.customInstructions || "None"}\n\nGuidelines:\n- ALWAYS provide a complete, unbroken, fully detailed, and seamless response from start to finish.\n- NEVER truncate, cut off, or split answers into multiple chunks.\n- Provide accurate, verifiable information.\n- Avoid fabricating facts or citations.\n- Tailor complexity to the academic level.`;
             
             const history = currentSession.messages.slice(-20).map(item=>({ role: item.role === "ai" ? "assistant" : "user", content: item.text }));
             const response = await UltraAPI.chat({ message:text, mode:currentMode, language:settings.language, systemPrompt, customInstructions:settings.customInstructions, conversation:history, file: attachedFile ? attachedFile.data : null });
@@ -753,7 +772,13 @@ function speak(text){
     speechSynthesis.cancel();
     const clean = String(text || "").replace(/[#*_`~[\]()]/g,"");
     const utterance = new SpeechSynthesisUtterance(clean);
-    if(/[\u0dc0-\u0dff]/.test(clean)){ utterance.lang = "si-LK"; } else { utterance.lang = "en-US"; }
+    
+    if(/[\u0dc0-\u0dff]/.test(clean)){ utterance.lang = "si-LK"; } 
+    else if(/[\u0b80-\u0bff]/.test(clean)){ utterance.lang = "ta-LK"; }
+    else if(/[\u0900-\u097f]/.test(clean)){ utterance.lang = "hi-IN"; }
+    else if(/[\u3040-\u30ff\u4e00-\u9faf]/.test(clean)){ utterance.lang = "ja-JP"; }
+    else { utterance.lang = "en-US"; }
+    
     speechSynthesis.speak(utterance);
 }
 window.speak = speak;
