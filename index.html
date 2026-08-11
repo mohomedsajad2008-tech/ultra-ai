@@ -39,8 +39,8 @@ button,input,textarea,select{font-family:inherit;}button{cursor:pointer;}
 .view{position:absolute;inset:0;display:none;flex-direction:column;overflow-y:auto;}
 .view.active{display:flex;}
 .nav{min-height:64px;padding-bottom:env(safe-area-inset-bottom);display:flex;justify-content:space-around;align-items:center;border-top:1px solid var(--border);z-index:30;background:var(--surface);}
-.nav button{border:0;background:transparent;color:var(--muted);padding:7px 13px;border-radius:12px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:.72rem;font-weight:600;transition:all 0.2s ease;}
-.nav button span{font-size:1.15rem;}
+.nav button{border:0;background:transparent;color:var(--muted);padding:7px 11px;border-radius:12px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:.7rem;font-weight:600;transition:all 0.2s ease;}
+.nav button span{font-size:1.1rem;}
 .nav button.active{color:var(--accent);background:var(--glow);box-shadow:inset 0 0 10px rgba(0,242,254,0.15);}
 
 .sidebar{position:absolute;top:0;bottom:0;left:0;width:280px;background:var(--surface2);border-right:1px solid var(--border);z-index:25;transform:translateX(-100%);transition:transform .25s ease;display:flex;flex-direction:column;padding:14px;box-shadow: 10px 0 30px rgba(0,0,0,0.5);}
@@ -63,6 +63,12 @@ button,input,textarea,select{font-family:inherit;}button{cursor:pointer;}
 .card:hover{border-color:var(--accent);transform:translateY(-5px);box-shadow:0 10px 25px rgba(0,0,0,0.4), 0 0 15px var(--glow), inset 0 0 12px rgba(255,255,255,0.05);}
 .card h3{color:var(--accent);font-size:.95rem;margin-bottom:6px;}
 .card p{color:var(--muted);font-size:.8rem;line-height:1.45;}
+
+.promo-banner{padding:12px 16px;border-radius:14px;border:1px solid var(--accent);background:rgba(0,242,254,0.08);display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:0.83rem;margin-bottom:4px;}
+.promo-badges{display:flex;align-items:center;gap:6px;}
+.brand-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:0.7rem;font-weight:700;}
+.aptoide-badge{background:#14b8a6;color:#071018;}
+.appsgeyser-badge{background:#f97316;color:#fff;}
 
 .chat{padding:0;flex:1;width:100%;}
 .modebar{display:flex;align-items:center;gap:7px;overflow-x:auto;padding:9px 12px;border-bottom:1px solid var(--border);flex-shrink:0;}
@@ -115,7 +121,7 @@ textarea.chat-input{flex:1;min-height:25px;max-height:130px;resize:none;border:0
 .file-preview{display:none;align-items:center;gap:6px;padding:4px 10px;font-size:.75rem;background:rgba(0,242,254,.1);border-radius:8px;margin-bottom:6px;border:1px solid rgba(0,242,254,.3);color:var(--accent);}
 
 .tools{padding:17px;gap:14px;}
-.tools h2,.profile h2{font-size:1.2rem;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;color:transparent;}
+.tools h2,.profile h2,.about h2{font-size:1.2rem;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;color:transparent;}
 .tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:11px;}
 .tool{padding:16px 10px;text-align:center;border-radius:15px;border:1px solid var(--border);background:rgba(20,30,48,.6);transition:all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);box-shadow: inset 0 0 10px rgba(255,255,255,0.02);}
 .tool:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:0 10px 20px rgba(0,0,0,0.3), 0 0 12px var(--glow);}
@@ -123,7 +129,7 @@ textarea.chat-input{flex:1;min-height:25px;max-height:130px;resize:none;border:0
 .tool h4{font-size:.82rem;margin-bottom:4px;}
 .tool p{color:var(--muted);font-size:.68rem;}
 
-.profile{padding:18px;gap:14px;}
+.profile,.about{padding:18px;gap:14px;}
 .profile-card{padding:20px;border-radius:18px;display:flex;align-items:center;gap:14px;}
 .avatar{width:70px;height:70px;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#07101a;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:800;flex-shrink:0;}
 .avatar img{width:100%;height:100%;object-fit:cover;}
@@ -199,6 +205,16 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
     </div>
 
 <section id="homeView" class="view active home">
+    <div class="promo-banner glass">
+        <div style="display:flex;align-items:center;gap:8px;">
+            <div class="promo-badges">
+                <span class="brand-badge aptoide-badge">🟢 Aptoide</span>
+                <span class="brand-badge appsgeyser-badge">🛠️ AppsGeyser</span>
+            </div>
+            <span>Download safely & verified.</span>
+        </div>
+        <button class="btn" onclick="switchView('about')" style="padding:5px 10px;font-size:0.72rem;">Details</button>
+    </div>
     <div class="hero glass">
         <h1>Welcome to ULTRA AI 🧠</h1>
         <p>Your personal academic AI workspace for learning, research, problem solving, writing, coding and productivity.</p>
@@ -212,16 +228,33 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
             <h3>🛠️ Academic Toolkit</h3>
             <p>Research, summarization, quizzes, flashcards, planning, solving and writing assistance.</p>
         </div>
+        <div class="card" onclick="switchView('about')">
+            <h3>ℹ️ About & Download</h3>
+            <p>Learn about Aptoide availability, AppsGeyser development, and safety.</p>
+        </div>
         <div class="card" onclick="openSettings()">
             <h3>🎨 Personalize</h3>
             <p>Customize theme, language, font and AI behavior.</p>
         </div>
-        <div class="card">
-            <h3>🔐 Server Status</h3>
-            <p id="securityStatus">🟢 Secure & Connected</p>
-        </div>
     </div>
 </section>
+
+<section id="aboutView" class="view about">
+    <h2>ℹ️ About App & Download</h2>
+    <div class="card glass">
+        <h3><span class="brand-badge appsgeyser-badge" style="margin-right:6px;">🛠️ AppsGeyser</span> How It Was Made</h3>
+        <p>This application was developed using <b>AppsGeyser</b>, providing a smooth, optimized, and reliable framework tailored for mobile users.</p>
+    </div>
+    <div class="card glass" style="margin-top:12px;">
+        <h3><span class="brand-badge aptoide-badge" style="margin-right:6px;">🟢 Aptoide</span> Available on Aptoide</h3>
+        <p>You can effortlessly download, install, and update this app directly from the trusted <b>Aptoide</b> store ecosystem.</p>
+    </div>
+    <div class="card glass" style="margin-top:12px;">
+        <h3>🔒 Reliability & Security Verification</h3>
+        <p><b>Is it safe?</b> Yes, 100% reliable! If Android or your web browser displays a standard security prompt ("This file may be harmful") during third-party APK downloads, please note that this is an automated generic warning for all external apps. You can safely tap <b>"More details"</b> and <b>"Install anyway"</b> to proceed without any risk.</p>
+    </div>
+</section>
+
 <section id="chatView" class="view chat">
     <div class="modebar">
         <button class="mode active" data-mode="quick">⚡ Quick</button>
@@ -305,6 +338,7 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
     <button class="active" onclick="switchView('home')"><span>🏠</span>Home</button>
     <button onclick="switchView('chat')"><span>💬</span>Chat</button>
     <button onclick="switchView('tools')"><span>🧰</span>Tools</button>
+    <button onclick="switchView('about')"><span>ℹ️</span>About</button>
     <button onclick="switchView('profile')"><span>👤</span>Profile</button>
 </nav>
 <div id="settingsModal" class="modal">
@@ -445,7 +479,7 @@ window.switchView = function(name){
     if(!target) return;
     target.classList.add("active");
     document.querySelectorAll(".nav button").forEach(button => button.classList.remove("active"));
-    const indexes = { home:0, chat:1, tools:2, profile:3 };
+    const indexes = { home:0, chat:1, tools:2, about:3, profile:4 };
     const navButtons = document.querySelectorAll(".nav button");
     if(indexes[name] !== undefined && navButtons[indexes[name]]){ navButtons[indexes[name]].classList.add("active"); }
 };
@@ -1013,3 +1047,4 @@ if(document.readyState === "loading"){
 </script>
 </body>
 </html>
+
