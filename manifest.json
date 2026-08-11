@@ -1,5 +1,6 @@
 {
   "background_color": "#0f172a",
+  "description": "Ultra AI assistant application",
   "dir": "ltr",
   "display": "standalone",
   "name": "Ultra AI",
