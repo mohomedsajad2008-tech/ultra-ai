@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="si">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
@@ -248,7 +248,7 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
             <label class="attach-btn" title="Attach file or image">
                 📎 <input type="file" id="fileInput" style="display:none" onchange="handleFileAttach(event)">
             </label>
-            <textarea id="userInput" class="chat-input" rows="1" maxlength="10000" placeholder="Ask ULTRA AI anything (සිංහලෙන්, English, தமிழ்)..."></textarea>
+            <textarea id="userInput" class="chat-input" rows="1" maxlength="10000" placeholder="Ask ULTRA AI anything..."></textarea>
             <button id="sendBtn" class="send" onclick="handleSendClick()">➤</button>
         </div>
         <div style="display:flex;justify-content:space-between;padding:5px 5px 0;font-size:.62rem;color:var(--muted);">
@@ -340,10 +340,7 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
     <div class="setting-title">🌍 Language</div>
     <div class="field">
         <select id="language" class="select">
-            <option value="auto" selected>Auto Detect (ස්වයංක්‍රීයව හඳුනාගන්න)</option>
-            <option value="sinhala">සිංහල (Sinhala Only)</option>
-            <option value="tamil">தமிழ் (Tamil Only)</option>
-            <option value="english">English Only</option>
+            <option value="english" selected>English Only</option>
         </select>
     </div>
     <div class="setting-title">🧠 AI Preferences</div>
@@ -385,7 +382,7 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
 <script>
 (function(){
 "use strict";
-const defaultSettings = { theme:"cyan", font:"15px", density:"normal", language:"auto", academicLevel:"University Student", responseStyle:"balanced", customInstructions:"", motion:true, tts:true, memory:true, defaultSkill:"quick" };
+const defaultSettings = { theme:"cyan", font:"15px", density:"normal", language:"english", academicLevel:"University Student", responseStyle:"balanced", customInstructions:"", motion:true, tts:true, memory:true, defaultSkill:"quick" };
 function localLoad(key,fallback){ try{ const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : fallback; }catch(e){ return fallback; } }
 function localSave(key,value){ try{ localStorage.setItem(key, JSON.stringify(value)); }catch(e){} }
 function localRemove(key){ try{ localStorage.removeItem(key); }catch(e){} }
@@ -458,14 +455,14 @@ window.toggleSidebar = function(){
 };
 
 const modeInstructions = {
-    quick: "Answer accurately, clearly, and directly.",
-    deep: "Use rigorous academic reasoning. Break complex problems into logical stages, inspect assumptions, compare interpretations, verify conclusions, and present crystal-clear results.",
-    learn: "Teach like an exemplary professor. Explain concepts progressively with practical examples, clear definitions, analogies, and checks for understanding.",
-    research: "Act as a rigorous academic research assistant. Separate established facts from uncertainty, evaluate evidence objectively, avoid hallucinations, and highlight limitations.",
-    solve: "Solve step-by-step with meticulous verification of calculations and logical consistency.",
-    writer: "Act as an expert academic writer and editor. Enhance clarity, rhetorical structure, grammar, argumentation, and scholarly tone.",
-    coder: "Act as a senior software architect. Review code correctness, security vulnerabilities, edge cases, performance, and best practices.",
-    debate: "Analyze multiple perspectives impartially, highlighting arguments, counterarguments, underlying assumptions, and evidence quality."
+    quick: "Answer accurately, clearly, and directly in English.",
+    deep: "Use rigorous academic reasoning in English. Break complex problems into logical stages, inspect assumptions, compare interpretations, verify conclusions, and present crystal-clear results.",
+    learn: "Teach like an exemplary professor in English. Explain concepts progressively with practical examples, clear definitions, analogies, and checks for understanding.",
+    research: "Act as a rigorous academic research assistant in English. Separate established facts from uncertainty, evaluate evidence objectively, avoid hallucinations, and highlight limitations.",
+    solve: "Solve step-by-step in English with meticulous verification of calculations and logical consistency.",
+    writer: "Act as an expert academic writer and editor in English. Enhance clarity, rhetorical structure, grammar, argumentation, and scholarly tone.",
+    coder: "Act as a senior software architect in English. Review code correctness, security vulnerabilities, edge cases, performance, and best practices.",
+    debate: "Analyze multiple perspectives impartially in English, highlighting arguments, counterarguments, underlying assumptions, and evidence quality."
 };
 
 let currentMode = UltraSettings.get().defaultSkill || "quick";
@@ -643,18 +640,7 @@ if(!window.UltraChat){
 
         try{
             const settings = UltraSettings.get();
-            let langRule = "";
-            const langMap = {
-                sinhala: "Sinhala (සිංහල)",
-                tamil: "Tamil (தமிழ்)",
-                english: "English"
-            };
-
-            if(settings.language && settings.language !== "auto" && langMap[settings.language]){
-                langRule = `CRITICAL REQUIREMENT: You MUST respond FULLY and EXCLUSIVELY in ${langMap[settings.language]} language. Do not mix with other languages.`;
-            } else {
-                langRule = "CRITICAL REQUIREMENT: Automatically detect the exact language of the user's prompt and respond FULLY and EXCLUSIVELY in that exact same language using completely correct native terminology and vocabulary.";
-            }
+            const langRule = "CRITICAL REQUIREMENT: You MUST respond FULLY and EXCLUSIVELY in English.";
 
             const systemPrompt = `You are ULTRA AI, a secure, highly advanced academic and productivity assistant.
 
@@ -682,7 +668,7 @@ STRICT OPERATIONAL GUIDELINES:
 3. SOURCE INTEGRITY: Do not fake citations. Prioritize fundamental, standard textbooks over generalized creative text.`;
             
             const history = currentSession.messages.slice(-20).map(item=>({ role: item.role === "ai" ? "assistant" : "user", content: item.text }));
-            const response = await UltraAPI.chat({ message:text, mode:currentMode, language:settings.language, systemPrompt, customInstructions:settings.customInstructions, conversation:history, file: attachedFile ? attachedFile.data : null });
+            const response = await UltraAPI.chat({ message:text, mode:currentMode, language:"english", systemPrompt, customInstructions:settings.customInstructions, conversation:history, file: attachedFile ? attachedFile.data : null });
             
             typing.remove();
             renderMessage("ai", response);
@@ -778,11 +764,7 @@ function speak(text){
     speechSynthesis.cancel();
     const clean = String(text || "").replace(/[#*_`~[\]()]/g,"");
     const utterance = new SpeechSynthesisUtterance(clean);
-    
-    if(/[\u0dc0-\u0dff]/.test(clean)){ utterance.lang = "si-LK"; } 
-    else if(/[\u0b80-\u0bff]/.test(clean)){ utterance.lang = "ta-LK"; }
-    else { utterance.lang = "en-US"; }
-    
+    utterance.lang = "en-US";
     speechSynthesis.speak(utterance);
 }
 window.speak = speak;
@@ -942,7 +924,7 @@ window.saveSettings = function(){
         ...current,
         font: document.getElementById("fontSize").value,
         density: document.getElementById("density").value,
-        language: document.getElementById("language").value,
+        language: "english",
         academicLevel: document.getElementById("academicLevel").value,
         responseStyle: document.getElementById("responseStyle").value,
         customInstructions: document.getElementById("customInstructions").value.trim()
