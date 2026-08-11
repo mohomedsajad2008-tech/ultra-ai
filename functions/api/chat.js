@@ -14,6 +14,7 @@ export async function onRequestPost(context) {
     const { request, env } = context;
     const body = await request.json();
     const userMessage = body.message;
+    const mode = body.mode || 'quick';
 
     if (!userMessage) {
       return new Response(JSON.stringify({ error: "Message is required" }), {
@@ -59,10 +60,19 @@ export async function onRequestPost(context) {
       { role: 'user', content: userMessage }
     ];
 
+    let temperature = 0.3;
+    if (mode === 'solve' || mode === 'quick') {
+      temperature = 0.1;
+    } else if (mode === 'writer' || mode === 'debate') {
+      temperature = 0.6;
+    } else if (mode === 'deep' || mode === 'research') {
+      temperature = 0.2;
+    }
+
     const response = await env.AI.run('@cf/meta/llama-3.2-3b-instruct', {
       messages: messages,
       max_tokens: 2048,
-      temperature: 0.3
+      temperature: temperature
     });
 
     const aiReply = response.response || "No response generated";
