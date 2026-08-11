@@ -50,7 +50,7 @@ export async function onRequestPost(context) {
     }
 
     const baseSystemPrompt = body.systemPrompt || 'You are ULTRA AI, a helpful and smart academic assistant.';
-    const systemPrompt = baseSystemPrompt + wikiContext;
+    const systemPrompt = baseSystemPrompt + "\nCRITICAL RULE: Always write and reply strictly in English." + wikiContext;
     const conversation = body.conversation || [];
 
     const messages = [
