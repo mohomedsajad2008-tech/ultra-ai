@@ -20,20 +20,30 @@ export async function onRequestPost(context) {
       { role: 'user', content: userMessage }
     ];
 
-    // Using the current active Cloudflare model
+    // max_tokens සහ temperature එකතු කර ඇත
     const response = await env.AI.run('@cf/meta/llama-3.2-3b-instruct', {
-      messages: messages
+      messages: messages,
+      max_tokens: 2048,
+      temperature: 0.7
     });
 
     const aiReply = response.response || "No response generated";
 
     return new Response(JSON.stringify({ reply: aiReply }), {
-      headers: { "Content-Type": "application/json" }
+      headers: { 
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*"
+      }
     });
   } catch (err) {
     return new Response(JSON.stringify({ error: err.message }), {
       status: 500,
-      headers: { "Content-Type": "application/json" }
+      headers: { 
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*"
+      }
     });
   }
 }
+
+  
