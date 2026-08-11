@@ -15,13 +15,11 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{width:100%;height:100%;height:100dvh;overflow:hidden;background:radial-gradient(circle at 50% 0%,#17243b 0%,#0d1422 45%,#080c14 100%);color:var(--text);font-family:var(--font);font-size:var(--base);padding-bottom:env(safe-area-inset-bottom);}
 
-/* Custom Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
-/* Selection Color */
 ::selection { background: var(--accent); color: #071018; }
 
 button,input,textarea,select{font-family:inherit;}button{cursor:pointer;}
@@ -44,7 +42,6 @@ button,input,textarea,select{font-family:inherit;}button{cursor:pointer;}
 .nav button span{font-size:1.15rem;}
 .nav button.active{color:var(--accent);background:var(--glow);box-shadow:inset 0 0 10px rgba(0,242,254,0.15);}
 
-/* Sidebar Styles */
 .sidebar{position:absolute;top:0;bottom:0;left:0;width:280px;background:var(--surface2);border-right:1px solid var(--border);z-index:25;transform:translateX(-100%);transition:transform .25s ease;display:flex;flex-direction:column;padding:14px;box-shadow: 10px 0 30px rgba(0,0,0,0.5);}
 .sidebar.open{transform:translateX(0);}
 .sidebar-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
@@ -150,7 +147,6 @@ textarea.chat-input{flex:1;min-height:25px;max-height:130px;resize:none;border:0
 .modal-head h3{font-size:1rem;}
 .setting-title{color:var(--accent);font-size:.78rem;font-weight:700;margin:15px 0 7px;}
 
-/* Fixed Theme Grid Styles with clear font size */
 .theme-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
 .theme{padding:10px 8px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text);font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s ease;text-align:center;}
 .theme:hover{border-color:var(--accent);background:var(--glow);transform:translateY(-2px);box-shadow:0 4px 12px var(--glow);}
@@ -252,7 +248,7 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
             <label class="attach-btn" title="Attach file or image">
                 📎 <input type="file" id="fileInput" style="display:none" onchange="handleFileAttach(event)">
             </label>
-            <textarea id="userInput" class="chat-input" rows="1" maxlength="10000" placeholder="Ask ULTRA AI anything (සිංහලෙන් හෝ ඉංග්‍රීසියෙන්)..."></textarea>
+            <textarea id="userInput" class="chat-input" rows="1" maxlength="10000" placeholder="Ask ULTRA AI anything (සිංහලෙන්, English, 日本語)..."></textarea>
             <button id="sendBtn" class="send" onclick="handleSendClick()">➤</button>
         </div>
         <div style="display:flex;justify-content:space-between;padding:5px 5px 0;font-size:.62rem;color:var(--muted);">
@@ -662,17 +658,41 @@ if(!window.UltraChat){
                 french: "French (Français)",
                 german: "German (Deutsch)",
                 chinese: "Mandarin Chinese (中文)",
-                japanese: "Japanese (日本語)",
+                japanese: "Japanese (日本語 - use correct native technical terminology such as 教師あり学習, 教師なし学習, 強化学習)",
                 hindi: "Hindi (हिन्दी)"
             };
 
             if(settings.language && settings.language !== "auto" && langMap[settings.language]){
                 langRule = `CRITICAL REQUIREMENT: You MUST respond FULLY and EXCLUSIVELY in ${langMap[settings.language]} language. Do not mix with other languages.`;
             } else {
-                langRule = "CRITICAL REQUIREMENT: Automatically detect the exact language of the user's prompt and respond FULLY and EXCLUSIVELY in that exact same language.";
+                langRule = "CRITICAL REQUIREMENT: Automatically detect the exact language of the user's prompt and respond FULLY and EXCLUSIVELY in that exact same language using completely correct native terminology and vocabulary.";
             }
 
-            const systemPrompt = `You are ULTRA AI, a secure, highly advanced academic and productivity assistant.\n\nCurrent Mode:\n${currentMode}\n\nMode Instructions:\n${modeInstructions[currentMode] || modeInstructions.quick}\n\nAcademic Level:\n${settings.academicLevel}\n\nResponse Style:\n${settings.responseStyle}\n\nLanguage Policy:\n${langRule}\n\nCustom Instructions:\n${settings.customInstructions || "None"}\n\nGuidelines:\n- ALWAYS provide a complete, unbroken, fully detailed, and seamless response from start to finish.\n- NEVER truncate, cut off, or split answers into multiple chunks.\n- Provide accurate, verifiable information.\n- Avoid fabricating facts or citations.\n- Tailor complexity to the academic level.`;
+            const systemPrompt = `You are ULTRA AI, a secure, highly advanced academic and productivity assistant.
+
+Current Mode:
+${currentMode}
+
+Mode Instructions:
+${modeInstructions[currentMode] || modeInstructions.quick}
+
+Academic Level:
+${settings.academicLevel}
+
+Response Style:
+${settings.responseStyle}
+
+Language Policy:
+${langRule}
+
+Custom Instructions:
+${settings.customInstructions || "None"}
+
+STRICT OPERATIONAL GUIDELINES:
+1. FACTUAL ACCURACY IS PARAMOUNT: For all scientific, technical, chemical, historical, or mathematical queries, rely strictly on verified, consensus-based academic facts. Do not invent processes, reactions, or terminology.
+2. ZERO TERMINOLOGY HALLUCINATIONS: When responding in Japanese, use correct standard native technical terms (e.g., 教師あり学習 for Supervised Learning, 教師なし学習 for Unsupervised Learning, 強化学習 for Reinforcement Learning). Never fabricate words or gibberish.
+3. COMPLETENESS: Provide a complete, unbroken, seamless, and fully detailed response. NEVER truncate, cut off, or split answers.
+4. SOURCE INTEGRITY: Do not fake citations. Prioritize fundamental, standard textbooks over generalized creative text.`;
             
             const history = currentSession.messages.slice(-20).map(item=>({ role: item.role === "ai" ? "assistant" : "user", content: item.text }));
             const response = await UltraAPI.chat({ message:text, mode:currentMode, language:settings.language, systemPrompt, customInstructions:settings.customInstructions, conversation:history, file: attachedFile ? attachedFile.data : null });
@@ -688,7 +708,7 @@ if(!window.UltraChat){
             busy = false;
             removeAttachedFile();
             sendBtn.textContent = "➤";
-            sendBtn.onclick = () => sendMessage();
+            sendBtn.onclick = () => handleSendClick();
         }
     }
 
@@ -710,7 +730,6 @@ if(!window.UltraChat){
     }
 
     function loadCurrentSession(){
-        const settings = UltraSettings.get();
         const currentSession = getActiveSession();
         const box = chatContainer();
         if(!box) return;
