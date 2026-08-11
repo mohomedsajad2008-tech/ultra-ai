@@ -11,7 +11,6 @@ export async function onRequestPost(context) {
       });
     }
 
-    // විකිපීඩියාවෙන් අදාළ තොරතුරු සෙවීම (Wikipedia API Integration)
     let wikiContext = "";
     try {
       const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(userMessage)}&format=json&origin=*`;
@@ -33,11 +32,9 @@ export async function onRequestPost(context) {
         }
       }
     } catch (wikiErr) {
-      // විකිපීඩියා දත්ත ලබාගැනීමේදී දෝෂයක් වුවහොත් කට්‌චය බිඳ වැටීම වළක්වා ගැනීමට මෙය යොදා ඇත
       console.error("Wikipedia fetch error:", wikiErr);
     }
 
-    // මූලික System Prompt එකට Wikipedia සන්දර්භය (Context) එකතු කිරීම
     const baseSystemPrompt = body.systemPrompt || 'You are ULTRA AI, a helpful and smart academic assistant.';
     const systemPrompt = baseSystemPrompt + wikiContext;
     const conversation = body.conversation || [];
@@ -51,7 +48,7 @@ export async function onRequestPost(context) {
     const response = await env.AI.run('@cf/meta/llama-3.2-3b-instruct', {
       messages: messages,
       max_tokens: 2048,
-      temperature: 0.7
+      temperature: 0.3
     });
 
     const aiReply = response.response || "No response generated";
