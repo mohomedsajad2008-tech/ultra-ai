@@ -1,0 +1,28 @@
+{
+  "background_color": "#0f172a",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "Ultra AI",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "Ultra AI",
+  "start_url": "/",
+  "theme_color": "#3b82f6",
+  "icons": [
+    {
+      "src": "https://ultra-ai.pages.dev/favicon.ico",
+      "type": "image/x-icon",
+      "isSquare": false,
+      "isPng": false,
+      "isWebp": false,
+      "isJpg": false,
+      "width": 0,
+      "is512x512": false,
+      "is256x256": false,
+      "is192x192": false
+    }
+  ],
+  "id": "com.ultra.ai",
+  "lang": "en"
+}
+
