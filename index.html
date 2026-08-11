@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+                    <!DOCTYPE html>
 <html lang="si">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#090d16">
 <title>ULTRA AI — Academic Intelligence Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,9 +13,9 @@
 <style>
 :root{--bg:#080c14;--bg2:#0d1422;--surface:rgba(20,30,48,.78);--surface2:rgba(15,23,42,.92);--border:rgba(255,255,255,.09);--accent:#00f2fe;--accent2:#4facfe;--glow:rgba(0,242,254,.22);--text:#f8fafc;--muted:#94a3b8;--danger:#ef4444;--success:#10b981;--warning:#f59e0b;--radius:16px;--font:Inter,-apple-system,BlinkMacSystemFont,sans-serif;--base:15px;}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html,body{width:100%;height:100%;overflow:hidden;background:radial-gradient(circle at 50% 0%,#17243b 0%,#0d1422 45%,#080c14 100%);color:var(--text);font-family:var(--font);font-size:var(--base);}
+html,body{width:100%;height:100%;height:100dvh;overflow:hidden;background:radial-gradient(circle at 50% 0%,#17243b 0%,#0d1422 45%,#080c14 100%);color:var(--text);font-family:var(--font);font-size:var(--base);padding-bottom:env(safe-area-inset-bottom);}
 button,input,textarea,select{font-family:inherit;}button{cursor:pointer;}
-#app{width:100%;height:100%;max-width:1100px;margin:auto;display:flex;flex-direction:column;overflow:hidden;background:rgba(7,12,22,.5);}
+#app{width:100%;height:100%;height:100dvh;max-width:1100px;margin:auto;display:flex;flex-direction:column;overflow:hidden;background:rgba(7,12,22,.5);}
 .glass{background:var(--surface);border:1px solid var(--border);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);}
 .header{min-height:62px;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);z-index:20;}
 .brand{display:flex;align-items:center;gap:9px;}
@@ -27,7 +27,7 @@ button,input,textarea,select{font-family:inherit;}button{cursor:pointer;}
 .main{flex:1;min-height:0;position:relative;}
 .view{position:absolute;inset:0;display:none;flex-direction:column;overflow-y:auto;}
 .view.active{display:flex;}
-.nav{min-height:64px;display:flex;justify-content:space-around;align-items:center;border-top:1px solid var(--border);z-index:20;}
+.nav{min-height:64px;padding-bottom:env(safe-area-inset-bottom);display:flex;justify-content:space-around;align-items:center;border-top:1px solid var(--border);z-index:20;background:var(--surface);}
 .nav button{border:0;background:transparent;color:var(--muted);padding:7px 13px;border-radius:12px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:.72rem;font-weight:600;}
 .nav button span{font-size:1.15rem;}
 .nav button.active{color:var(--accent);background:var(--glow);}
@@ -160,7 +160,7 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
         </div>
         <div class="card">
             <h3>🔐 Server Status</h3>
-            <p id="securityStatus">🟢 Connected to Cloudflare Backend</p>
+            <p id="securityStatus">🟢 Secure & Connected</p>
         </div>
     </div>
 </section>
@@ -276,9 +276,9 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
     <div class="setting-title">🌍 Language</div>
     <div class="field">
         <select id="language" class="select">
-            <option value="sinhala" selected>සිංහල (Sinhala)</option>
-            <option value="auto">Auto Detect</option>
-            <option value="english">English</option>
+            <option value="auto" selected>Auto Detect (භාෂාව ස්වයංක්‍රීයව හඳුනාගන්න)</option>
+            <option value="sinhala">සිංහල (Sinhala Only)</option>
+            <option value="english">English Only</option>
         </select>
     </div>
     <div class="setting-title">🧠 AI Preferences</div>
@@ -320,7 +320,7 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
 <script>
 (function(){
 "use strict";
-const defaultSettings = { theme:"cyan", font:"15px", density:"normal", language:"sinhala", academicLevel:"University Student", responseStyle:"balanced", customInstructions:"", motion:true, tts:true, memory:true, defaultSkill:"quick" };
+const defaultSettings = { theme:"cyan", font:"15px", density:"normal", language:"auto", academicLevel:"University Student", responseStyle:"balanced", customInstructions:"", motion:true, tts:true, memory:true, defaultSkill:"quick" };
 function localLoad(key,fallback){ try{ const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : fallback; }catch(e){ return fallback; } }
 function localSave(key,value){ try{ localStorage.setItem(key, JSON.stringify(value)); }catch(e){} }
 function localRemove(key){ try{ localStorage.removeItem(key); }catch(e){} }
@@ -338,18 +338,29 @@ if(!window.UltraSettings){
 if(!window.UltraAPI){
     window.UltraAPI = {
         async chat(payload){
-            const response = await fetch("/api/chat", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            });
-
-            const data = await response.json();
-            if(!response.ok){
-                throw new Error(data.error || "Server request failed.");
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 60000);
+            try {
+                const response = await fetch("/api/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "X-Client-Version": "2.4.0" },
+                    body: JSON.stringify(payload),
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+                const data = await response.json();
+                if(!response.ok){
+                    throw new Error(data.error || "Server request failed with status " + response.status);
+                }
+                if(!data.reply){ throw new Error("Received empty response payload from server."); }
+                return data.reply;
+            } catch (err) {
+                clearTimeout(timeoutId);
+                if (err.name === 'AbortError') {
+                    throw new Error("Request timed out. Please check your network connection and try again.");
+                }
+                throw err;
             }
-            if(!data.reply){ throw new Error("Received empty response from server."); }
-            return data.reply;
         }
     };
 }
@@ -368,18 +379,18 @@ window.switchView = function(name){
     document.querySelectorAll(".nav button").forEach(button => button.classList.remove("active"));
     const indexes = { home:0, chat:1, tools:2, profile:3 };
     const navButtons = document.querySelectorAll(".nav button");
-    if(indexes[name] !== undefined && navButtons[indexes[name]]){ navButtons[indexes[name]].classList.add("active"); }
+    if(indexes[name] !== undefined && navButtons[indexes[name]]){ navButtons[indexes[name]] .classList.add("active"); }
 };
 
 const modeInstructions = {
-    quick: "Answer accurately and directly in Sinhala.",
-    deep: "Use rigorous reasoning. Break complex problems into logical stages, inspect assumptions, compare possible interpretations, verify important conclusions, and present a clear result in Sinhala.",
-    learn: "Teach like an excellent professor. Explain concepts progressively with examples, analogies, definitions and checks for understanding in Sinhala.",
-    research: "Act as an academic research assistant. Separate established facts from uncertainty, avoid fabricated sources, compare evidence and identify limitations in Sinhala.",
-    solve: "Solve systematically. Show necessary calculations and reasoning, check the result, and identify possible mistakes in Sinhala.",
-    writer: "Act as an expert academic writer and editor. Improve clarity, structure, grammar, argumentation and academic quality in Sinhala.",
-    coder: "Act as a senior software engineer. Review architecture, correctness, security, edge cases, maintainability and performance.",
-    debate: "Analyze multiple perspectives fairly. Identify arguments, counterarguments, assumptions, evidence and logical weaknesses in Sinhala."
+    quick: "Answer accurately, clearly, and directly.",
+    deep: "Use rigorous academic reasoning. Break complex problems into logical stages, inspect assumptions, compare interpretations, verify conclusions, and present crystal-clear results.",
+    learn: "Teach like an exemplary professor. Explain concepts progressively with practical examples, clear definitions, analogies, and checks for understanding.",
+    research: "Act as a rigorous academic research assistant. Separate established facts from uncertainty, evaluate evidence objectively, avoid hallucinations, and highlight limitations.",
+    solve: "Solve step-by-step with meticulous verification of calculations and logical consistency.",
+    writer: "Act as an expert academic writer and editor. Enhance clarity, rhetorical structure, grammar, argumentation, and scholarly tone.",
+    coder: "Act as a senior software architect. Review code correctness, security vulnerabilities, edge cases, performance, and best practices.",
+    debate: "Analyze multiple perspectives impartially, highlighting arguments, counterarguments, underlying assumptions, and evidence quality."
 };
 
 let currentMode = UltraSettings.get().defaultSkill || "quick";
@@ -405,10 +416,21 @@ if(!window.UltraChat){
     let messages = UltraStorage.get("chat", []);
     let busy = false;
     function chatContainer(){ return document.getElementById("chatBox"); }
+    
+    if(window.marked){
+        marked.setOptions({ gfm: true, breaks: true });
+    }
+
     function safeMarkdown(text){
-        try{ if(window.marked && window.DOMPurify){ return DOMPurify.sanitize(marked.parse(String(text || ""))); } }catch(e){}
+        try{ 
+            if(window.marked && window.DOMPurify){ 
+                const rawHtml = marked.parse(String(text || ""));
+                return DOMPurify.sanitize(rawHtml, { ALLOWED_TAGS: ['p', 'b', 'i', 'em', 'strong', 'a', 'code', 'pre', 'ul', 'ol', 'li', 'br', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'hr'], ALLOWED_ATTR: ['href', 'target', 'rel'] }); 
+            } 
+        }catch(e){}
         return String(text || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
     }
+
     function renderMessage(role, text){
         const box = chatContainer();
         if(!box) return;
@@ -434,6 +456,7 @@ if(!window.UltraChat){
         box.appendChild(message);
         box.scrollTop = box.scrollHeight;
     }
+
     async function send(text){
         if(!text || busy) return;
         busy = true;
@@ -448,8 +471,17 @@ if(!window.UltraChat){
         document.getElementById("sendBtn").disabled = true;
         try{
             const settings = UltraSettings.get();
-            const languageInstruction = "Respond fully and completely in Sinhala language unless the user asks in another language.";
-            const systemPrompt = `You are ULTRA AI, an advanced academic and productivity assistant.\n\nCurrent skill:\n${currentMode}\n\nSkill instructions:\n${modeInstructions[currentMode] || modeInstructions.quick}\n\nAcademic level:\n${settings.academicLevel}\n\nResponse style:\n${settings.responseStyle}\n\nLanguage:\n${languageInstruction}\n\nCustom user instructions:\n${settings.customInstructions || "None"}\n\nCore quality requirements:\n- Complete the full answer without stopping abruptly.\n- Be accurate and useful.\n- Do not fabricate facts.\n- Do not fabricate citations.\n- Clearly indicate uncertainty.\n- Verify calculations when possible.\n- For programming requests, consider security and edge cases.\n- Protect private information.\n- Adapt explanations to the user's level.`;
+            let langRule = "";
+            if(settings.language === "sinhala"){
+                langRule = "CRITICAL REQUIREMENT: You MUST respond FULLY and EXCLUSIVELY in Sinhala language (සිංහලෙන් පමණක් පිළිතුරු දෙන්න).";
+            } else if(settings.language === "english"){
+                langRule = "CRITICAL REQUIREMENT: You MUST respond FULLY and EXCLUSIVELY in English language.";
+            } else {
+                langRule = "CRITICAL REQUIREMENT: Detect the language of the user's latest query and respond in that exact language (Sinhala for Sinhala, English for English).";
+            }
+
+            const systemPrompt = `You are ULTRA AI, a secure, highly advanced academic and productivity assistant.\n\nCurrent Mode:\n${currentMode}\n\nMode Instructions:\n${modeInstructions[currentMode] || modeInstructions.quick}\n\nAcademic Level:\n${settings.academicLevel}\n\nResponse Style:\n${settings.responseStyle}\n\nLanguage Policy:\n${langRule}\n\nCustom Instructions:\n${settings.customInstructions || "None"}\n\nGuidelines:\n- Complete responses fully without truncation.\n- Provide accurate, verifiable information.\n- Avoid fabricating facts or citations.\n- Tailor complexity to the academic level.`;
+            
             const history = messages.slice(-20).map(item=>({ role: item.role === "ai" ? "assistant" : "user", content: item.text }));
             const response = await UltraAPI.chat({ message:text, mode:currentMode, language:settings.language, systemPrompt, customInstructions:settings.customInstructions, conversation:history });
             typing.remove();
@@ -458,12 +490,13 @@ if(!window.UltraChat){
             if(settings.memory){ UltraStorage.set("chat", messages); }
         }catch(error){
             typing.remove();
-            renderMessage("ai", "⚠️ " + (error.message || "Server connection failed."));
+            renderMessage("ai", "⚠️ " + (error.message || "Communication with the AI backend failed."));
         }finally{
             busy = false;
             document.getElementById("sendBtn").disabled = false;
         }
     }
+
     function load(){
         const settings = UltraSettings.get();
         messages = settings.memory ? UltraStorage.get("chat", []) : [];
@@ -476,13 +509,14 @@ if(!window.UltraChat){
         }
         messages.forEach(item => renderMessage(item.role, item.text));
     }
+
     function clear(){
         messages = [];
         UltraStorage.remove("chat");
         const box = chatContainer();
         if(box){ box.innerHTML = `<div id="welcome" class="welcome glass"><div class="big">🧠</div><h2>Academic Tutor Ready</h2><p>Start a new conversation.</p></div>`; }
     }
-    window.UltraChat = { send, load, clear, speak };
+    window.UltraChat = { send, load, clear };
 }
 
 window.sendMessage = function(){
@@ -518,21 +552,21 @@ function copyText(text){
 
 const toolPrompts = {
     research: "Research and academically analyze this topic:",
-    summarize: "Summarize the following material while preserving the important ideas:",
-    flashcards: "Create useful active-recall flashcards for:",
+    summarize: "Summarize the following material while preserving the core ideas:",
+    flashcards: "Create active-recall flashcards for:",
     quiz: "Create a practice quiz with answers and explanations for:",
-    planner: "Create a realistic study plan for:",
-    solve: "Solve this problem step-by-step and verify the answer:",
-    explain: "Explain this concept in simple language with examples:",
+    planner: "Create a structured study plan for:",
+    solve: "Solve this problem step-by-step and verify the result:",
+    explain: "Explain this concept simply with examples:",
     citation: "Help construct appropriate academic citations for:",
     credibility: "Analyze the credibility of this source or claim:",
     essay: "Improve the academic quality, structure and clarity of:",
-    code: "Review the following code for bugs, security issues, performance and quality:",
+    code: "Review the following code for security, bugs and performance:",
     language: "Act as a language coach and improve this:",
     brainstorm: "Generate creative and practical ideas for:",
-    presentation: "Create a professional presentation structure for:",
-    exam: "Act as an exam coach and create a preparation strategy for:",
-    career: "Help create a practical career development plan for:"
+    presentation: "Create a professional presentation outline for:",
+    exam: "Act as an exam coach and create a study strategy for:",
+    career: "Help create a professional career roadmap for:"
 };
 
 window.toolPrompt = function(type){
@@ -582,8 +616,8 @@ window.saveProfile = function(){
 window.changeAvatar = function(event){
     const file = event && event.target && event.target.files ? event.target.files[0] : null;
     if(!file) return;
-    if(!file.type || !file.type.startsWith("image/")){ alert("Please select an image file."); return; }
-    if(file.size > 5 * 1024 * 1024){ alert("Profile image must be smaller than 5 MB."); return; }
+    if(!file.type || !file.type.startsWith("image/")){ alert("Please select a valid image file."); return; }
+    if(file.size > 5 * 1024 * 1024){ alert("Profile image must be less than 5 MB."); return; }
     const reader = new FileReader();
     reader.onload = function(){
         profile.avatar = reader.result;
@@ -681,25 +715,25 @@ function applySettings(){
 }
 
 window.resetSettings = function(){
-    if(!confirm("Reset all settings?")) return;
+    if(!confirm("Are you sure you want to reset all settings to default?")) return;
     UltraSettings.reset();
     applySettings();
     loadSettingsIntoUI();
 };
 
 window.clearChat = function(){
-    if(!confirm("Clear the current conversation?")) return;
+    if(!confirm("Are you sure you want to clear the conversation?")) return;
     UltraChat.clear();
 };
 
 window.exportChat = function(){
     const messages = UltraStorage.get("chat", []);
-    if(!Array.isArray(messages) || !messages.length){ alert("There is no conversation to export."); return; }
+    if(!Array.isArray(messages) || !messages.length){ alert("There are no messages to export."); return; }
     const text = messages.map(item => `${(item.role || "").toUpperCase()}\n\n${item.text || ""}`).join("\n\n----------------\n\n");
     const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-    link.href = url; link.download = "ultra-ai-chat.txt";
+    link.href = url; link.download = "ultra-ai-chat-export.txt";
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -729,7 +763,7 @@ function initialize(){
         renderProfile();
         UltraChat.load();
     }catch(error){
-        console.error("ULTRA AI initialization error:", error);
+        console.error("Initialization error:", error);
     }
 }
 
