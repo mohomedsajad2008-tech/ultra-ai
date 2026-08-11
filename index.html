@@ -248,7 +248,7 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
             <label class="attach-btn" title="Attach file or image">
                 📎 <input type="file" id="fileInput" style="display:none" onchange="handleFileAttach(event)">
             </label>
-            <textarea id="userInput" class="chat-input" rows="1" maxlength="10000" placeholder="Ask ULTRA AI anything (සිංහලෙන්, English, 日本語)..."></textarea>
+            <textarea id="userInput" class="chat-input" rows="1" maxlength="10000" placeholder="Ask ULTRA AI anything (සිංහලෙන්, English, தமிழ்)..."></textarea>
             <button id="sendBtn" class="send" onclick="handleSendClick()">➤</button>
         </div>
         <div style="display:flex;justify-content:space-between;padding:5px 5px 0;font-size:.62rem;color:var(--muted);">
@@ -340,16 +340,10 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
     <div class="setting-title">🌍 Language</div>
     <div class="field">
         <select id="language" class="select">
-            <option value="auto" selected>Auto Detect (භාෂාව ස්වයංක්‍රීයව හඳුනාගන්න)</option>
+            <option value="auto" selected>Auto Detect (ස්වයංක්‍රීයව හඳුනාගන්න)</option>
             <option value="sinhala">සිංහල (Sinhala Only)</option>
             <option value="tamil">தமிழ் (Tamil Only)</option>
             <option value="english">English Only</option>
-            <option value="spanish">Español (Spanish Only)</option>
-            <option value="french">Français (French Only)</option>
-            <option value="german">Deutsch (German Only)</option>
-            <option value="chinese">中文 (Chinese Only)</option>
-            <option value="japanese">日本語 (Japanese Only)</option>
-            <option value="hindi">हिन्दी (Hindi Only)</option>
         </select>
     </div>
     <div class="setting-title">🧠 AI Preferences</div>
@@ -653,13 +647,7 @@ if(!window.UltraChat){
             const langMap = {
                 sinhala: "Sinhala (සිංහල)",
                 tamil: "Tamil (தமிழ்)",
-                english: "English",
-                spanish: "Spanish (Español)",
-                french: "French (Français)",
-                german: "German (Deutsch)",
-                chinese: "Mandarin Chinese (中文)",
-                japanese: "Japanese (日本語 - use correct native technical terminology such as 教師あり学習, 教師なし学習, 強化学習)",
-                hindi: "Hindi (हिन्दी)"
+                english: "English"
             };
 
             if(settings.language && settings.language !== "auto" && langMap[settings.language]){
@@ -690,9 +678,8 @@ ${settings.customInstructions || "None"}
 
 STRICT OPERATIONAL GUIDELINES:
 1. FACTUAL ACCURACY IS PARAMOUNT: For all scientific, technical, chemical, historical, or mathematical queries, rely strictly on verified, consensus-based academic facts. Do not invent processes, reactions, or terminology.
-2. ZERO TERMINOLOGY HALLUCINATIONS: When responding in Japanese, use correct standard native technical terms (e.g., 教師あり学習 for Supervised Learning, 教師なし学習 for Unsupervised Learning, 強化学習 for Reinforcement Learning). Never fabricate words or gibberish.
-3. COMPLETENESS: Provide a complete, unbroken, seamless, and fully detailed response. NEVER truncate, cut off, or split answers.
-4. SOURCE INTEGRITY: Do not fake citations. Prioritize fundamental, standard textbooks over generalized creative text.`;
+2. COMPLETENESS: Provide a complete, unbroken, seamless, and fully detailed response. NEVER truncate, cut off, or split answers.
+3. SOURCE INTEGRITY: Do not fake citations. Prioritize fundamental, standard textbooks over generalized creative text.`;
             
             const history = currentSession.messages.slice(-20).map(item=>({ role: item.role === "ai" ? "assistant" : "user", content: item.text }));
             const response = await UltraAPI.chat({ message:text, mode:currentMode, language:settings.language, systemPrompt, customInstructions:settings.customInstructions, conversation:history, file: attachedFile ? attachedFile.data : null });
@@ -794,8 +781,6 @@ function speak(text){
     
     if(/[\u0dc0-\u0dff]/.test(clean)){ utterance.lang = "si-LK"; } 
     else if(/[\u0b80-\u0bff]/.test(clean)){ utterance.lang = "ta-LK"; }
-    else if(/[\u0900-\u097f]/.test(clean)){ utterance.lang = "hi-IN"; }
-    else if(/[\u3040-\u30ff\u4e00-\u9faf]/.test(clean)){ utterance.lang = "ja-JP"; }
     else { utterance.lang = "en-US"; }
     
     speechSynthesis.speak(utterance);
