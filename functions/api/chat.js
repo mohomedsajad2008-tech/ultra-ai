@@ -1,3 +1,14 @@
+export async function onRequestOptions() {
+  return new Response(null, {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, X-Client-Version",
+      "Access-Control-Max-Age": "86400",
+    },
+  });
+}
+
 export async function onRequestPost(context) {
   try {
     const { request, env } = context;
@@ -7,7 +18,10 @@ export async function onRequestPost(context) {
     if (!userMessage) {
       return new Response(JSON.stringify({ error: "Message is required" }), {
         status: 400,
-        headers: { "Content-Type": "application/json" }
+        headers: { 
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*"
+        }
       });
     }
 
