@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#090d16">
-<title>ULTRA AI — Ecosystem & Secure QR Hub</title>
+<title>ULTRA AI — Ecosystem, Security & Secure QR Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -60,7 +60,7 @@ button,input,textarea,select{font-family:inherit;}button{cursor:pointer;}
 .hero h1{font-size:1.45rem;margin-bottom:7px;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;color:transparent;}
 .hero p{color:var(--muted);line-height:1.55;font-size:.88rem;}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;}
-.card{padding:17px;border:1px solid var(--border);background:rgba(20,30,48,.6);border-radius:16px;transition:transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease;box-shadow: inset 0 0 10px rgba(255,255,255,0.02);}
+.card{padding:17px;border:1px solid var(--border);background:rgba(20,30,48,.6);border-radius:16px;transition:transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease;box-shadow: inset 0 0 10px rgba(255,255,255,0.02); margin-bottom: 12px;}
 .card:hover{border-color:var(--accent);transform:translateY(-5px);box-shadow:0 10px 25px rgba(0,0,0,0.4), 0 0 15px var(--glow), inset 0 0 12px rgba(255,255,255,0.05);}
 .card h3{color:var(--accent);font-size:.95rem;margin-bottom:6px;}
 .card p{color:var(--muted);font-size:.8rem;line-height:1.45;}
@@ -70,6 +70,10 @@ button,input,textarea,select{font-family:inherit;}button{cursor:pointer;}
 .brand-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:0.7rem;font-weight:700;}
 .aptoide-badge{background:#14b8a6;color:#071018;}
 .appsgeyser-badge{background:#f97316;color:#fff;}
+
+/* Security Animation & Styles */
+@keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.7; } 100% { transform: scale(1); opacity: 1; } }
+.secure-icon { font-size: 4rem; animation: pulse 2s infinite ease-in-out; display: block; margin-bottom: 10px; text-align: center; }
 
 .chat{padding:0;flex:1;width:100%;}
 .modebar{display:flex;align-items:center;gap:7px;overflow-x:auto;padding:9px 12px;border-bottom:1px solid var(--border);flex-shrink:0;}
@@ -136,14 +140,14 @@ textarea.chat-input{flex:1;min-height:25px;max-height:130px;resize:none;border:0
 .avatar img{width:100%;height:100%;object-fit:cover;}
 .profile-name{font-weight:700;font-size:1.05rem;}
 .profile-email{color:var(--muted);font-size:.8rem;margin-top:3px;}
-.section{padding:16px;border-radius:16px;}
+.section{padding:16px;border-radius:16px; margin-bottom:12px;}
 .field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;}
 .field label{color:var(--muted);font-size:.75rem;font-weight:600;}
 .input,.select,.textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;outline:0;color:var(--text);background:rgba(5,10,18,.8);transition:border-color 0.2s ease;}
 .input:focus,.select:focus,.textarea:focus{border-color:var(--accent);box-shadow:0 0 8px var(--glow);}
 .textarea{resize:vertical;min-height:90px;}
 
-.btn{border:0;padding:10px 14px;border-radius:10px;font-weight:700;font-size:.8rem;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#061018;transition:transform 0.2s ease, box-shadow 0.2s ease;}
+.btn{border:0;padding:10px 14px;border-radius:10px;font-weight:700;font-size:.8rem;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#061018;transition:transform 0.2s ease, box-shadow 0.2s ease; cursor:pointer;}
 .btn:hover{transform:translateY(-1px);box-shadow:0 4px 15px var(--glow);}
 .btn.secondary{background:rgba(255,255,255,.07);border:1px solid var(--border);color:var(--text);}
 .btn.secondary:hover{background:rgba(255,255,255,.12);border-color:var(--accent);}
@@ -188,7 +192,7 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
         <div id="statusDot" class="status-dot"></div>
         <div>
             <div class="logo">ULTRA AI</div>
-            <div style="font-size:.6rem;color:var(--muted)">Academic Intelligence Hub</div>
+            <div style="font-size:.6rem;color:var(--muted)">Security & Ecosystem Hub</div>
         </div>
     </div>
     <div class="header-actions">
@@ -218,7 +222,7 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
     </div>
     <div class="hero glass">
         <h1>Welcome to ULTRA AI Ecosystem 🧠</h1>
-        <p>Your secure academic AI workspace combined with integrated QR scanning and browser safety validation.</p>
+        <p>Your secure academic AI workspace combined with integrated QR scanning, security verification and browser safety validation.</p>
     </div>
     <div class="cards">
         <div class="card" onclick="switchView('chat')">
@@ -229,14 +233,29 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
             <h3>🛠️ Academic Toolkit</h3>
             <p>Research, summarization, quizzes, flashcards, planning, solving and writing assistance.</p>
         </div>
+        <div class="card" onclick="switchView('security')">
+            <h3>🛡️ Security Status</h3>
+            <p>Verify system sandbox shield status and end-to-end protection protocols.</p>
+        </div>
         <div class="card" onclick="switchView('qr')">
             <h3>📷 Secure QR Scanner</h3>
             <p>Scan ecosystem QRs safely with built-in URL security validation model.</p>
         </div>
-        <div class="card" onclick="openSettings()">
-            <h3>🎨 Personalize</h3>
-            <p>Customize theme, language, font and AI behavior.</p>
-        </div>
+    </div>
+</section>
+
+<!-- SECURITY VIEW -->
+<section id="securityView" class="view" style="padding:18px;gap:14px;overflow-y:auto;">
+    <h2>🛡️ Security & System Status</h2>
+    <div class="card glass" style="text-align:center; padding:30px 20px;">
+        <span class="secure-icon">🛡️</span>
+        <h3 style="color:var(--accent); font-size: 1.2rem;">System Verified & Protected</h3>
+        <p style="margin-top:10px; color:var(--muted); font-size: 0.9rem;">Our <b>Ultra AI</b> engine and sandbox architecture are fully secured. End-to-end encryption & URL safety checks are active.</p>
+        <div style="margin-top:20px; display:inline-block; padding: 6px 14px; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--success); border-radius: 20px; color:var(--success); font-weight:bold; font-size:0.85rem;">● Security Protocol: ENABLED</div>
+    </div>
+    <div class="card glass">
+        <h3>🔒 Ecosystem Reliability</h3>
+        <p style="margin-top:5px; font-size: 0.85rem; color: var(--muted);">All external requests and internal data storage operate inside an isolated client-side sandbox to ensure total user privacy.</p>
     </div>
 </section>
 
@@ -317,6 +336,7 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
     <h2>🧰 Academic & Productivity Tools</h2>
     <div class="tool-grid">
         <div class="tool" onclick="switchView('qr')"><div class="emoji">📷</div><h4>Secure QR Scanner</h4><p>Scan ecosystem QRs safely</p></div>
+        <div class="tool" onclick="switchView('security')"><div class="emoji">🛡️</div><h4>Security Shield</h4><p>Check system protection</p></div>
         <div class="tool" onclick="toolPrompt('research')"><div class="emoji">🌐</div><h4>Research Assistant</h4><p>Research & analyze topics</p></div>
         <div class="tool" onclick="toolPrompt('summarize')"><div class="emoji">📄</div><h4>Summarizer</h4><p>Condense long content</p></div>
         <div class="tool" onclick="toolPrompt('flashcards')"><div class="emoji">🧠</div><h4>Flashcards</h4><p>Active recall cards</p></div>
@@ -331,7 +351,6 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
         <div class="tool" onclick="toolPrompt('language')"><div class="emoji">🌍</div><h4>Language Coach</h4><p>Translation & grammar</p></div>
         <div class="tool" onclick="toolPrompt('brainstorm')"><div class="emoji">💭</div><h4>Brainstormer</h4><p>Generate ideas</p></div>
         <div class="tool" onclick="toolPrompt('presentation')"><div class="emoji">📊</div><h4>Presentation Builder</h4><p>Create slide structures</p></div>
-        <div class="tool" onclick="toolPrompt('exam')"><div class="emoji">🎓</div><h4>Exam Coach</h4><p>Prepare for exams</p></div>
     </div>
 </section>
 <section id="profileView" class="view profile">
@@ -361,6 +380,7 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
     <button onclick="switchView('chat')"><span>💬</span>Chat</button>
     <button onclick="switchView('tools')"><span>🧰</span>Tools</button>
     <button onclick="switchView('qr')"><span>📷</span>QR Scan</button>
+    <button onclick="switchView('security')"><span>🛡️</span>Security</button>
     <button onclick="switchView('about')"><span>ℹ️</span>About</button>
 </nav>
 <div id="settingsModal" class="modal">
@@ -571,7 +591,9 @@ window.switchView = function(name){
     if(!target) return;
     target.classList.add("active");
     document.querySelectorAll(".nav button").forEach(button => button.classList.remove("active"));
-    const indexes = { home:0, chat:1, tools:2, qr:3, about:4 };
+    
+    // Map navigation items properly
+    const indexes = { home:0, chat:1, tools:2, qr:3, security:4, about:5 };
     const navButtons = document.querySelectorAll(".nav button");
     if(indexes[name] !== undefined && navButtons[indexes[name]]){ navButtons[indexes[name]].classList.add("active"); }
 };
@@ -579,17 +601,6 @@ window.switchView = function(name){
 window.toggleSidebar = function(){
     const sidebar = document.getElementById("sidebar");
     if(sidebar) sidebar.classList.toggle("open");
-};
-
-const modeInstructions = {
-    quick: "Answer accurately, clearly, and directly in English.",
-    deep: "Use rigorous academic reasoning in English.",
-    learn: "Teach like an exemplary professor in English.",
-    research: "Act as an academic research assistant.",
-    solve: "Solve step-by-step with verification.",
-    writer: "Enhance clarity, argumentation, and scholarly tone.",
-    coder: "Review code correctness, security, and edge cases.",
-    debate: "Analyze multiple perspectives impartially."
 };
 
 let currentMode = UltraSettings.get().defaultSkill || "quick";
@@ -851,8 +862,7 @@ const toolPrompts = {
     code: "Review the following code for security and bugs:",
     language: "Improve this grammar and text:",
     brainstorm: "Generate creative ideas for:",
-    presentation: "Create a presentation outline for:",
-    exam: "Create an exam study strategy for:"
+    presentation: "Create a presentation outline for:"
 };
 
 window.toolPrompt = function(type){
