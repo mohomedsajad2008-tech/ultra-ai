@@ -299,19 +299,146 @@
 </section>
 
 <section id="aboutView" class="view about">
-    <h2>ℹ️ About App & Download</h2>
-    <div class="card glass">
-        <h3><span class="brand-badge appsgeyser-badge" style="margin-right:6px;">🛠️ AppsGeyser</span> How It Was Made</h3>
-        <p>This application was developed using <b>AppsGeyser</b>, providing a smooth, optimized, and reliable framework tailored for mobile users.</p>
+
+<style>
+@keyframes shieldFloat{
+    0%,100%{transform:translateY(0) rotate(0deg)}
+    50%{transform:translateY(-6px) rotate(2deg)}
+}
+@keyframes securityGlow{
+    0%,100%{box-shadow:0 0 8px rgba(16,185,129,.08)}
+    50%{box-shadow:0 0 25px rgba(16,185,129,.20)}
+}
+@keyframes textGlow{
+    0%,100%{opacity:.75}
+    50%{opacity:1}
+}
+
+.security-card{
+    animation:securityGlow 2.8s ease-in-out infinite;
+    border:1px solid rgba(16,185,129,.35)!important;
+}
+
+.security-icon{
+    text-align:center;
+    font-size:3.4rem;
+    margin:8px 0 14px;
+    animation:shieldFloat 2.2s ease-in-out infinite;
+}
+
+.security-title{
+    text-align:center;
+    color:var(--success)!important;
+    font-size:1.05rem!important;
+    margin-bottom:10px;
+}
+
+.security-text{
+    color:var(--muted);
+    font-size:.82rem;
+    line-height:1.65;
+    text-align:center;
+}
+
+.security-points{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin-top:15px;
+}
+
+.security-point{
+    padding:10px 12px;
+    border-radius:11px;
+    background:rgba(255,255,255,.035);
+    border:1px solid var(--border);
+    font-size:.78rem;
+    color:var(--text);
+}
+
+.install-box{
+    margin-top:15px;
+    padding:13px;
+    border-radius:13px;
+    text-align:center;
+    background:rgba(16,185,129,.08);
+    border:1px solid rgba(16,185,129,.30);
+    animation:textGlow 2s ease-in-out infinite;
+}
+
+.install-box strong{
+    color:var(--success);
+    font-size:.9rem;
+}
+
+.install-box span{
+    display:block;
+    margin-top:5px;
+    color:var(--muted);
+    font-size:.72rem;
+}
+</style>
+
+<h2>ℹ️ About App & Download</h2>
+
+<div class="card glass security-card">
+
+    <div class="security-icon">🛡️</div>
+
+    <h3 class="security-title">
+        🔒 Reliability & Security Verification
+    </h3>
+
+    <p class="security-text">
+        Your safety matters. ULTRA AI is designed with a
+        security-focused experience to help you use the application
+        with confidence.
+    </p>
+
+    <div class="security-points">
+
+        <div class="security-point">
+            🛡️ <b>Security First</b><br>
+            <span style="color:var(--muted);">
+                Always review the download source before installing.
+            </span>
+        </div>
+
+        <div class="security-point">
+            📱 <b>Android Installation</b><br>
+            <span style="color:var(--muted);">
+                Android may display a security prompt for apps
+                installed outside Google Play.
+            </span>
+        </div>
+
+        <div class="security-point">
+            🔍 <b>Verify Before Install</b><br>
+            <span style="color:var(--muted);">
+                Make sure the APK comes from the intended official
+                or trusted source.
+            </span>
+        </div>
+
+        <div class="security-point">
+            🔐 <b>Protect Your Device</b><br>
+            <span style="color:var(--muted);">
+                Check app permissions and only continue when you
+                trust the source.
+            </span>
+        </div>
+
     </div>
-    <div class="card glass" style="margin-top:12px;">
-        <h3><span class="brand-badge aptoide-badge" style="margin-right:6px;">🟢 Aptoide</span> Available on Aptoide</h3>
-        <p>You can effortlessly download, install, and update this app directly from the trusted <b>Aptoide</b> store ecosystem.</p>
+
+    <div class="install-box">
+        <strong>🛡️ SECURE INSTALL</strong>
+        <span>
+            Verify the source → Review permissions → Install safely
+        </span>
     </div>
-    <div class="card glass" style="margin-top:12px;">
-        <h3>🔒 Reliability & Security Verification</h3>
-        <p><b>Is it safe?</b> Yes, 100% reliable! If Android or your web browser displays a standard security prompt during third-party downloads, you can safely tap <b>"More details"</b> and <b>"Install anyway"</b> to proceed.</p>
-    </div>
+
+</div>
+
 </section>
 
 <section id="chatView" class="view chat">
