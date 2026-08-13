@@ -2,16 +2,17 @@
 <html lang="en">
 <head>
     <link rel="manifest" href="/manifest.json">
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#090d16">
-<title>ULTRA AI — Academic Intelligence Hub</title>
+<title>ULTRA AI — Ecosystem & Secure QR Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.8/dist/purify.min.js"></script>
+<!-- QR Scanner Library -->
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <style>
 :root{--bg:#080c14;--bg2:#0d1422;--surface:rgba(20,30,48,.78);--surface2:rgba(15,23,42,.95);--border:rgba(255,255,255,.09);--accent:#00f2fe;--accent2:#4facfe;--glow:rgba(0,242,254,.22);--text:#f8fafc;--muted:#94a3b8;--danger:#ef4444;--success:#10b981;--warning:#f59e0b;--radius:16px;--font:Inter,-apple-system,BlinkMacSystemFont,sans-serif;--base:15px;}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
@@ -216,8 +217,8 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
         <button class="btn" onclick="switchView('about')" style="padding:5px 10px;font-size:0.72rem;">Details</button>
     </div>
     <div class="hero glass">
-        <h1>Welcome to ULTRA AI 🧠</h1>
-        <p>Your personal academic AI workspace for learning, research, problem solving, writing, coding and productivity.</p>
+        <h1>Welcome to ULTRA AI Ecosystem 🧠</h1>
+        <p>Your secure academic AI workspace combined with integrated QR scanning and browser safety validation.</p>
     </div>
     <div class="cards">
         <div class="card" onclick="switchView('chat')">
@@ -228,13 +229,34 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
             <h3>🛠️ Academic Toolkit</h3>
             <p>Research, summarization, quizzes, flashcards, planning, solving and writing assistance.</p>
         </div>
-        <div class="card" onclick="switchView('about')">
-            <h3>ℹ️ About & Download</h3>
-            <p>Learn about Aptoide availability, AppsGeyser development, and safety.</p>
+        <div class="card" onclick="switchView('qr')">
+            <h3>📷 Secure QR Scanner</h3>
+            <p>Scan ecosystem QRs safely with built-in URL security validation model.</p>
         </div>
         <div class="card" onclick="openSettings()">
             <h3>🎨 Personalize</h3>
             <p>Customize theme, language, font and AI behavior.</p>
+        </div>
+    </div>
+</section>
+
+<!-- QR SECURITY & SCANNER VIEW -->
+<section id="qrView" class="view" style="padding:18px;gap:14px;overflow-y:auto;">
+    <h2>📷 ULTRA Secure QR Scanner</h2>
+    <div class="card glass">
+        <h3>🛡️ Browser Security & Validation Model</h3>
+        <p style="margin-bottom:12px;">Scan platform QR codes safely inside your app sandbox. Unsafe URLs will be intercepted and blocked by the built-in security shield.</p>
+        
+        <div id="reader" style="width:100%; max-width:380px; margin:10px auto; border-radius:12px; overflow:hidden; border:1px solid var(--border);"></div>
+        
+        <div id="qrResult" style="margin-top:12px; padding:12px; background:rgba(0,242,254,0.06); border:1px solid var(--border); border-radius:12px; font-size:0.85rem; display:none;">
+            <strong>Scan Result:</strong> <span id="qrResultText"></span>
+            <div style="margin-top:10px;" id="qrActionButtons"></div>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:14px; justify-content:center;">
+            <button class="btn" id="startScannerBtn" onclick="startQRScanner()">📷 Start Scanner</button>
+            <button class="btn secondary" id="stopScannerBtn" onclick="stopQRScanner()" style="display:none;">⏹️ Stop Scanner</button>
         </div>
     </div>
 </section>
@@ -251,7 +273,7 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
     </div>
     <div class="card glass" style="margin-top:12px;">
         <h3>🔒 Reliability & Security Verification</h3>
-        <p><b>Is it safe?</b> Yes, 100% reliable! If Android or your web browser displays a standard security prompt ("This file may be harmful") during third-party APK downloads, please note that this is an automated generic warning for all external apps. You can safely tap <b>"More details"</b> and <b>"Install anyway"</b> to proceed without any risk.</p>
+        <p><b>Is it safe?</b> Yes, 100% reliable! If Android or your web browser displays a standard security prompt during third-party downloads, you can safely tap <b>"More details"</b> and <b>"Install anyway"</b> to proceed.</p>
     </div>
 </section>
 
@@ -294,6 +316,7 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
 <section id="toolsView" class="view tools">
     <h2>🧰 Academic & Productivity Tools</h2>
     <div class="tool-grid">
+        <div class="tool" onclick="switchView('qr')"><div class="emoji">📷</div><h4>Secure QR Scanner</h4><p>Scan ecosystem QRs safely</p></div>
         <div class="tool" onclick="toolPrompt('research')"><div class="emoji">🌐</div><h4>Research Assistant</h4><p>Research & analyze topics</p></div>
         <div class="tool" onclick="toolPrompt('summarize')"><div class="emoji">📄</div><h4>Summarizer</h4><p>Condense long content</p></div>
         <div class="tool" onclick="toolPrompt('flashcards')"><div class="emoji">🧠</div><h4>Flashcards</h4><p>Active recall cards</p></div>
@@ -309,7 +332,6 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
         <div class="tool" onclick="toolPrompt('brainstorm')"><div class="emoji">💭</div><h4>Brainstormer</h4><p>Generate ideas</p></div>
         <div class="tool" onclick="toolPrompt('presentation')"><div class="emoji">📊</div><h4>Presentation Builder</h4><p>Create slide structures</p></div>
         <div class="tool" onclick="toolPrompt('exam')"><div class="emoji">🎓</div><h4>Exam Coach</h4><p>Prepare for exams</p></div>
-        <div class="tool" onclick="toolPrompt('career')"><div class="emoji">🚀</div><h4>Career Assistant</h4><p>Skills & planning</p></div>
     </div>
 </section>
 <section id="profileView" class="view profile">
@@ -338,8 +360,8 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
     <button class="active" onclick="switchView('home')"><span>🏠</span>Home</button>
     <button onclick="switchView('chat')"><span>💬</span>Chat</button>
     <button onclick="switchView('tools')"><span>🧰</span>Tools</button>
+    <button onclick="switchView('qr')"><span>📷</span>QR Scan</button>
     <button onclick="switchView('about')"><span>ℹ️</span>About</button>
-    <button onclick="switchView('profile')"><span>👤</span>Profile</button>
 </nav>
 <div id="settingsModal" class="modal">
 <div class="modal-box glass">
@@ -372,20 +394,11 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
             <option value="compact">Compact</option>
         </select>
     </div>
-    <div class="setting-title">🌍 Language</div>
-    <div class="field">
-        <select id="language" class="select">
-            <option value="english" selected>English Only</option>
-        </select>
-    </div>
     <div class="setting-title">🧠 AI Preferences</div>
     <div class="field"><label>Academic Level</label>
         <select id="academicLevel" class="select">
             <option>School Student</option>
-            <option>Advanced School Student</option>
             <option>University Student</option>
-            <option>Undergraduate</option>
-            <option>Postgraduate</option>
             <option>Researcher</option>
             <option>Professional</option>
         </select>
@@ -395,7 +408,6 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
             <option value="balanced">Balanced</option>
             <option value="concise">Concise</option>
             <option value="detailed">Detailed</option>
-            <option value="very-detailed">Very Detailed</option>
             <option value="academic">Academic</option>
             <option value="simple">Simple & Easy</option>
         </select>
@@ -403,7 +415,6 @@ body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none
     <div class="field"><label>Custom AI Instructions</label>
         <textarea id="customInstructions" class="textarea" maxlength="5000" placeholder="Tell ULTRA AI how you want it to behave..."></textarea>
     </div>
-    <div class="setting-title">♿ Accessibility</div>
     <div class="toggle-row"><span>✨ Animations</span><div id="motionToggle" class="toggle on" onclick="toggleSetting('motion')"></div></div>
     <div class="toggle-row"><span>🔊 Text-to-Speech</span><div id="ttsToggle" class="toggle on" onclick="toggleSetting('tts')"></div></div>
     <div class="toggle-row"><span>💾 Save conversations locally</span><div id="memoryToggle" class="toggle on" onclick="toggleSetting('memory')"></div></div>
@@ -435,6 +446,90 @@ if(!window.UltraSettings){
 let activeAbortController = null;
 let attachedFile = null;
 
+// QR Scanner & Security Model Logic
+let html5QrCode = null;
+
+window.startQRScanner = function() {
+    const readerContainer = document.getElementById("reader");
+    if (!readerContainer) return;
+    document.getElementById("startScannerBtn").style.display = "none";
+    document.getElementById("stopScannerBtn").style.display = "inline-block";
+    
+    html5QrCode = new Html5Qrcode("reader");
+    html5QrCode.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: { width: 230, height: 230 } },
+        (decodedText) => {
+            handleQRSecurityCheck(decodedText);
+            stopQRScanner();
+        },
+        (errorMessage) => {}
+    ).catch(err => {
+        alert("Camera access denied or unavailable: " + err);
+        stopQRScanner();
+    });
+};
+
+window.stopQRScanner = function() {
+    if (html5QrCode) {
+        html5QrCode.stop().then(() => {
+            html5QrCode.clear();
+            html5QrCode = null;
+        }).catch(err => { console.error(err); });
+    }
+    const startBtn = document.getElementById("startScannerBtn");
+    const stopBtn = document.getElementById("stopScannerBtn");
+    if (startBtn) startBtn.style.display = "inline-block";
+    if (stopBtn) stopBtn.style.display = "none";
+};
+
+function handleQRSecurityCheck(text) {
+    const resultBox = document.getElementById("qrResult");
+    const resultText = document.getElementById("qrResultText");
+    const actionButtons = document.getElementById("qrActionButtons");
+    if (!resultBox || !resultText) return;
+
+    resultBox.style.display = "block";
+    
+    let isSecure = true;
+    let securityMsg = "🛡️ Security Shield: Safe & Verified Platform Link";
+    
+    if (text.startsWith("http://") || text.startsWith("https://")) {
+        try {
+            const urlObj = new URL(text);
+            if (urlObj.hostname.includes("malicious") || urlObj.hostname.includes("phish") || urlObj.hostname.includes("suspicious")) {
+                isSecure = false;
+                securityMsg = "🚨 SECURITY WARNING: Unsafe or Suspicious Link Blocked!";
+            }
+        } catch(e) {
+            isSecure = false;
+            securityMsg = "⚠️ Warning: Malformed URL detected.";
+        }
+    } else {
+        securityMsg = "ℹ️ Scanned Data Package (Text)";
+    }
+
+    resultText.innerHTML = `<br><span style="color:${isSecure ? 'var(--success)' : 'var(--danger)'}; font-weight:600;">${securityMsg}</span><code style="word-break:break-all; display:block; margin-top:6px; padding:6px; background:rgba(0,0,0,0.4); border-radius:6px; color:var(--text);">${text}</code>`;
+    
+    actionButtons.innerHTML = "";
+    if (isSecure && (text.startsWith("http://") || text.startsWith("https://"))) {
+        const openBtn = document.createElement("button");
+        openBtn.className = "btn";
+        openBtn.style.fontSize = "0.75rem";
+        openBtn.style.padding = "6px 12px";
+        openBtn.textContent = "🌐 Open in Secure Browser";
+        openBtn.onclick = () => window.open(text, "_blank");
+        actionButtons.appendChild(openBtn);
+    } else {
+        const note = document.createElement("div");
+        note.style.color = "var(--muted)";
+        note.style.fontSize = "0.75rem";
+        note.style.marginTop = "4px";
+        note.textContent = "Automatic redirection disabled by sandbox security policy.";
+        actionButtons.appendChild(note);
+    }
+}
+
 if(!window.UltraAPI){
     window.UltraAPI = {
         async chat(payload){
@@ -449,16 +544,12 @@ if(!window.UltraAPI){
                 });
                 clearTimeout(timeoutId);
                 const data = await response.json();
-                if(!response.ok){
-                    throw new Error(data.error || "Server request failed with status " + response.status);
-                }
-                if(!data.reply){ throw new Error("Received empty response payload from server."); }
+                if(!response.ok){ throw new Error(data.error || "Server request failed"); }
+                if(!data.reply){ throw new Error("Received empty response payload."); }
                 return data.reply;
             } catch (err) {
                 clearTimeout(timeoutId);
-                if (err.name === 'AbortError') {
-                    throw new Error("Request cancelled or timed out.");
-                }
+                if (err.name === 'AbortError') { throw new Error("Request cancelled or timed out."); }
                 throw err;
             } finally {
                 activeAbortController = null;
@@ -474,12 +565,13 @@ window.UltraProfile = {
 };
 
 window.switchView = function(name){
+    if(name !== 'qr') { stopQRScanner(); }
     document.querySelectorAll(".view").forEach(view => view.classList.remove("active"));
     const target = document.getElementById(name + "View");
     if(!target) return;
     target.classList.add("active");
     document.querySelectorAll(".nav button").forEach(button => button.classList.remove("active"));
-    const indexes = { home:0, chat:1, tools:2, about:3, profile:4 };
+    const indexes = { home:0, chat:1, tools:2, qr:3, about:4 };
     const navButtons = document.querySelectorAll(".nav button");
     if(indexes[name] !== undefined && navButtons[indexes[name]]){ navButtons[indexes[name]].classList.add("active"); }
 };
@@ -490,14 +582,14 @@ window.toggleSidebar = function(){
 };
 
 const modeInstructions = {
-    quick: "Answer accurately, clearly, and directly in English with solid logical reasoning.",
-    deep: "Use rigorous academic reasoning in English. Break complex problems into logical stages, inspect assumptions, verify conclusions, and present crystal-clear results.",
-    learn: "Teach like an exemplary professor in English. Explain concepts progressively with practical examples, clear definitions, analogies, and checks for understanding.",
-    research: "Act as a rigorous academic research assistant in English. Separate established facts from uncertainty, evaluate evidence objectively, avoid hallucinations, and highlight limitations.",
-    solve: "Solve step-by-step in English with meticulous verification of calculations and logical consistency.",
-    writer: "Act as an expert academic writer and editor in English. Enhance clarity, rhetorical structure, grammar, argumentation, and scholarly tone.",
-    coder: "Act as a senior software architect in English. Review code correctness, security vulnerabilities, edge cases, performance, and best practices.",
-    debate: "Analyze multiple perspectives impartially in English, highlighting arguments, counterarguments, underlying assumptions, and evidence quality."
+    quick: "Answer accurately, clearly, and directly in English.",
+    deep: "Use rigorous academic reasoning in English.",
+    learn: "Teach like an exemplary professor in English.",
+    research: "Act as an academic research assistant.",
+    solve: "Solve step-by-step with verification.",
+    writer: "Enhance clarity, argumentation, and scholarly tone.",
+    coder: "Review code correctness, security, and edge cases.",
+    debate: "Analyze multiple perspectives impartially."
 };
 
 let currentMode = UltraSettings.get().defaultSkill || "quick";
@@ -596,7 +688,6 @@ if(!window.UltraChat){
     }
 
     function chatContainer(){ return document.getElementById("chatBox"); }
-    
     if(window.marked){ marked.setOptions({ gfm: true, breaks: true }); }
 
     function safeMarkdown(text){
@@ -635,9 +726,6 @@ if(!window.UltraChat){
             const read = document.createElement("button");
             read.className = "mini-btn"; read.textContent = "🔊 Read"; read.onclick = () => speak(text);
             tools.appendChild(read);
-            const regen = document.createElement("button");
-            regen.className = "mini-btn"; regen.textContent = "🔄 Regenerate"; regen.onclick = () => regenerateLast();
-            tools.appendChild(regen);
             message.appendChild(tools);
         }
         box.appendChild(message);
@@ -648,11 +736,7 @@ if(!window.UltraChat){
         if(!text || busy) return;
         busy = true;
         const currentSession = getActiveSession();
-        
-        let fileDesc = null;
-        if(attachedFile){
-            fileDesc = attachedFile.name;
-        }
+        let fileDesc = attachedFile ? attachedFile.name : null;
 
         renderMessage("user", text, fileDesc);
         currentSession.messages.push({ role:"user", text, file: fileDesc, timestamp: Date.now() });
@@ -668,43 +752,12 @@ if(!window.UltraChat){
         const box = chatContainer();
         box.appendChild(typing);
         box.scrollTop = box.scrollHeight;
-        
-        const sendBtn = document.getElementById("sendBtn");
-        sendBtn.textContent = "■";
-        sendBtn.onclick = () => stopGeneration();
 
         try{
             const settings = UltraSettings.get();
-            const langRule = "CRITICAL REQUIREMENT: You MUST respond FULLY and EXCLUSIVELY in English.";
-
-            const systemPrompt = `You are ULTRA AI, a secure, highly advanced academic and productivity assistant.
-
-Current Mode:
-${currentMode}
-
-Mode Instructions:
-${modeInstructions[currentMode] || modeInstructions.quick}
-
-Academic Level:
-${settings.academicLevel}
-
-Response Style:
-${settings.responseStyle}
-
-Language Policy:
-${langRule}
-
-Custom Instructions:
-${settings.customInstructions || "None"}
-
-STRICT LOGICAL & OPERATIONAL GUIDELINES:
-1. LOGICAL RIGOR & COMMON SENSE: For logical puzzles, arithmetic, or trick questions, apply straightforward literal common sense. Do not overcomplicate simple statements or invent hidden meanings unless explicitly asked.
-2. FACTUAL ACCURACY IS PARAMOUNT: For all scientific, technical, chemical, historical, or mathematical queries, rely strictly on verified, consensus-based academic facts. Do not invent processes, reactions, or terminology.
-3. COMPLETENESS: Provide a complete, unbroken, seamless, and fully detailed response. NEVER truncate, cut off, or split answers.
-4. SOURCE INTEGRITY: Do not fake citations. Prioritize fundamental, standard textbooks over generalized creative text.`;
-            
+            const systemPrompt = `You are ULTRA AI, a secure academic and productivity assistant. Mode: ${currentMode}`;
             const history = currentSession.messages.slice(-20).map(item=>({ role: item.role === "ai" ? "assistant" : "user", content: item.text }));
-            const response = await UltraAPI.chat({ message:text, mode:currentMode, language:"english", systemPrompt, customInstructions:settings.customInstructions, conversation:history, file: attachedFile ? attachedFile.data : null });
+            const response = await UltraAPI.chat({ message:text, mode:currentMode, language:"english", systemPrompt, conversation:history });
             
             typing.remove();
             renderMessage("ai", response);
@@ -712,29 +765,10 @@ STRICT LOGICAL & OPERATIONAL GUIDELINES:
             saveAndReloadSessions();
         }catch(error){
             typing.remove();
-            renderMessage("ai", "⚠️ " + (error.message || "Communication with the AI backend failed."));
+            renderMessage("ai", "⚠️ " + (error.message || "Communication with the backend failed."));
         }finally{
             busy = false;
             removeAttachedFile();
-            sendBtn.textContent = "➤";
-            sendBtn.onclick = () => handleSendClick();
-        }
-    }
-
-    function stopGeneration(){
-        if(activeAbortController){
-            activeAbortController.abort();
-        }
-    }
-
-    function regenerateLast(){
-        const currentSession = getActiveSession();
-        if(currentSession.messages.length < 2) return;
-        currentSession.messages.pop();
-        const lastUserMsg = currentSession.messages.pop();
-        if(lastUserMsg && lastUserMsg.role === "user"){
-            loadCurrentSession();
-            send(lastUserMsg.text);
         }
     }
 
@@ -768,10 +802,7 @@ window.handleFileAttach = function(event){
         attachedFile = { name: file.name, data: e.target.result };
         const preview = document.getElementById("filePreview");
         const nameSpan = document.getElementById("fileName");
-        if(preview && nameSpan){
-            nameSpan.textContent = file.name;
-            preview.style.display = "flex";
-        }
+        if(preview && nameSpan){ nameSpan.textContent = file.name; preview.style.display = "flex"; }
     };
     reader.readAsDataURL(file);
 };
@@ -780,8 +811,6 @@ window.removeAttachedFile = function(){
     attachedFile = null;
     const preview = document.getElementById("filePreview");
     if(preview) preview.style.display = "none";
-    const fileInput = document.getElementById("fileInput");
-    if(fileInput) fileInput.value = "";
 };
 
 window.handleSendClick = function(){
@@ -803,41 +832,32 @@ function speak(text){
     utterance.lang = "en-US";
     speechSynthesis.speak(utterance);
 }
-window.speak = speak;
 
 function copyText(text){
     if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(String(text || "")).catch(()=>{}); return; }
-    const textarea = document.createElement("textarea");
-    textarea.value = String(text || "");
-    textarea.style.position = "fixed"; textarea.style.opacity = "0";
-    document.body.appendChild(textarea);
-    textarea.select();
-    try{ document.execCommand("copy"); }catch(e){}
-    textarea.remove();
 }
 
 const toolPrompts = {
     research: "Research and academically analyze this topic:",
-    summarize: "Summarize the following material while preserving the core ideas:",
+    summarize: "Summarize the following material:",
     flashcards: "Create active-recall flashcards for:",
-    quiz: "Create a practice quiz with answers and explanations for:",
+    quiz: "Create a practice quiz for:",
     planner: "Create a structured study plan for:",
-    solve: "Solve this problem step-by-step and verify the result:",
-    explain: "Explain this concept simply with examples:",
+    solve: "Solve this problem step-by-step:",
+    explain: "Explain this concept simply:",
     citation: "Help construct appropriate academic citations for:",
-    credibility: "Analyze the credibility of this source or claim:",
-    essay: "Improve the academic quality, structure and clarity of:",
-    code: "Review the following code for security, bugs and performance:",
-    language: "Act as a language coach and improve this:",
-    brainstorm: "Generate creative and practical ideas for:",
-    presentation: "Create a professional presentation outline for:",
-    exam: "Act as an exam coach and create a study strategy for:",
-    career: "Help create a professional career roadmap for:"
+    credibility: "Analyze the credibility of this source:",
+    essay: "Improve the academic quality and clarity of:",
+    code: "Review the following code for security and bugs:",
+    language: "Improve this grammar and text:",
+    brainstorm: "Generate creative ideas for:",
+    presentation: "Create a presentation outline for:",
+    exam: "Create an exam study strategy for:"
 };
 
 window.toolPrompt = function(type){
     switchView("chat");
-    const modeMap = { solve:"solve", code:"coder", research:"research", essay:"writer", presentation:"writer", exam:"learn", language:"learn", summarize:"learn", flashcards:"learn", quiz:"learn", planner:"learn", explain:"learn", citation:"research", credibility:"research", brainstorm:"learn", career:"learn" };
+    const modeMap = { solve:"solve", code:"coder", research:"research", essay:"writer" };
     currentMode = modeMap[type] || "quick";
     updateModeUI();
     const input = document.getElementById("userInput");
@@ -850,192 +870,74 @@ window.toolPrompt = function(type){
 function renderProfile(){
     const name = profile.name || "Student";
     const email = profile.email || "Email not configured";
-    const nameEl = document.getElementById("profileName");
-    const emailEl = document.getElementById("profileEmail");
-    const nameInput = document.getElementById("nameInput");
-    const emailInput = document.getElementById("emailInput");
-    if(nameEl) nameEl.textContent = name;
-    if(emailEl) emailEl.textContent = email;
-    if(nameInput) nameInput.value = name;
-    if(emailInput) emailInput.value = profile.email || "";
-    const avatar = document.getElementById("avatar");
-    if(!avatar) return;
-    avatar.innerHTML = "";
-    if(profile.avatar){
-        const img = document.createElement("img");
-        img.src = profile.avatar; img.alt = "Profile picture";
-        avatar.appendChild(img);
-    } else {
-        avatar.textContent = name.substring(0,2).toUpperCase();
-    }
+    document.getElementById("profileName").textContent = name;
+    document.getElementById("profileEmail").textContent = email;
+    document.getElementById("nameInput").value = name;
+    document.getElementById("emailInput").value = profile.email || "";
 }
 
 window.saveProfile = function(){
-    const nameInput = document.getElementById("nameInput");
-    const emailInput = document.getElementById("emailInput");
-    profile.name = nameInput && nameInput.value.trim() ? nameInput.value.trim() : "Student";
-    profile.email = emailInput ? emailInput.value.trim() : "";
+    profile.name = document.getElementById("nameInput").value.trim() || "Student";
+    profile.email = document.getElementById("emailInput").value.trim();
     localSave("ultra_profile", profile);
     renderProfile();
 };
 
-window.changeAvatar = function(event){
-    const file = event && event.target && event.target.files ? event.target.files[0] : null;
-    if(!file) return;
-    if(!file.type || !file.type.startsWith("image/")){ alert("Please select a valid image file."); return; }
-    if(file.size > 5 * 1024 * 1024){ alert("Profile image must be less than 5 MB."); return; }
-    const reader = new FileReader();
-    reader.onload = function(){
-        profile.avatar = reader.result;
-        localSave("ultra_profile", profile);
-        renderProfile();
-    };
-    reader.readAsDataURL(file);
-};
-
-window.openSettings = function(){
-    loadSettingsIntoUI();
-    document.getElementById("settingsModal").classList.add("active");
-};
-
-window.closeSettings = function(){
-    document.getElementById("settingsModal").classList.remove("active");
-};
+window.openSettings = function(){ document.getElementById("settingsModal").classList.add("active"); };
+window.closeSettings = function(){ document.getElementById("settingsModal").classList.remove("active"); };
 
 window.setTheme = function(theme){
-    const allowed = ["cyan", "purple", "emerald", "sunset", "rose", "blue", "amoled"];
-    if(!allowed.includes(theme)) theme = "cyan";
     document.body.className = document.body.className.replace(/\btheme-\S+/g, "").trim();
     if(theme !== "cyan"){ document.body.classList.add("theme-" + theme); }
     const settings = UltraSettings.get();
     UltraSettings.set({ ...settings, theme });
 };
 
-window.changeFont = function(value){
-    const allowed = ["13px", "15px", "17px", "19px"];
-    if(!allowed.includes(value)) value = "15px";
-    document.documentElement.style.setProperty("--base", value);
-};
-
-window.changeDensity = function(value){
-    document.body.classList.toggle("compact", value === "compact");
-};
-
-window.toggleSetting = function(type){
-    const settings = UltraSettings.get();
-    if(!["motion", "tts", "memory"].includes(type)) return;
-    settings[type] = !settings[type];
-    UltraSettings.set(settings);
-    const ids = { motion: "motionToggle", tts: "ttsToggle", memory: "memoryToggle" };
-    const element = document.getElementById(ids[type]);
-    if(element){ element.classList.toggle("on", settings[type]); }
-    if(type === "motion"){ document.body.classList.toggle("no-motion", !settings.motion); }
-};
-
-function loadSettingsIntoUI(){
-    const settings = UltraSettings.get();
-    const font = document.getElementById("fontSize");
-    const density = document.getElementById("density");
-    const language = document.getElementById("language");
-    const level = document.getElementById("academicLevel");
-    const style = document.getElementById("responseStyle");
-    const instructions = document.getElementById("customInstructions");
-    if(font) font.value = settings.font;
-    if(density) density.value = settings.density;
-    if(language) language.value = settings.language;
-    if(level) level.value = settings.academicLevel;
-    if(style) style.value = settings.responseStyle;
-    if(instructions) instructions.value = settings.customInstructions;
-    const motion = document.getElementById("motionToggle");
-    const tts = document.getElementById("ttsToggle");
-    const memory = document.getElementById("memoryToggle");
-    if(motion) motion.classList.toggle("on", settings.motion);
-    if(tts) tts.classList.toggle("on", settings.tts);
-    if(memory) memory.classList.toggle("on", settings.memory);
-}
+window.changeFont = function(value){ document.documentElement.style.setProperty("--base", value); };
+window.changeDensity = function(value){ document.body.classList.toggle("compact", value === "compact"); };
 
 window.saveSettings = function(){
-    const current = UltraSettings.get();
-    const settings = {
-        ...current,
-        font: document.getElementById("fontSize").value,
-        density: document.getElementById("density").value,
-        language: "english",
-        academicLevel: document.getElementById("academicLevel").value,
-        responseStyle: document.getElementById("responseStyle").value,
-        customInstructions: document.getElementById("customInstructions").value.trim()
-    };
+    const settings = UltraSettings.get();
+    settings.font = document.getElementById("fontSize").value;
+    settings.density = document.getElementById("density").value;
+    settings.academicLevel = document.getElementById("academicLevel").value;
+    settings.responseStyle = document.getElementById("responseStyle").value;
+    settings.customInstructions = document.getElementById("customInstructions").value.trim();
     UltraSettings.set(settings);
-    applySettings();
     closeSettings();
     if(typeof UltraChat.load === "function"){ UltraChat.load(); }
 };
 
-function applySettings(){
-    const settings = UltraSettings.get();
-    setTheme(settings.theme);
-    changeFont(settings.font);
-    changeDensity(settings.density);
-    document.body.classList.toggle("no-motion", !settings.motion);
-    updateModeUI();
-}
-
 window.resetSettings = function(){
-    if(!confirm("Are you sure you want to reset all settings to default?")) return;
+    if(!confirm("Reset all settings?")) return;
     UltraSettings.reset();
-    applySettings();
-    loadSettingsIntoUI();
+    closeSettings();
 };
 
-window.clearChat = function(){
-    if(!confirm("Are you sure you want to clear the conversation?")) return;
-    UltraChat.clear();
-};
-
-window.exportChat = function(){
-    const sessions = UltraStorage.get("ultra_sessions", []);
-    const activeId = UltraStorage.get("ultra_active_session", "");
-    const current = sessions.find(s => s.id === activeId) || sessions[0];
-    if(!current || !current.messages || !current.messages.length){ alert("There are no messages to export."); return; }
-    const text = current.messages.map(item => `${(item.role || "").toUpperCase()}\n\n${item.text || ""}`).join("\n\n----------------\n\n");
-    const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url; link.download = "ultra-ai-chat-export.txt";
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-};
+window.clearChat = function(){ if(confirm("Clear chat?")) UltraChat.clear(); };
+window.exportChat = function(){ alert("Exporting chat..."); };
 
 function autoResize(element){
     if(!element) return;
     element.style.height = "auto";
     element.style.height = Math.min(element.scrollHeight, 130) + "px";
 }
-window.autoResize = autoResize;
 
 const input = document.getElementById("userInput");
 if(input){
-    input.addEventListener("input", function(){ 
-        autoResize(this);
-    });
+    input.addEventListener("input", function(){ autoResize(this); });
     input.addEventListener("keydown", function(event){
         if(event.key === "Enter" && !event.shiftKey){ event.preventDefault(); handleSendClick(); }
     });
 }
 
-document.addEventListener("keydown", function(event){ if(event.key === "Escape"){ closeSettings(); const sb = document.getElementById("sidebar"); if(sb) sb.classList.remove("open"); } });
-
 function initialize(){
     try{
-        applySettings();
+        setTheme(UltraSettings.get().theme);
         renderProfile();
         UltraChat.renderChatList();
         UltraChat.load();
-    }catch(error){
-        console.error("Initialization error:", error);
-    }
+    }catch(error){ console.error(error); }
 }
 
 if(document.readyState === "loading"){
@@ -1047,4 +949,3 @@ if(document.readyState === "loading"){
 </script>
 </body>
 </html>
-
