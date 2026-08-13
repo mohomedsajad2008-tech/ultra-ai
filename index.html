@@ -1001,4 +1001,451 @@ if(document.readyState === "loading"){
 })();
 </script>
 </body>
+    <!-- 🚀 ULTRA AI APK DOWNLOAD POPUP -->
+<div id="ultraApkPopup">
+
+    <div class="ultra-apk-box">
+
+        <button
+            onclick="closeUltraApkPopup()"
+            class="ultra-apk-close"
+            aria-label="Close"
+        >✕</button>
+
+        <div class="ultra-apk-icon">
+            📱
+        </div>
+
+        <div class="ultra-apk-content">
+            <div class="ultra-apk-title">
+                🚀 ULTRA AI Android App
+            </div>
+
+            <div class="ultra-apk-message">
+                Install the official ULTRA AI APK
+                <br>
+                ⚡ Fast • Free • Mobile Optimized
+            </div>
+
+            <a
+                href="https://github.com/mohomedsajad2008-tech/ultra-ai/releases/download/v1.0.0/_Ultra_Academic_20058244.apk"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="ultra-apk-download"
+                onclick="closeUltraApkPopup()"
+            >
+                📥 Download & Install APK
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+
+/* ================================
+   ULTRA AI APK POPUP
+================================ */
+
+#ultraApkPopup{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    z-index:999999;
+
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+
+    padding:12px;
+
+    pointer-events:none;
+
+    animation:
+        ultraPopupAppear .7s cubic-bezier(.22,1,.36,1) forwards;
+}
+
+/* Popup Card */
+
+.ultra-apk-box{
+    position:relative;
+
+    width:min(560px,94vw);
+
+    display:flex;
+    align-items:center;
+
+    gap:12px;
+
+    padding:13px 14px;
+
+    border:1px solid rgba(0,242,254,.65);
+
+    border-radius:18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(8,12,20,.97),
+            rgba(15,25,42,.97)
+        );
+
+    backdrop-filter:blur(25px);
+    -webkit-backdrop-filter:blur(25px);
+
+    box-shadow:
+        0 15px 45px rgba(0,0,0,.55),
+        0 0 25px rgba(0,242,254,.18),
+        inset 0 0 20px rgba(0,242,254,.04);
+
+    overflow:hidden;
+
+    pointer-events:auto;
+
+    animation:
+        ultraBoxFloat 3s ease-in-out infinite;
+}
+
+/* Animated glowing line */
+
+.ultra-apk-box::before{
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:-100%;
+
+    width:100%;
+    height:2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #00f2fe,
+            #4facfe,
+            transparent
+        );
+
+    animation:
+        ultraLightMove 2.5s linear infinite;
+}
+
+/* Icon */
+
+.ultra-apk-icon{
+    width:50px;
+    height:50px;
+
+    flex-shrink:0;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:15px;
+
+    font-size:26px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0,242,254,.18),
+            rgba(79,172,254,.14)
+        );
+
+    border:1px solid rgba(0,242,254,.3);
+
+    box-shadow:
+        0 0 18px rgba(0,242,254,.22);
+
+    animation:
+        ultraIconPulse 2s ease-in-out infinite;
+}
+
+/* Content */
+
+.ultra-apk-content{
+    flex:1;
+    min-width:0;
+}
+
+.ultra-apk-title{
+    color:#f8fafc;
+
+    font-size:14px;
+
+    font-weight:800;
+
+    margin-bottom:3px;
+}
+
+.ultra-apk-message{
+    color:#94a3b8;
+
+    font-size:10px;
+
+    line-height:1.45;
+
+    margin-bottom:8px;
+}
+
+/* Download Button */
+
+.ultra-apk-download{
+    display:inline-flex;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:8px 13px;
+
+    border-radius:10px;
+
+    text-decoration:none;
+
+    font-size:10px;
+
+    font-weight:800;
+
+    color:#061018;
+
+    background:
+        linear-gradient(
+            135deg,
+            #00f2fe,
+            #4facfe
+        );
+
+    box-shadow:
+        0 0 15px rgba(0,242,254,.30);
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+.ultra-apk-download:hover{
+    transform:translateY(-2px) scale(1.03);
+
+    box-shadow:
+        0 0 25px rgba(0,242,254,.55);
+}
+
+.ultra-apk-download:active{
+    transform:scale(.94);
+}
+
+/* Close Button */
+
+.ultra-apk-close{
+    position:absolute;
+
+    top:5px;
+    right:7px;
+
+    width:23px;
+    height:23px;
+
+    border:0;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.07);
+
+    color:#94a3b8;
+
+    font-size:11px;
+
+    cursor:pointer;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    transition:.2s ease;
+}
+
+.ultra-apk-close:hover{
+    color:#fff;
+
+    background:rgba(239,68,68,.25);
+
+    transform:rotate(90deg);
+}
+
+/* Popup entrance */
+
+@keyframes ultraPopupAppear{
+
+    0%{
+        opacity:0;
+        transform:translateY(-100%);
+    }
+
+    70%{
+        opacity:1;
+        transform:translateY(8px);
+    }
+
+    100%{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* Floating animation */
+
+@keyframes ultraBoxFloat{
+
+    0%,100%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(3px);
+    }
+}
+
+/* Icon animation */
+
+@keyframes ultraIconPulse{
+
+    0%,100%{
+        transform:scale(1);
+        box-shadow:0 0 15px rgba(0,242,254,.18);
+    }
+
+    50%{
+        transform:scale(1.08);
+        box-shadow:0 0 25px rgba(0,242,254,.45);
+    }
+}
+
+/* Light animation */
+
+@keyframes ultraLightMove{
+
+    0%{
+        left:-100%;
+    }
+
+    100%{
+        left:100%;
+    }
+}
+
+/* Mobile */
+
+@media(max-width:600px){
+
+    #ultraApkPopup{
+        padding:8px;
+    }
+
+    .ultra-apk-box{
+        width:96vw;
+
+        padding:12px;
+
+        gap:9px;
+
+        border-radius:16px;
+    }
+
+    .ultra-apk-icon{
+        width:43px;
+        height:43px;
+
+        border-radius:12px;
+
+        font-size:22px;
+    }
+
+    .ultra-apk-title{
+        font-size:12px;
+    }
+
+    .ultra-apk-message{
+        font-size:9px;
+    }
+
+    .ultra-apk-download{
+        padding:7px 10px;
+
+        font-size:9px;
+    }
+}
+
+</style>
+
+<script>
+
+/* ==================================
+   ULTRA AI APK POPUP CONTROLS
+================================== */
+
+function closeUltraApkPopup(){
+
+    const popup =
+        document.getElementById("ultraApkPopup");
+
+    if(!popup) return;
+
+    popup.style.animation =
+        "ultraPopupDisappear .35s ease forwards";
+
+    setTimeout(function(){
+
+        popup.remove();
+
+    },350);
+}
+
+
+/* Add closing animation */
+
+const ultraPopupStyle =
+document.createElement("style");
+
+ultraPopupStyle.innerHTML = `
+
+@keyframes ultraPopupDisappear{
+
+    from{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+    to{
+        opacity:0;
+        transform:translateY(-120%);
+    }
+
+}
+
+`;
+
+document.head.appendChild(ultraPopupStyle);
+
+
+/* Auto popup after page loads */
+
+setTimeout(function(){
+
+    const popup =
+        document.getElementById("ultraApkPopup");
+
+    if(popup){
+
+        popup.style.display = "flex";
+
+    }
+
+},500);
+
+</script>
 </html>
