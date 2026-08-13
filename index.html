@@ -212,14 +212,50 @@
     </div>
 
 <section id="homeView" class="view active home">
-    <div class="promo-banner glass">
-        <div style="display:flex;align-items:center;gap:8px;">
-            <div class="promo-badges">
-                <span class="brand-badge aptoide-badge">🟢 Aptoide</span>
-                <span class="brand-badge appsgeyser-badge">🛠️ AppsGeyser</span>
+    <div class="promo-banner glass"
+     style="
+        border-color:rgba(16,185,129,.4);
+        background:rgba(16,185,129,.07);
+     ">
+
+    <div style="display:flex;align-items:center;gap:9px;">
+        <span style="
+            font-size:1.25rem;
+            animation:pulse 2s infinite;
+        ">🛡️</span>
+
+        <div>
+            <div style="
+                font-weight:800;
+                color:var(--success);
+                font-size:.82rem;
+            ">
+                Security Verified
             </div>
-            <span>Download safely & verified.</span>
+
+            <div style="
+                color:var(--muted);
+                font-size:.68rem;
+                margin-top:2px;
+            ">
+                Check the source before installing
+            </div>
         </div>
+    </div>
+
+    <button
+        class="btn"
+        onclick="switchView('about')"
+        style="
+            padding:6px 11px;
+            font-size:.7rem;
+            background:linear-gradient(135deg,#10b981,#34d399);
+        "
+    >
+        🛡️ Details
+    </button>
+
+    </div>
         <button class="btn" onclick="switchView('about')" style="padding:5px 10px;font-size:0.72rem;">Details</button>
     </div>
     <div class="hero glass">
