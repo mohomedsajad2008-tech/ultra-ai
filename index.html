@@ -1,0 +1,4753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#080c14">
+<meta name="description" content="ULTRA AI - Secure Academic AI Assistant">
+<title>ULTRA AI — Secure AI Hub</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.8/dist/purify.min.js"></script>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "YOUR_TOKEN_HERE"}'></script>
+
+<style>
+:root{
+ --bg:#080c14;
+ --bg2:#0d1422;
+ --surface:rgba(20,30,48,.78);
+ --surface2:rgba(15,23,42,.96);
+ --border:rgba(255,255,255,.09);
+ --accent:#00f2fe;
+ --accent2:#4facfe;
+ --glow:rgba(0,242,254,.22);
+ --text:#f8fafc;
+ --muted:#94a3b8;
+ --danger:#ef4444;
+ --success:#10b981;
+ --warning:#f59e0b;
+ --font:Inter,-apple-system,BlinkMacSystemFont,sans-serif;
+ --base:15px;
+}
+
+*{
+ box-sizing:border-box;
+ margin:0;
+ padding:0;
+ -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+ width:100%;
+ height:100%;
+ height:100dvh;
+ overflow:hidden;
+ background:
+ radial-gradient(circle at 50% 0%,#17243b 0%,#0d1422 45%,#080c14 100%);
+ color:var(--text);
+ font-family:var(--font);
+ font-size:var(--base);
+}
+
+body{
+ padding-bottom:env(safe-area-inset-bottom);
+}
+
+button,input,textarea,select{
+ font-family:inherit;
+}
+
+button{
+ cursor:pointer;
+}
+
+::-webkit-scrollbar{
+ width:5px;
+}
+
+::-webkit-scrollbar-track{
+ background:transparent;
+}
+
+::-webkit-scrollbar-thumb{
+ background:rgba(255,255,255,.15);
+ border-radius:10px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+ background:var(--accent);
+}
+
+::selection{
+ background:var(--accent);
+ color:#071018;
+}
+
+#app{
+ width:100%;
+ height:100%;
+ height:100dvh;
+ max-width:1250px;
+ margin:auto;
+ display:flex;
+ flex-direction:column;
+ overflow:hidden;
+ background:rgba(7,12,22,.5);
+}
+
+.glass{
+ background:var(--surface);
+ border:1px solid var(--border);
+ backdrop-filter:blur(25px);
+ -webkit-backdrop-filter:blur(25px);
+ box-shadow:
+ inset 0 0 15px rgba(255,255,255,.03),
+ 0 8px 32px rgba(0,0,0,.37);
+}
+
+/* HEADER */
+
+.header{
+ min-height:calc(62px + env(safe-area-inset-top));
+ padding-top:env(safe-area-inset-top);
+ padding-left:14px;
+ padding-right:14px;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ border-bottom:1px solid var(--border);
+ z-index:30;
+}
+
+.brand{
+ display:flex;
+ align-items:center;
+ gap:9px;
+ min-width:0;
+ overflow:hidden;
+}
+
+.status-dot{
+ width:9px;
+ height:9px;
+ border-radius:50%;
+ background:var(--success);
+ box-shadow:0 0 12px var(--success);
+ animation:onlinePulse 2s infinite;
+}
+
+@keyframes onlinePulse{
+ 0%,100%{opacity:1;transform:scale(1)}
+ 50%{opacity:.55;transform:scale(.75)}
+}
+
+.logo{
+ font-weight:800;
+ font-size:1.08rem;
+ background:linear-gradient(135deg,var(--accent),var(--accent2));
+ -webkit-background-clip:text;
+ color:transparent;
+}
+
+.header-actions{
+ display:flex;
+ align-items:center;
+ gap:4px;
+ flex-shrink:0;
+}
+
+.icon{
+ border:0;
+ background:transparent;
+ color:var(--muted);
+ width:38px;
+ height:38px;
+ border-radius:50%;
+ font-size:1.1rem;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ transition:.2s;
+}
+
+.icon:hover{
+ background:var(--glow);
+ color:var(--text);
+ transform:scale(1.05);
+}
+
+/* MAIN */
+
+.main{
+ flex:1;
+ min-height:0;
+ position:relative;
+ display:flex;
+ overflow:hidden;
+}
+
+.view{
+ position:absolute;
+ inset:0;
+ display:none;
+ flex-direction:column;
+ overflow-y:auto;
+ background:var(--bg2);
+}
+
+.view.active{
+ display:flex;
+}
+
+/* NAV */
+
+.nav{
+ min-height:64px;
+ padding-bottom:env(safe-area-inset-bottom);
+ display:flex;
+ justify-content:space-around;
+ align-items:center;
+ border-top:1px solid var(--border);
+ z-index:30;
+ background:var(--surface);
+}
+
+.nav button{
+ border:0;
+ background:transparent;
+ color:var(--muted);
+ padding:7px 9px;
+ border-radius:12px;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ gap:3px;
+ font-size:.66rem;
+ font-weight:600;
+ transition:.2s;
+}
+
+.nav button span{
+ font-size:1.1rem;
+}
+
+.nav button.active{
+ color:var(--accent);
+ background:var(--glow);
+}
+
+/* SIDEBAR */
+
+.sidebar{
+ position:absolute;
+ top:0;
+ bottom:0;
+ left:0;
+ width:280px;
+ background:var(--surface2);
+ border-right:1px solid var(--border);
+ z-index:25;
+ transform:translateX(-100%);
+ transition:.25s ease;
+ display:flex;
+ flex-direction:column;
+ padding:14px;
+ box-shadow:10px 0 30px rgba(0,0,0,.5);
+}
+
+.sidebar.open{
+ transform:translateX(0);
+}
+
+.sidebar-header{
+ margin-bottom:12px;
+}
+
+.chat-list{
+ flex:1;
+ overflow-y:auto;
+ display:flex;
+ flex-direction:column;
+ gap:6px;
+}
+
+.chat-item{
+ padding:10px 12px;
+ border-radius:10px;
+ font-size:.85rem;
+ background:rgba(255,255,255,.03);
+ border:1px solid var(--border);
+ color:var(--text);
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ cursor:pointer;
+}
+
+.chat-item.active{
+ background:var(--glow);
+ border-color:var(--accent);
+}
+
+.chat-item-title{
+ overflow:hidden;
+ text-overflow:ellipsis;
+ white-space:nowrap;
+ flex:1;
+}
+
+.chat-item-del{
+ background:transparent;
+ border:0;
+ color:var(--muted);
+ padding:2px 6px;
+}
+
+/* BUTTONS */
+
+.btn{
+ border:0;
+ padding:10px 14px;
+ border-radius:10px;
+ font-weight:700;
+ font-size:.8rem;
+ background:linear-gradient(135deg,var(--accent),var(--accent2));
+ color:#061018;
+ transition:.2s;
+}
+
+.btn:hover{
+ transform:translateY(-1px);
+ box-shadow:0 4px 15px var(--glow);
+}
+
+.btn.secondary{
+ background:rgba(255,255,255,.07);
+ border:1px solid var(--border);
+ color:var(--text);
+}
+
+/* HOME */
+
+.home{
+ padding:18px;
+ gap:16px;
+}
+
+.hero{
+ padding:22px;
+ border-radius:20px;
+}
+
+.hero h1{
+ font-size:1.45rem;
+ margin-bottom:7px;
+ background:linear-gradient(135deg,var(--accent),var(--accent2));
+ -webkit-background-clip:text;
+ color:transparent;
+}
+
+.hero p{
+ color:var(--muted);
+ line-height:1.55;
+ font-size:.88rem;
+}
+
+.cards{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+ gap:12px;
+}
+
+.card{
+ padding:17px;
+ border:1px solid var(--border);
+ background:rgba(20,30,48,.6);
+ border-radius:16px;
+ transition:.3s;
+ box-shadow:inset 0 0 10px rgba(255,255,255,.02);
+}
+
+.card:hover{
+ border-color:var(--accent);
+ transform:translateY(-4px);
+ box-shadow:0 10px 25px rgba(0,0,0,.4),0 0 15px var(--glow);
+}
+
+.card h3{
+ color:var(--accent);
+ font-size:.95rem;
+ margin-bottom:6px;
+}
+
+.card p{
+ color:var(--muted);
+ font-size:.8rem;
+ line-height:1.45;
+}
+
+/* CHAT */
+
+.chat{
+ padding:0;
+ flex:1;
+ width:100%;
+}
+
+.modebar{
+ display:flex;
+ align-items:center;
+ gap:7px;
+ overflow-x:auto;
+ padding:9px 12px;
+ border-bottom:1px solid var(--border);
+ flex-shrink:0;
+}
+
+.mode{
+ flex-shrink:0;
+ border:1px solid var(--border);
+ background:rgba(255,255,255,.04);
+ color:var(--muted);
+ border-radius:12px;
+ padding:7px 10px;
+ font-size:.7rem;
+ font-weight:700;
+}
+
+.mode.active{
+ color:var(--accent);
+ border-color:var(--accent);
+ background:var(--glow);
+}
+
+.chatbox{
+ flex:1;
+ min-height:0;
+ overflow-y:auto;
+ padding:16px;
+ display:flex;
+ flex-direction:column;
+ gap:14px;
+}
+
+.welcome{
+ margin:auto;
+ max-width:520px;
+ text-align:center;
+ padding:28px 20px;
+ border-radius:22px;
+}
+
+.welcome .big{
+ font-size:2.2rem;
+ margin-bottom:8px;
+}
+
+.welcome h2{
+ font-size:1.25rem;
+ margin-bottom:7px;
+}
+
+.welcome p{
+ color:var(--muted);
+ font-size:.85rem;
+ line-height:1.5;
+}
+
+.message{
+ max-width:88%;
+ display:flex;
+ flex-direction:column;
+ animation:messageIn .22s ease;
+}
+
+@keyframes messageIn{
+ from{opacity:0;transform:translateY(8px)}
+ to{opacity:1;transform:none}
+}
+
+.message.user{
+ align-self:flex-end;
+}
+
+.message.ai{
+ align-self:flex-start;
+}
+
+.bubble{
+ padding:13px 16px;
+ line-height:1.65;
+ border-radius:16px;
+ word-break:break-word;
+ font-size:.92rem;
+ overflow:auto;
+}
+
+.user .bubble{
+ background:linear-gradient(
+ 135deg,
+ rgba(0,242,254,.18),
+ rgba(79,172,254,.12)
+ );
+ border:1px solid rgba(0,242,254,.25);
+ border-bottom-right-radius:4px;
+}
+
+.ai .bubble{
+ background:rgba(25,35,53,.86);
+ border:1px solid var(--border);
+ border-bottom-left-radius:4px;
+}
+
+.bubble pre{
+ overflow-x:auto;
+ padding:12px;
+ margin:10px 0;
+ background:#050911;
+ border-radius:10px;
+ border:1px solid var(--border);
+}
+
+.bubble code{
+ font-family:"JetBrains Mono",monospace;
+}
+
+.bubble a{
+ color:var(--accent);
+}
+
+.bubble p{
+ margin-bottom:9px;
+}
+
+.bubble p:last-child{
+ margin-bottom:0;
+}
+
+.message-tools{
+ display:flex;
+ gap:5px;
+ margin-top:5px;
+ flex-wrap:wrap;
+}
+
+.mini-btn{
+ border:1px solid var(--border);
+ background:rgba(255,255,255,.05);
+ color:var(--muted);
+ padding:4px 8px;
+ border-radius:7px;
+ font-size:.7rem;
+}
+
+.typing{
+ display:flex;
+ gap:4px;
+ align-items:center;
+}
+
+.typing i{
+ width:6px;
+ height:6px;
+ border-radius:50%;
+ background:var(--accent);
+ animation:type 1s infinite;
+}
+
+.typing i:nth-child(2){
+ animation-delay:.15s;
+}
+
+.typing i:nth-child(3){
+ animation-delay:.3s;
+}
+
+@keyframes type{
+ 0%,100%{opacity:.25;transform:translateY(0)}
+ 50%{opacity:1;transform:translateY(-3px)}
+}
+
+/* INPUT */
+
+.input-area{
+ padding:10px 12px;
+ border-top:1px solid var(--border);
+ flex-shrink:0;
+}
+
+.input-wrap{
+ display:flex;
+ align-items:flex-end;
+ gap:7px;
+ background:rgba(7,12,22,.88);
+ border:1px solid var(--border);
+ border-radius:22px;
+ padding:6px 8px 6px 13px;
+}
+
+textarea.chat-input{
+ flex:1;
+ min-height:25px;
+ max-height:130px;
+ resize:none;
+ border:0;
+ outline:0;
+ background:transparent;
+ color:var(--text);
+ font-size:.94rem;
+}
+
+.send{
+ width:37px;
+ height:37px;
+ border:0;
+ border-radius:50%;
+ background:linear-gradient(135deg,var(--accent),var(--accent2));
+ color:#07101a;
+ font-size:1rem;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+}
+
+.attach-btn{
+ background:transparent;
+ border:0;
+ color:var(--muted);
+ font-size:1.1rem;
+ padding:6px;
+}
+
+.file-preview{
+ display:none;
+ align-items:center;
+ gap:6px;
+ padding:4px 10px;
+ font-size:.75rem;
+ background:rgba(0,242,254,.1);
+ border-radius:8px;
+ margin-bottom:6px;
+ border:1px solid rgba(0,242,254,.3);
+ color:var(--accent);
+}
+
+/* TOOLS */
+
+.tools{
+ padding:17px;
+ gap:14px;
+}
+
+.tools h2,
+.profile h2,
+.about h2{
+ font-size:1.2rem;
+ background:linear-gradient(135deg,var(--accent),var(--accent2));
+ -webkit-background-clip:text;
+ color:transparent;
+}
+
+.tool-grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+ gap:11px;
+}
+
+.tool{
+ padding:16px 10px;
+ text-align:center;
+ border-radius:15px;
+ border:1px solid var(--border);
+ background:rgba(20,30,48,.6);
+ transition:.3s;
+}
+
+.tool:hover{
+ border-color:var(--accent);
+ transform:translateY(-4px);
+}
+
+.tool .emoji{
+ font-size:1.7rem;
+ margin-bottom:7px;
+}
+
+.tool h4{
+ font-size:.82rem;
+ margin-bottom:4px;
+}
+
+.tool p{
+ color:var(--muted);
+ font-size:.68rem;
+}
+
+/* FORMS */
+
+.profile,
+.about{
+ padding:18px;
+ gap:14px;
+}
+
+.profile-card{
+ padding:20px;
+ border-radius:18px;
+ display:flex;
+ align-items:center;
+ gap:14px;
+}
+
+.avatar{
+ width:70px;
+ height:70px;
+ border-radius:50%;
+ overflow:hidden;
+ background:linear-gradient(135deg,var(--accent),var(--accent2));
+ color:#07101a;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:1.5rem;
+ font-weight:800;
+ flex-shrink:0;
+}
+
+.avatar img{
+ width:100%;
+ height:100%;
+ object-fit:cover;
+}
+
+.profile-name{
+ font-weight:700;
+ font-size:1.05rem;
+}
+
+.profile-email{
+ color:var(--muted);
+ font-size:.8rem;
+ margin-top:3px;
+}
+
+.section{
+ padding:16px;
+ border-radius:16px;
+}
+
+.field{
+ display:flex;
+ flex-direction:column;
+ gap:6px;
+ margin-bottom:12px;
+}
+
+.field label{
+ color:var(--muted);
+ font-size:.75rem;
+ font-weight:600;
+}
+
+.input,
+.select,
+.textarea{
+ width:100%;
+ padding:10px 12px;
+ border:1px solid var(--border);
+ border-radius:10px;
+ outline:0;
+ color:var(--text);
+ background:rgba(5,10,18,.8);
+}
+
+.textarea{
+ resize:vertical;
+ min-height:90px;
+}
+
+/* SECURITY */
+
+.security-shield-animate{
+ font-size:5rem;
+ text-align:center;
+ margin:20px 0;
+ animation:shieldPulse 2s ease-in-out infinite;
+ display:block;
+}
+
+@keyframes shieldPulse{
+ 0%,100%{
+  transform:scale(1);
+  filter:drop-shadow(0 0 5px var(--accent));
+ }
+ 50%{
+  transform:scale(1.1);
+  filter:drop-shadow(0 0 25px var(--accent));
+ }
+}
+
+/* QR */
+
+#reader{
+ width:100%;
+ max-width:380px;
+ margin:10px auto;
+ border-radius:12px;
+ overflow:hidden;
+ border:1px solid var(--border);
+}
+
+/* MODAL */
+
+.modal{
+ position:absolute;
+ inset:0;
+ background:rgba(0,0,0,.72);
+ display:none;
+ align-items:center;
+ justify-content:center;
+ padding:12px;
+ z-index:100;
+}
+
+.modal.active{
+ display:flex;
+ backdrop-filter:blur(8px);
+ animation:modalFadeIn .18s ease;
+}
+
+.toast{
+ position:fixed;
+ left:50%;
+ bottom:calc(84px + env(safe-area-inset-bottom));
+ transform:translateX(-50%) translateY(20px);
+ background:rgba(15,23,42,.96);
+ border:1px solid var(--border);
+ color:var(--text);
+ padding:10px 18px;
+ border-radius:12px;
+ font-size:.82rem;
+ z-index:200;
+ opacity:0;
+ pointer-events:none;
+ transition:.25s ease;
+ box-shadow:0 8px 24px rgba(0,0,0,.4);
+ max-width:88%;
+ text-align:center;
+}
+.toast.show{
+ opacity:1;
+ transform:translateX(-50%) translateY(0);
+}
+
+.msg{ display:flex; margin-bottom:10px; }
+.msg.user{ justify-content:flex-end; }
+.msg.assistant{ justify-content:flex-start; }
+.msg-bubble{
+ max-width:82%;
+ padding:10px 14px;
+ border-radius:14px;
+ font-size:.88rem;
+ line-height:1.5;
+}
+.msg-bubble.user{
+ background:linear-gradient(135deg,var(--accent),var(--accent2));
+ color:#071018;
+ border-bottom-right-radius:4px;
+}
+.msg-bubble.assistant{
+ background:rgba(255,255,255,.06);
+ border:1px solid var(--border);
+ border-bottom-left-radius:4px;
+}
+
+.memory-card{
+ aspect-ratio:1;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:1.4rem;
+ background:rgba(255,255,255,.05);
+ border:1px solid var(--border);
+ border-radius:10px;
+ cursor:pointer;
+}
+.memory-card.matched{
+ background:rgba(16,185,129,.15);
+ border-color:var(--success);
+}
+.memory-grid{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:8px;
+ margin-top:12px;
+}
+.palette-swatch{
+ flex:1;
+ height:36px;
+ border-radius:6px;
+}
+.palette-row{ display:flex; gap:6px; margin-top:8px; }
+.contrast-preview{
+ padding:20px;
+ border-radius:10px;
+ text-align:center;
+ font-weight:600;
+ margin-top:10px;
+}
+
+@keyframes modalFadeIn{
+ from{opacity:0}
+ to{opacity:1}
+}
+
+.modal-box{
+ width:100%;
+ max-width:520px;
+ max-height:92vh;
+ overflow-y:auto;
+ border-radius:20px;
+ padding:18px;
+}
+
+.modal-head{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ margin-bottom:15px;
+}
+
+.setting-title{
+ color:var(--accent);
+ font-size:.78rem;
+ font-weight:700;
+ margin:15px 0 7px;
+}
+
+.theme-grid{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:8px;
+}
+
+.theme{
+ padding:10px 8px;
+ border-radius:10px;
+ border:1px solid var(--border);
+ background:rgba(255,255,255,.04);
+ color:var(--text);
+ font-size:.82rem;
+ font-weight:600;
+}
+
+.toggle-row{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:10px;
+ padding:9px 0;
+}
+
+.toggle-row span{
+ font-size:.8rem;
+}
+
+.toggle{
+ width:42px;
+ height:23px;
+ border-radius:20px;
+ border:1px solid var(--border);
+ background:#1e293b;
+ position:relative;
+ cursor:pointer;
+}
+
+.toggle::after{
+ content:"";
+ position:absolute;
+ width:17px;
+ height:17px;
+ top:2px;
+ left:2px;
+ border-radius:50%;
+ background:#94a3b8;
+ transition:.2s;
+}
+
+.toggle.on{
+ background:var(--accent);
+}
+
+.toggle.on::after{
+ left:21px;
+ background:#071018;
+}
+
+/* THEMES */
+
+body.theme-purple{
+ --accent:#a855f7;
+ --accent2:#c084fc;
+ --glow:rgba(168,85,247,.22);
+}
+
+body.theme-emerald{
+ --accent:#10b981;
+ --accent2:#34d399;
+ --glow:rgba(16,185,129,.22);
+}
+
+body.theme-sunset{
+ --accent:#f59e0b;
+ --accent2:#f97316;
+ --glow:rgba(245,158,11,.22);
+}
+
+body.theme-rose{
+ --accent:#f43f5e;
+ --accent2:#fb7185;
+ --glow:rgba(244,63,94,.22);
+}
+
+body.theme-blue{
+ --accent:#3b82f6;
+ --accent2:#60a5fa;
+ --glow:rgba(59,130,246,.22);
+}
+
+body.theme-amoled{
+ --bg:#000;
+ --bg2:#000;
+ --surface:rgba(8,8,8,.92);
+}
+
+body.compact .bubble{
+ padding:9px 12px;
+}
+
+body.compact .chatbox{
+ gap:8px;
+}
+
+/* =========================================
+   APK DOWNLOAD CARD
+   ========================================= */
+
+.apk-card{
+ position:relative;
+ overflow:hidden;
+ padding:28px 20px;
+ border-radius:24px;
+ border:1px solid rgba(0,242,254,.35);
+ background:
+ radial-gradient(
+  circle at 50% -20%,
+  rgba(0,242,254,.18),
+  transparent 55%
+ ),
+ rgba(10,17,30,.92);
+ box-shadow:
+ 0 15px 45px rgba(0,0,0,.45),
+ 0 0 25px rgba(0,242,254,.08),
+ inset 0 0 25px rgba(255,255,255,.025);
+ text-align:center;
+ animation:apkCardIn .65s cubic-bezier(.175,.885,.32,1.275);
+}
+
+@keyframes apkCardIn{
+ from{
+  opacity:0;
+  transform:translateY(25px) scale(.96);
+ }
+ to{
+  opacity:1;
+  transform:translateY(0) scale(1);
+ }
+}
+
+.apk-glow{
+ position:absolute;
+ width:180px;
+ height:180px;
+ left:50%;
+ top:-90px;
+ transform:translateX(-50%);
+ border-radius:50%;
+ background:var(--accent);
+ filter:blur(80px);
+ opacity:.15;
+ pointer-events:none;
+ animation:apkGlow 3s ease-in-out infinite;
+}
+
+@keyframes apkGlow{
+ 0%,100%{
+  opacity:.10;
+  transform:translateX(-50%) scale(.9);
+ }
+ 50%{
+  opacity:.25;
+  transform:translateX(-50%) scale(1.15);
+ }
+}
+
+.apk-icon{
+ position:relative;
+ width:78px;
+ height:78px;
+ margin:0 auto 14px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ border-radius:22px;
+ font-size:2.35rem;
+ background:linear-gradient(
+ 135deg,
+ rgba(0,242,254,.18),
+ rgba(79,172,254,.12)
+ );
+ border:1px solid rgba(0,242,254,.35);
+ box-shadow:0 0 25px rgba(0,242,254,.18);
+ animation:apkIconPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes apkIconPulse{
+ 0%,100%{
+  transform:scale(1);
+ }
+ 50%{
+  transform:scale(1.06);
+ }
+}
+
+.apk-title{
+ position:relative;
+ font-size:1.45rem;
+ font-weight:800;
+ background:linear-gradient(135deg,var(--accent),var(--accent2));
+ -webkit-background-clip:text;
+ background-clip:text;
+ color:transparent;
+}
+
+.apk-subtitle{
+ margin-top:5px;
+ color:var(--muted);
+ font-size:.78rem;
+}
+
+.security-status{
+ position:relative;
+ width:max-content;
+ max-width:100%;
+ margin:15px auto 12px;
+ padding:7px 12px;
+ border-radius:20px;
+ border:1px solid rgba(16,185,129,.35);
+ background:rgba(16,185,129,.08);
+ color:#34d399;
+ font-size:.72rem;
+ font-weight:700;
+ animation:securityPulse 2s infinite;
+}
+
+.security-dot{
+ display:inline-block;
+ width:7px;
+ height:7px;
+ margin-right:5px;
+ border-radius:50%;
+ background:#10b981;
+ box-shadow:0 0 10px #10b981;
+}
+
+@keyframes securityPulse{
+ 0%,100%{
+  box-shadow:0 0 0 rgba(16,185,129,0);
+ }
+ 50%{
+  box-shadow:0 0 18px rgba(16,185,129,.18);
+ }
+}
+
+.apk-description{
+ position:relative;
+ max-width:500px;
+ margin:0 auto;
+ color:#aebbd0;
+ font-size:.82rem;
+ line-height:1.6;
+}
+
+.security-message{
+ position:relative;
+ display:flex;
+ align-items:flex-start;
+ gap:11px;
+ margin-top:18px;
+ padding:13px;
+ text-align:left;
+ border-radius:15px;
+ border:1px solid rgba(245,158,11,.25);
+ background:rgba(245,158,11,.06);
+}
+
+.security-message-icon{
+ font-size:1.4rem;
+ flex-shrink:0;
+}
+
+.security-message strong{
+ display:block;
+ color:#fbbf24;
+ font-size:.8rem;
+ margin-bottom:4px;
+}
+
+.security-message p{
+ color:#aebbd0;
+ font-size:.72rem;
+ line-height:1.5;
+}
+
+.apk-install-btn{
+ position:relative;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ gap:9px;
+ width:100%;
+ margin-top:18px;
+ padding:13px 16px;
+ border-radius:14px;
+ background:linear-gradient(135deg,var(--accent),var(--accent2));
+ color:#061018;
+ text-decoration:none;
+ font-size:.85rem;
+ font-weight:800;
+ box-shadow:0 8px 25px rgba(0,242,254,.18);
+ transition:.2s;
+ overflow:hidden;
+}
+
+.apk-install-btn::before{
+ content:"";
+ position:absolute;
+ top:0;
+ left:-120%;
+ width:80%;
+ height:100%;
+ background:linear-gradient(
+ 90deg,
+ transparent,
+ rgba(255,255,255,.45),
+ transparent
+ );
+ transform:skewX(-20deg);
+ animation:installShine 3s infinite;
+}
+
+@keyframes installShine{
+ 0%{left:-120%}
+ 45%,100%{left:140%}
+}
+
+.apk-install-btn:hover{
+ transform:translateY(-2px) scale(1.01);
+ box-shadow:0 12px 35px rgba(0,242,254,.3);
+}
+
+.apk-install-btn:active{
+ transform:scale(.97);
+}
+
+.apk-install-btn .arrow{
+ font-size:1.1rem;
+ transition:.2s;
+}
+
+.apk-install-btn:hover .arrow{
+ transform:translateX(4px);
+}
+
+.apk-note{
+ position:relative;
+ margin-top:9px;
+ color:#64748b;
+ font-size:.65rem;
+}
+
+.security-info-card{
+ margin-top:14px;
+ padding:17px;
+ border-radius:18px;
+ border:1px solid var(--border);
+ background:rgba(15,23,42,.78);
+ box-shadow:inset 0 0 15px rgba(255,255,255,.02);
+}
+
+.security-info-header{
+ display:flex;
+ align-items:center;
+ gap:12px;
+}
+
+.security-big-icon{
+ width:45px;
+ height:45px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ border-radius:13px;
+ background:rgba(16,185,129,.08);
+ border:1px solid rgba(16,185,129,.25);
+ font-size:1.45rem;
+}
+
+.security-info-header h3{
+ color:var(--accent);
+ font-size:.92rem;
+ margin-bottom:3px;
+}
+
+.security-info-header p{
+ color:var(--muted);
+ font-size:.7rem;
+}
+
+.security-points{
+ display:flex;
+ flex-direction:column;
+ gap:9px;
+ margin-top:15px;
+}
+
+.security-point{
+ display:flex;
+ align-items:flex-start;
+ gap:9px;
+ padding:10px;
+ border-radius:11px;
+ background:rgba(255,255,255,.025);
+ border:1px solid rgba(255,255,255,.05);
+}
+
+.security-point>span{
+ width:21px;
+ height:21px;
+ flex-shrink:0;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ border-radius:50%;
+ background:rgba(16,185,129,.12);
+ color:#34d399;
+ font-size:.72rem;
+ font-weight:800;
+}
+
+.security-point strong{
+ display:block;
+ color:#e2e8f0;
+ font-size:.75rem;
+}
+
+.security-point small{
+ display:block;
+ margin-top:2px;
+ color:#64748b;
+ font-size:.65rem;
+ line-height:1.4;
+}
+
+/* API KEY GUIDE MODAL */
+
+.guide-steps{
+ padding-left:20px;
+ line-height:1.9;
+ font-size:.85rem;
+ color:var(--muted);
+}
+
+.provider-badge{
+ display:inline-block;
+ padding:3px 9px;
+ border-radius:8px;
+ font-size:.65rem;
+ font-weight:700;
+ background:rgba(16,185,129,.12);
+ color:#34d399;
+ border:1px solid rgba(16,185,129,.3);
+ margin-left:6px;
+}
+
+/* AI FLASHCARD BANNER (Chat Tab) */
+
+.ai-flashcard{
+ position:relative;
+ margin:10px 12px 0;
+ padding:14px 16px;
+ border-radius:16px;
+ overflow:hidden;
+ flex-shrink:0;
+ background:
+ linear-gradient(120deg,rgba(0,242,254,.16),rgba(79,172,254,.08));
+ border:1px solid rgba(0,242,254,.35);
+ display:flex;
+ align-items:center;
+ gap:12px;
+ animation:flashIn .5s cubic-bezier(.175,.885,.32,1.275),
+ flashGlow 2.6s ease-in-out infinite;
+ cursor:pointer;
+}
+
+@keyframes flashIn{
+ from{opacity:0;transform:translateY(-10px) scale(.97)}
+ to{opacity:1;transform:none}
+}
+
+@keyframes flashGlow{
+ 0%,100%{box-shadow:0 0 0 rgba(0,242,254,0)}
+ 50%{box-shadow:0 0 22px rgba(0,242,254,.18)}
+}
+
+.ai-flashcard::before{
+ content:"";
+ position:absolute;
+ top:0;
+ left:-130%;
+ width:60%;
+ height:100%;
+ background:linear-gradient(
+ 90deg,transparent,rgba(255,255,255,.35),transparent
+ );
+ transform:skewX(-20deg);
+ animation:flashShine 3.4s infinite;
+}
+
+@keyframes flashShine{
+ 0%{left:-130%}
+ 50%,100%{left:150%}
+}
+
+.ai-flashcard .fc-icon{
+ font-size:1.6rem;
+ flex-shrink:0;
+ animation:fcIconPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes fcIconPulse{
+ 0%,100%{transform:scale(1) rotate(0)}
+ 50%{transform:scale(1.12) rotate(-4deg)}
+}
+
+.ai-flashcard .fc-text{
+ flex:1;
+ position:relative;
+}
+
+.ai-flashcard .fc-text strong{
+ display:block;
+ font-size:.83rem;
+ color:var(--text);
+}
+
+.ai-flashcard .fc-text span{
+ display:block;
+ font-size:.68rem;
+ color:var(--muted);
+ margin-top:2px;
+}
+
+.ai-flashcard .fc-close{
+ position:relative;
+ flex-shrink:0;
+ width:26px;
+ height:26px;
+ border-radius:50%;
+ border:1px solid var(--border);
+ background:rgba(0,0,0,.25);
+ color:var(--muted);
+ font-size:.75rem;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+}
+
+/* SECURITY - AI SCANNER */
+
+.scan-result{
+ margin-top:10px;
+ padding:12px;
+ border-radius:12px;
+ font-size:.8rem;
+ line-height:1.55;
+ display:none;
+ border:1px solid var(--border);
+ background:rgba(255,255,255,.03);
+}
+
+.scan-bar-row{
+ display:flex;
+ align-items:center;
+ gap:8px;
+ margin:5px 0;
+}
+
+.scan-bar-track{
+ flex:1;
+ height:7px;
+ border-radius:6px;
+ background:rgba(255,255,255,.08);
+ overflow:hidden;
+}
+
+.scan-bar-fill{
+ height:100%;
+ border-radius:6px;
+ transition:.4s;
+}
+
+.model-badge{
+ display:inline-flex;
+ align-items:center;
+ gap:5px;
+ padding:4px 10px;
+ border-radius:20px;
+ font-size:.65rem;
+ font-weight:700;
+ background:rgba(168,85,247,.12);
+ border:1px solid rgba(168,85,247,.3);
+ color:#c084fc;
+ margin-bottom:10px;
+}
+
+/* COMING SOON - GOOGLE PLAY */
+
+.play-card{
+ position:relative;
+ overflow:hidden;
+ padding:30px 20px;
+ border-radius:24px;
+ border:1px solid rgba(0,242,254,.35);
+ background:
+ radial-gradient(circle at 50% -20%,rgba(0,242,254,.18),transparent 55%),
+ rgba(10,17,30,.92);
+ box-shadow:0 15px 45px rgba(0,0,0,.45),0 0 25px rgba(0,242,254,.08);
+ text-align:center;
+ animation:apkCardIn .65s cubic-bezier(.175,.885,.32,1.275);
+}
+
+.play-icon{
+ width:82px;
+ height:82px;
+ margin:0 auto 14px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ border-radius:22px;
+ font-size:2.5rem;
+ background:linear-gradient(135deg,rgba(0,242,254,.18),rgba(79,172,254,.12));
+ border:1px solid rgba(0,242,254,.35);
+ animation:apkIconPulse 2.4s ease-in-out infinite;
+}
+
+.play-badge{
+ display:inline-flex;
+ align-items:center;
+ gap:6px;
+ margin:14px auto 4px;
+ padding:7px 14px;
+ border-radius:20px;
+ border:1px solid rgba(245,158,11,.35);
+ background:rgba(245,158,11,.08);
+ color:#fbbf24;
+ font-size:.72rem;
+ font-weight:700;
+}
+
+.play-dot{
+ width:7px;
+ height:7px;
+ border-radius:50%;
+ background:#f59e0b;
+ box-shadow:0 0 10px #f59e0b;
+ animation:onlinePulse 1.6s infinite;
+}
+
+.play-progress{
+ margin-top:18px;
+ padding:14px;
+ border-radius:14px;
+ border:1px solid var(--border);
+ background:rgba(255,255,255,.02);
+ text-align:left;
+}
+
+.play-progress-track{
+ height:8px;
+ border-radius:6px;
+ background:rgba(255,255,255,.08);
+ overflow:hidden;
+ margin-top:8px;
+}
+
+.play-progress-fill{
+ height:100%;
+ width:78%;
+ border-radius:6px;
+ background:linear-gradient(90deg,var(--accent),var(--accent2));
+ animation:progressGrow 1.4s ease-out;
+}
+
+@keyframes progressGrow{
+ from{width:0%}
+ to{width:78%}
+}
+
+.play-continue-btn{
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ gap:9px;
+ width:100%;
+ margin-top:18px;
+ padding:13px 16px;
+ border-radius:14px;
+ background:linear-gradient(135deg,var(--accent),var(--accent2));
+ color:#061018;
+ font-size:.85rem;
+ font-weight:800;
+ border:0;
+}
+
+/* =========================================
+   AI PROVIDER CAROUSEL (slider cards)
+   ========================================= */
+
+.provider-carousel{
+ display:flex;
+ gap:10px;
+ overflow-x:auto;
+ padding:4px 2px 12px;
+ scroll-snap-type:x proximity;
+ -webkit-overflow-scrolling:touch;
+}
+
+.provider-carousel::-webkit-scrollbar{
+ height:4px;
+}
+
+.provider-chip{
+ position:relative;
+ flex-shrink:0;
+ scroll-snap-align:start;
+ width:132px;
+ padding:14px 12px;
+ border-radius:16px;
+ border:1px solid var(--border);
+ background:rgba(20,30,48,.6);
+ text-align:left;
+ transition:.25s;
+ overflow:hidden;
+}
+
+.provider-chip .pc-icon{
+ font-size:1.4rem;
+ margin-bottom:8px;
+ display:block;
+}
+
+.provider-chip .pc-name{
+ display:block;
+ font-size:.78rem;
+ font-weight:700;
+ color:var(--text);
+}
+
+.provider-chip .pc-tag{
+ display:block;
+ margin-top:3px;
+ font-size:.62rem;
+ color:var(--muted);
+}
+
+.provider-chip.active{
+ border-color:var(--accent);
+ background:linear-gradient(135deg,rgba(0,242,254,.16),rgba(79,172,254,.08));
+ box-shadow:0 0 18px var(--glow);
+ transform:translateY(-2px);
+}
+
+.provider-chip.active::after{
+ content:"✓";
+ position:absolute;
+ top:8px;
+ right:9px;
+ width:16px;
+ height:16px;
+ border-radius:50%;
+ background:var(--accent);
+ color:#061018;
+ font-size:.6rem;
+ font-weight:800;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ animation:apkIconPulse 1.6s ease-in-out infinite;
+}
+
+.provider-chip:active{
+ transform:scale(.96);
+}
+
+/* =========================================
+   UTILITY / SECURITY TOOL MODALS
+   ========================================= */
+
+.util-out{
+ margin-top:12px;
+ padding:13px;
+ border-radius:12px;
+ border:1px solid var(--border);
+ background:rgba(255,255,255,.03);
+ font-size:.85rem;
+ line-height:1.6;
+ word-break:break-word;
+}
+
+.util-out.hidden{
+ display:none;
+}
+
+.util-out strong{
+ color:var(--accent);
+}
+
+.util-row{
+ display:flex;
+ gap:8px;
+}
+
+.util-row .input,
+.util-row .select{
+ flex:1;
+}
+
+.calc-display{
+ padding:16px 14px;
+ border-radius:14px;
+ background:#050911;
+ border:1px solid var(--border);
+ text-align:right;
+ font-family:"JetBrains Mono",monospace;
+ font-size:1.55rem;
+ word-break:break-all;
+ margin-bottom:10px;
+ min-height:32px;
+}
+
+.calc-grid{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:8px;
+}
+
+.calc-btn{
+ padding:14px 0;
+ border-radius:12px;
+ border:1px solid var(--border);
+ background:rgba(255,255,255,.05);
+ color:var(--text);
+ font-size:1rem;
+ font-weight:600;
+}
+
+.calc-btn:active{
+ transform:scale(.94);
+}
+
+.calc-btn.op{
+ color:var(--accent);
+ background:var(--glow);
+ border-color:rgba(0,242,254,.3);
+}
+
+.calc-btn.eq{
+ background:linear-gradient(135deg,var(--accent),var(--accent2));
+ color:#061018;
+}
+
+.calc-btn.wide{
+ grid-column:span 2;
+}
+
+.copy-mini{
+ margin-top:8px;
+ border:1px solid var(--border);
+ background:rgba(255,255,255,.05);
+ color:var(--muted);
+ padding:5px 10px;
+ border-radius:8px;
+ font-size:.7rem;
+}
+
+
+/* =========================================
+   RADAR / SCAN ANIMATION (Security Hub)
+   ========================================= */
+
+.radar-wrap{
+ position:relative;
+ width:110px;
+ height:110px;
+ margin:14px auto;
+ border-radius:50%;
+ border:1px solid rgba(0,242,254,.25);
+ overflow:hidden;
+ background:
+ radial-gradient(circle,rgba(0,242,254,.08) 0%,transparent 70%);
+}
+
+.radar-wrap::before,
+.radar-wrap::after{
+ content:"";
+ position:absolute;
+ inset:0;
+ border-radius:50%;
+ border:1px solid rgba(0,242,254,.12);
+}
+
+.radar-wrap::after{
+ inset:22px;
+}
+
+.radar-sweep{
+ position:absolute;
+ inset:0;
+ border-radius:50%;
+ background:conic-gradient(
+ from 0deg,
+ transparent 0deg,
+ rgba(0,242,254,.55) 18deg,
+ transparent 60deg
+ );
+ animation:radarSpin 2.6s linear infinite;
+}
+
+@keyframes radarSpin{
+ to{transform:rotate(360deg)}
+}
+
+.radar-dot{
+ position:absolute;
+ top:50%;
+ left:50%;
+ width:60px;
+ height:60px;
+ transform:translate(-50%,-50%);
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:1.7rem;
+ filter:drop-shadow(0 0 8px var(--accent));
+}
+
+/* =========================================
+   GAMES HUB
+   ========================================= */
+
+.games{
+ padding:17px;
+ gap:14px;
+}
+
+.games h2{
+ font-size:1.2rem;
+ background:linear-gradient(135deg,var(--accent),var(--accent2));
+ -webkit-background-clip:text;
+ color:transparent;
+}
+
+.game-grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+ gap:11px;
+}
+
+.game-card{
+ padding:16px 10px;
+ text-align:center;
+ border-radius:15px;
+ border:1px solid var(--border);
+ background:
+ linear-gradient(150deg,rgba(168,85,247,.08),rgba(0,242,254,.05));
+ transition:.3s;
+}
+
+.game-card:hover{
+ border-color:var(--accent);
+ transform:translateY(-4px) scale(1.02);
+ box-shadow:0 10px 22px rgba(0,0,0,.35),0 0 15px var(--glow);
+}
+
+.game-card .emoji{
+ font-size:1.9rem;
+ margin-bottom:7px;
+ animation:fcIconPulse 2.4s ease-in-out infinite;
+}
+
+.game-card h4{
+ font-size:.82rem;
+ margin-bottom:4px;
+}
+
+.game-card p{
+ color:var(--muted);
+ font-size:.68rem;
+}
+
+.game-stat-row{
+ display:flex;
+ justify-content:space-between;
+ gap:8px;
+ margin:10px 0;
+}
+
+.game-stat{
+ flex:1;
+ text-align:center;
+ padding:10px 6px;
+ border-radius:12px;
+ border:1px solid var(--border);
+ background:rgba(255,255,255,.03);
+}
+
+.game-stat b{
+ display:block;
+ font-size:1.15rem;
+ color:var(--accent);
+}
+
+.game-stat span{
+ font-size:.62rem;
+ color:var(--muted);
+}
+
+.game-question{
+ text-align:center;
+ font-size:1.4rem;
+ font-weight:800;
+ padding:18px 10px;
+ margin:8px 0;
+ border-radius:14px;
+ background:rgba(255,255,255,.03);
+ border:1px solid var(--border);
+}
+
+.game-options{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:8px;
+}
+
+.game-opt-btn{
+ padding:12px 8px;
+ border-radius:12px;
+ border:1px solid var(--border);
+ background:rgba(255,255,255,.05);
+ color:var(--text);
+ font-size:.82rem;
+ font-weight:600;
+ transition:.15s;
+}
+
+.game-opt-btn.correct{
+ border-color:var(--success);
+ background:rgba(16,185,129,.18);
+ color:#34d399;
+}
+
+.game-opt-btn.wrong{
+ border-color:var(--danger);
+ background:rgba(239,68,68,.18);
+ color:#f87171;
+}
+
+.memory-grid{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:7px;
+ margin-top:10px;
+}
+
+.memory-card{
+ aspect-ratio:1;
+ border-radius:10px;
+ border:1px solid var(--border);
+ background:rgba(255,255,255,.05);
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:1.3rem;
+ transition:.2s;
+}
+
+.memory-card.flipped{
+ background:var(--glow);
+ border-color:var(--accent);
+}
+
+.memory-card.matched{
+ background:rgba(16,185,129,.15);
+ border-color:var(--success);
+ opacity:.6;
+}
+
+.typing-sample{
+ padding:12px;
+ border-radius:12px;
+ background:rgba(255,255,255,.03);
+ border:1px solid var(--border);
+ font-size:.82rem;
+ line-height:1.6;
+ color:var(--muted);
+ margin-bottom:8px;
+}
+
+.typing-sample span.correct-char{
+ color:var(--success);
+}
+
+.typing-sample span.wrong-char{
+ color:var(--danger);
+ text-decoration:underline;
+}
+
+/* =========================================
+   VAULT / SNIPPET LIST
+   ========================================= */
+
+.list-item{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:8px;
+ padding:9px 11px;
+ border-radius:11px;
+ border:1px solid var(--border);
+ background:rgba(255,255,255,.03);
+ margin-bottom:7px;
+}
+
+.list-item-title{
+ font-size:.8rem;
+ font-weight:600;
+ overflow:hidden;
+ text-overflow:ellipsis;
+ white-space:nowrap;
+}
+
+.list-item-tag{
+ font-size:.6rem;
+ color:var(--accent);
+ background:var(--glow);
+ padding:2px 7px;
+ border-radius:8px;
+ margin-left:6px;
+}
+
+.list-item-actions{
+ display:flex;
+ gap:5px;
+ flex-shrink:0;
+}
+
+/* =========================================
+   COLOR CHECKER
+   ========================================= */
+
+.contrast-preview{
+ padding:20px;
+ border-radius:14px;
+ text-align:center;
+ font-weight:700;
+ font-size:1rem;
+ border:1px solid var(--border);
+ margin-top:10px;
+}
+
+.palette-row{
+ display:flex;
+ gap:6px;
+ margin-top:10px;
+}
+
+.palette-swatch{
+ flex:1;
+ height:44px;
+ border-radius:9px;
+ border:1px solid var(--border);
+}
+
+/* =========================================
+   TIMER (Pomodoro)
+   ========================================= */
+
+.timer-display{
+ text-align:center;
+ font-family:"JetBrains Mono",monospace;
+ font-size:2.8rem;
+ font-weight:700;
+ padding:20px 0 6px;
+ background:linear-gradient(135deg,var(--accent),var(--accent2));
+ -webkit-background-clip:text;
+ color:transparent;
+}
+
+.timer-mode-row{
+ display:flex;
+ gap:7px;
+ justify-content:center;
+ margin-bottom:10px;
+}
+
+.timer-mode-row button{
+ flex:1;
+ padding:8px 5px;
+ border-radius:10px;
+ border:1px solid var(--border);
+ background:rgba(255,255,255,.04);
+ color:var(--muted);
+ font-size:.7rem;
+ font-weight:700;
+}
+
+.timer-mode-row button.active{
+ color:var(--accent);
+ border-color:var(--accent);
+ background:var(--glow);
+}
+
+.timer-controls{
+ display:flex;
+ gap:8px;
+ justify-content:center;
+ margin-top:8px;
+}
+
+/* =========================================
+   NEW UPDATE BADGE
+   ========================================= */
+
+.new-badge{
+ display:inline-block;
+ font-size:.55rem;
+ font-weight:800;
+ padding:2px 6px;
+ border-radius:6px;
+ background:linear-gradient(135deg,var(--accent),var(--accent2));
+ color:#061018;
+ margin-left:5px;
+ vertical-align:middle;
+}
+
+
+/* =========================================
+   PHASE 1 EXPANSION STYLES
+   ========================================= */
+
+.checklist-item{
+ display:flex;
+ align-items:center;
+ gap:9px;
+ padding:9px 0;
+ border-bottom:1px solid var(--border);
+ font-size:.8rem;
+}
+
+.checklist-item input[type="checkbox"]{
+ width:18px;
+ height:18px;
+ accent-color:var(--accent);
+ flex-shrink:0;
+}
+
+.audit-score{
+ text-align:center;
+ padding:16px;
+ border-radius:14px;
+ margin-top:10px;
+ font-weight:800;
+ font-size:1.3rem;
+}
+
+.flip-card{
+ min-height:120px;
+ border-radius:14px;
+ border:1px solid var(--border);
+ background:rgba(255,255,255,.04);
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ text-align:center;
+ padding:16px;
+ font-size:1rem;
+ font-weight:700;
+ cursor:pointer;
+ margin:10px 0;
+}
+
+.flip-card.back{
+ color:var(--accent);
+ background:var(--glow);
+}
+
+.gpa-row{
+ display:grid;
+ grid-template-columns:1fr 70px 70px auto;
+ gap:6px;
+ margin-bottom:6px;
+ align-items:center;
+}
+
+.formula-item{
+ padding:9px 0;
+ border-bottom:1px solid var(--border);
+ font-size:.8rem;
+}
+
+.formula-item b{
+ color:var(--accent);
+ display:block;
+ margin-bottom:2px;
+}
+
+.streak-grid{
+ display:grid;
+ grid-template-columns:repeat(7,1fr);
+ gap:5px;
+ margin-top:10px;
+}
+
+.streak-day{
+ aspect-ratio:1;
+ border-radius:7px;
+ border:1px solid var(--border);
+ background:rgba(255,255,255,.04);
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:.62rem;
+ color:var(--muted);
+}
+
+.streak-day.done{
+ background:var(--glow);
+ border-color:var(--accent);
+ color:var(--accent);
+ font-weight:800;
+}
+
+.hint-box{
+ padding:8px 10px;
+ border-radius:10px;
+ background:rgba(255,255,255,.03);
+ border:1px solid var(--border);
+ font-size:.72rem;
+ color:var(--muted);
+ margin-top:6px;
+}
+
+.reaction-box{
+ height:180px;
+ border-radius:16px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-weight:800;
+ font-size:1.1rem;
+ text-align:center;
+ margin:10px 0;
+ background:rgba(239,68,68,.15);
+ border:1px solid rgba(239,68,68,.35);
+ color:#f87171;
+ transition:.15s;
+}
+
+.reaction-box.go{
+ background:rgba(16,185,129,.2);
+ border-color:var(--success);
+ color:#34d399;
+}
+
+.hangman-display{
+ text-align:center;
+ font-family:"JetBrains Mono",monospace;
+ font-size:1.6rem;
+ letter-spacing:6px;
+ padding:16px 0;
+ font-weight:700;
+}
+
+.hangman-keys{
+ display:grid;
+ grid-template-columns:repeat(7,1fr);
+ gap:5px;
+ margin-top:8px;
+}
+
+.hangman-keys button{
+ padding:8px 0;
+ border-radius:8px;
+ border:1px solid var(--border);
+ background:rgba(255,255,255,.05);
+ color:var(--text);
+ font-size:.72rem;
+ font-weight:700;
+}
+
+.hangman-keys button:disabled{
+ opacity:.3;
+}
+
+.notes-list .list-item{
+ cursor:pointer;
+}
+
+/* =========================================
+   EXPLORE / WIKIPEDIA ARTICLES TAB
+   ========================================= */
+
+.explore-hero{
+ position:relative;
+ overflow:hidden;
+ padding:22px 20px;
+ border-radius:20px;
+ margin-bottom:2px;
+ background:
+ radial-gradient(circle at 15% 0%,rgba(0,242,254,.12),transparent 60%),
+ var(--surface);
+}
+
+.explore-hero h1{
+ font-size:1.25rem;
+ background:linear-gradient(135deg,var(--accent),var(--accent2));
+ -webkit-background-clip:text;
+ color:transparent;
+ margin-bottom:6px;
+}
+
+.explore-hero p{
+ color:var(--muted);
+ font-size:.79rem;
+ line-height:1.55;
+ max-width:92%;
+}
+
+.explore-search-wrap{
+ display:flex;
+ gap:7px;
+}
+
+.explore-results{
+ display:flex;
+ flex-direction:column;
+ gap:10px;
+}
+
+.explore-card{
+ position:relative;
+ display:flex;
+ gap:12px;
+ padding:15px 16px 15px 14px;
+ border-radius:16px;
+ border:1px solid var(--border);
+ border-left:3px solid var(--cat-color,var(--accent));
+ background:rgba(20,30,48,.6);
+ transition:.25s;
+ animation:messageIn .25s ease;
+}
+
+.explore-card:hover{
+ border-color:var(--accent);
+ border-left-color:var(--cat-color,var(--accent));
+ transform:translateY(-2px);
+ box-shadow:0 8px 20px rgba(0,0,0,.35),0 0 12px var(--glow);
+}
+
+.explore-card .ec-index{
+ flex-shrink:0;
+ width:28px;
+ height:28px;
+ border-radius:9px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:.72rem;
+ font-weight:800;
+ background:color-mix(in srgb,var(--cat-color,var(--accent)) 18%,transparent);
+ color:var(--cat-color,var(--accent));
+}
+
+.explore-card .ec-body{
+ flex:1;
+ min-width:0;
+}
+
+.explore-card h4{
+ color:var(--text);
+ font-size:.92rem;
+ font-weight:700;
+ margin-bottom:5px;
+ line-height:1.3;
+}
+
+.explore-card p{
+ color:var(--muted);
+ font-size:.79rem;
+ line-height:1.5;
+ margin-bottom:10px;
+}
+
+.explore-link-btn{
+ display:inline-flex;
+ align-items:center;
+ gap:6px;
+ padding:7px 13px;
+ border-radius:9px;
+ background:color-mix(in srgb,var(--cat-color,var(--accent)) 16%,transparent);
+ border:1px solid color-mix(in srgb,var(--cat-color,var(--accent)) 40%,transparent);
+ color:var(--cat-color,var(--accent));
+ font-size:.72rem;
+ font-weight:700;
+ text-decoration:none;
+ transition:.2s;
+}
+
+.explore-link-btn:hover{
+ background:var(--cat-color,var(--accent));
+ color:#061018;
+ transform:translateX(2px);
+}
+
+.explore-cat-label{
+ font-size:.74rem;
+ color:var(--muted);
+ margin:2px 2px 2px;
+ display:flex;
+ align-items:center;
+ gap:6px;
+}
+
+.explore-cat-label strong{
+ color:var(--accent);
+}
+
+.explore-skeleton{
+ padding:16px;
+ border-radius:16px;
+ border:1px solid var(--border);
+ background:rgba(255,255,255,.03);
+}
+
+.explore-skeleton .bar{
+ height:11px;
+ border-radius:6px;
+ background:
+ linear-gradient(90deg,rgba(255,255,255,.05),rgba(255,255,255,.12),rgba(255,255,255,.05));
+ background-size:200% 100%;
+ animation:skeletonShine 1.4s infinite;
+ margin-bottom:8px;
+}
+
+.explore-skeleton .bar.short{
+ width:55%;
+}
+
+@keyframes skeletonShine{
+ 0%{background-position:200% 0}
+ 100%{background-position:-200% 0}
+}
+
+/* RESPONSIVE */
+
+@media(max-width:600px){
+ .logo{font-size:.95rem}
+ .message{max-width:94%}
+ .tool-grid{grid-template-columns:repeat(2,1fr)}
+ .theme-grid{grid-template-columns:repeat(2,1fr)}
+ .nav button{padding-left:5px;padding-right:5px}
+ .game-grid{grid-template-columns:repeat(2,1fr)}
+ .memory-grid{grid-template-columns:repeat(4,1fr)}
+ .hangman-keys{grid-template-columns:repeat(6,1fr)}
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+<!-- HEADER -->
+
+<header class="header glass">
+
+ <div class="brand">
+
+  <button
+   class="icon"
+   onclick="toggleSidebar()"
+   title="Toggle Sidebar">
+   ☰
+  </button>
+
+  <div class="status-dot"></div>
+
+  <div style="min-width:0;overflow:hidden;">
+   <div class="logo" style="white-space:nowrap;">ULTRA AI</div>
+   <div style="font-size:.6rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+    Security & AI Ecosystem
+   </div>
+  </div>
+
+ </div>
+
+ <div class="header-actions">
+
+  <button
+   class="icon"
+   onclick="openSettings()"
+   title="Choose AI Brain / API Key">
+   🧠
+  </button>
+
+  <button
+   class="icon"
+   onclick="exportChat()"
+   title="Export Chat">
+   📤
+  </button>
+
+  <button
+   class="icon"
+   onclick="openSettings()"
+   title="Settings">
+   ⚙️
+  </button>
+
+  <button
+   class="icon"
+   onclick="switchView('profile')"
+   title="Profile">
+   👤
+  </button>
+
+ </div>
+
+</header>
+
+<!-- MAIN -->
+
+<main class="main">
+
+<!-- SIDEBAR -->
+
+<div id="sidebar" class="sidebar">
+
+ <div class="sidebar-header">
+
+  <button
+   class="btn"
+   style="width:100%;"
+   onclick="createNewChat()">
+   ＋ New Chat
+  </button>
+
+ </div>
+
+ <div id="chatList" class="chat-list"></div>
+
+</div>
+
+<!-- HOME -->
+
+<section id="homeView" class="view active home">
+
+ <div class="hero glass">
+
+  <h1>
+   Welcome to ULTRA AI Ecosystem 🧠
+  </h1>
+
+  <p>
+   Your secure academic AI workspace with AI tutoring,
+   productivity tools, QR scanning and security utilities.
+  </p>
+
+ </div>
+
+ <div class="cards">
+
+  <div
+   class="card"
+   onclick="switchView('chat')">
+
+   <h3>🧠 AI Tutor</h3>
+
+   <p>
+    Ask questions, learn concepts, solve problems
+    and get academic assistance.
+   </p>
+
+  </div>
+
+  <div
+   class="card"
+   onclick="switchView('tools')">
+
+   <h3>🛠️ Academic Toolkit</h3>
+
+   <p>
+    Research, summarization, quizzes, flashcards,
+    planning and writing assistance.
+   </p>
+
+  </div>
+
+  <div
+   class="card"
+   onclick="switchView('security')">
+
+   <h3>🛡️ Security Hub</h3>
+
+   <p>
+    Analyze suspicious links and check password
+    strength with client-side tools.
+   </p>
+
+  </div>
+
+  <div
+   class="card"
+   onclick="switchView('about')">
+
+   <h3>📲 Google Play — Coming Soon</h3>
+
+   <p>
+    ULTRA AI is on its way to the Play Store. Tap to
+    see progress and keep using it on web meanwhile.
+   </p>
+
+  </div>
+
+ </div>
+
+</section>
+
+<!-- SECURITY -->
+
+<section
+ id="securityView"
+ class="view"
+ style="padding:18px;gap:14px;overflow-y:auto;">
+
+ <h2>🛡️ ULTRA AI Security Hub</h2>
+
+ <div class="security-shield-animate">
+  🛡️
+ </div>
+
+ <div class="radar-wrap">
+  <div class="radar-sweep"></div>
+  <div class="radar-dot">📡</div>
+ </div>
+
+ <div class="card glass">
+
+  <h3>ULTRA AI Security Engine</h3>
+
+  <p style="margin-top:6px;">
+   Client-side security utilities for basic URL
+   pattern checking and password-strength estimation.
+  </p>
+
+  <div
+   style="
+   margin-top:15px;
+   display:inline-block;
+   padding:6px 14px;
+   background:rgba(16,185,129,.1);
+   border:1px solid var(--success);
+   border-radius:20px;
+   color:var(--success);
+   font-weight:bold;
+   font-size:.85rem;">
+   ● Security Tools: ACTIVE
+  </div>
+
+ </div>
+
+ <div class="card glass">
+
+  <h3>🔍 Phishing & Scam Link Analyzer</h3>
+
+  <p
+   style="
+   font-size:.8rem;
+   color:var(--muted);
+   margin-bottom:8px;">
+   Check a URL for common suspicious patterns.
+  </p>
+
+  <input
+   type="text"
+   id="phishInput"
+   class="input"
+   placeholder="Paste suspicious link here...">
+
+  <button
+   class="btn"
+   style="margin-top:10px;"
+   onclick="checkPhishing()">
+   Analyze Link
+  </button>
+
+  <div
+   id="phishResult"
+   style="margin-top:10px;font-size:.85rem;">
+  </div>
+
+ </div>
+
+ <div class="card glass">
+
+  <div class="model-badge">
+   🤖 On-Device AI · Transformers.js
+  </div>
+
+  <h3>🧪 AI Content Safety Scanner</h3>
+
+  <p
+   style="
+   font-size:.8rem;
+   color:var(--muted);
+   margin-bottom:8px;">
+   Analyze any message or comment for toxic/harmful
+   language using a free AI model that runs fully
+   in your browser — nothing is uploaded anywhere.
+  </p>
+
+  <textarea
+   id="scanInput"
+   class="textarea"
+   style="min-height:70px;"
+   placeholder="Paste a message or comment to analyze...">
+  </textarea>
+
+  <button
+   class="btn"
+   style="margin-top:10px;"
+   id="scanBtn"
+   onclick="runSafetyScan()">
+   🔍 Analyze with AI
+  </button>
+
+  <div id="scanResult" class="scan-result"></div>
+
+ </div>
+
+ <div class="card glass">
+
+  <h3>🔑 Password Strength Meter</h3>
+
+  <p
+   style="
+   font-size:.8rem;
+   color:var(--muted);
+   margin-bottom:8px;">
+   Estimate password strength locally.
+  </p>
+
+  <input
+   type="password"
+   id="passInput"
+   class="input"
+   placeholder="Type password..."
+   oninput="checkStrength()">
+
+  <div
+   style="
+   height:6px;
+   width:100%;
+   background:rgba(255,255,255,.1);
+   margin-top:12px;
+   border-radius:5px;
+   overflow:hidden;">
+
+   <div
+    id="strengthFill"
+    style="
+    height:100%;
+    width:0%;
+    transition:.3s;">
+   </div>
+
+  </div>
+
+  <p
+   id="strengthText"
+   style="
+   margin-top:6px;
+   font-size:.75rem;
+   color:var(--muted);">
+  </p>
+
+ </div>
+
+ <div class="card glass">
+
+  <h3>🔐 Secure Password Generator</h3>
+
+  <p style="font-size:.8rem;color:var(--muted);margin-bottom:8px;">
+   Generate a strong random password locally.
+  </p>
+
+  <div class="field" style="margin-bottom:8px;">
+   <label>Length: <span id="genLenVal">16</span></label>
+   <input type="range" id="genLen" min="8" max="32" value="16" class="input" oninput="document.getElementById('genLenVal').textContent=this.value">
+  </div>
+
+  <div class="toggle-row" style="padding:4px 0;">
+   <span>Include symbols</span>
+   <div id="genSymToggle" class="toggle on" onclick="this.classList.toggle('on')"></div>
+  </div>
+
+  <button class="btn" style="margin-top:8px;" onclick="generatePassword()">
+   ⚡ Generate Password
+  </button>
+
+  <div id="genPassOut" class="util-out hidden"></div>
+
+ </div>
+
+ <div class="card glass">
+
+  <h3>🧮 Hash Generator (SHA-256 / SHA-1)</h3>
+
+  <p style="font-size:.8rem;color:var(--muted);margin-bottom:8px;">
+   Compute a cryptographic hash of any text, entirely on-device.
+  </p>
+
+  <textarea id="hashInput" class="textarea" style="min-height:60px;" placeholder="Enter text to hash..."></textarea>
+
+  <div class="util-row" style="margin-top:8px;">
+   <select id="hashAlgo" class="select">
+    <option value="SHA-256">SHA-256</option>
+    <option value="SHA-1">SHA-1</option>
+    <option value="SHA-512">SHA-512</option>
+    <option value="MD5">MD5</option>
+   </select>
+   <button class="btn" onclick="generateHash()">Hash It</button>
+  </div>
+
+  <div id="hashOut" class="util-out hidden"></div>
+
+ </div>
+
+ <div class="card glass">
+
+  <h3>🔁 Base64 Encoder / Decoder</h3>
+
+  <p style="font-size:.8rem;color:var(--muted);margin-bottom:8px;">
+   Encode or decode text safely in your browser.
+  </p>
+
+  <textarea id="b64Input" class="textarea" style="min-height:60px;" placeholder="Enter text..."></textarea>
+
+  <div class="util-row" style="margin-top:8px;">
+   <button class="btn secondary" style="flex:1" onclick="doBase64('encode')">Encode</button>
+   <button class="btn secondary" style="flex:1" onclick="doBase64('decode')">Decode</button>
+  </div>
+
+  <div id="b64Out" class="util-out hidden"></div>
+
+ </div>
+
+ <div class="card glass">
+
+  <h3>📎 Suspicious File Extension Checker</h3>
+
+  <p style="font-size:.8rem;color:var(--muted);margin-bottom:8px;">
+   Check if a filename has a commonly-abused executable extension before opening it.
+  </p>
+
+  <input type="text" id="fileCheckInput" class="input" placeholder="e.g. invoice.pdf.exe">
+
+  <button class="btn" style="margin-top:10px;" onclick="checkFileExt()">
+   Check File
+  </button>
+
+  <div id="fileCheckOut" class="util-out hidden"></div>
+
+ </div>
+
+ <div class="card glass">
+
+  <h3>🌐 Domain Security Inspector <span class="new-badge">NEW</span></h3>
+
+  <p style="font-size:.8rem;color:var(--muted);margin-bottom:8px;">
+   Runs quick client-side heuristic checks on a domain — protocol, IP-hostnames, punycode, hyphen/subdomain abuse. Not a substitute for a full certificate authority check.
+  </p>
+
+  <input type="text" id="domainInput" class="input" placeholder="e.g. https://example.com">
+
+  <button class="btn" style="margin-top:10px;" onclick="inspectDomain()">
+   🔎 Inspect Domain
+  </button>
+
+  <div id="domainOut" class="util-out hidden"></div>
+
+ </div>
+
+ <div class="card glass">
+
+  <h3>✅ Hash Verifier <span class="new-badge">NEW</span></h3>
+
+  <p style="font-size:.8rem;color:var(--muted);margin-bottom:8px;">
+   Compare a computed hash against an expected value to confirm a downloaded file wasn't tampered with.
+  </p>
+
+  <div class="util-row">
+   <input type="text" id="verifyHash1" class="input" placeholder="Hash A">
+   <input type="text" id="verifyHash2" class="input" placeholder="Hash B">
+  </div>
+
+  <button class="btn" style="margin-top:10px;" onclick="verifyHashes()">
+   Compare Hashes
+  </button>
+
+  <div id="verifyOut" class="util-out hidden"></div>
+
+ </div>
+
+ <div class="card glass">
+
+  <h3>🕵️ Data Exposure Redactor</h3>
+
+  <p style="font-size:.8rem;color:var(--muted);margin-bottom:8px;">
+   Paste text before sharing it — this finds and masks emails, phone numbers, card-like numbers and IP addresses. 100% offline.
+  </p>
+
+  <textarea id="redactInput" class="textarea" style="min-height:70px;" placeholder="Paste text to check for exposed personal data..."></textarea>
+
+  <button class="btn" style="margin-top:10px;" onclick="runRedact()">
+   🕵️ Scan & Redact
+  </button>
+
+  <div id="redactOut" class="util-out hidden"></div>
+
+ </div>
+
+ <div class="card glass">
+
+  <h3>🍪 Local Storage Inspector</h3>
+
+  <p style="font-size:.8rem;color:var(--muted);margin-bottom:8px;">
+   See exactly what ULTRA AI has stored on this device, and wipe it all instantly. Fully offline — this only reads your own browser storage.
+  </p>
+
+  <button class="btn" onclick="inspectStorage()">
+   🔍 Inspect Local Data
+  </button>
+
+  <button class="btn secondary" style="margin-top:8px;" onclick="wipeLocalData()">
+   🗑️ Clear All Local Data
+  </button>
+
+  <div id="storageOut" class="util-out hidden"></div>
+
+ </div>
+
+ <div class="card glass">
+
+
+  <h3>🔒 Secure Local Vault <span class="new-badge">NEW</span></h3>
+
+  <p style="font-size:.8rem;color:var(--muted);margin-bottom:8px;">
+   Store sensitive notes locally, encrypted with AES-256-GCM under a passphrase only you know. Nothing leaves your device.
+  </p>
+
+  <div class="field">
+   <label>Master Passphrase</label>
+   <input type="password" id="vaultPass" class="input" placeholder="Enter your passphrase">
+  </div>
+
+  <textarea id="vaultNote" class="textarea" style="min-height:70px;" placeholder="Write a note to encrypt..."></textarea>
+
+  <div class="util-row" style="margin-top:8px;">
+   <button class="btn secondary" style="flex:1" onclick="vaultLock()">🔐 Encrypt & Save</button>
+   <button class="btn secondary" style="flex:1" onclick="vaultUnlock()">🔓 Decrypt & View</button>
+  </div>
+
+  <div id="vaultOut" class="util-out hidden"></div>
+
+ </div>
+
+ <div class="card glass">
+
+  <h3>✉️ Message Encryptor <span class="new-badge">NEW</span></h3>
+
+  <p style="font-size:.8rem;color:var(--muted);margin-bottom:8px;">
+   Encrypt or decrypt any short message with a shared passphrase — useful for sending sensitive text over insecure channels.
+  </p>
+
+  <textarea id="msgCryptInput" class="textarea" style="min-height:60px;" placeholder="Message or encrypted payload..."></textarea>
+
+  <input type="password" id="msgCryptPass" class="input" style="margin-top:8px;" placeholder="Shared passphrase">
+
+  <div class="util-row" style="margin-top:8px;">
+   <button class="btn secondary" style="flex:1" onclick="msgCrypt('encrypt')">🔐 Encrypt</button>
+   <button class="btn secondary" style="flex:1" onclick="msgCrypt('decrypt')">🔓 Decrypt</button>
+  </div>
+
+ <div id="msgCryptOut" class="util-out hidden"></div>
+
+ </div>
+
+ <div class="card glass">
+
+  <h3>🌐 IP Format Validator</h3>
+
+  <p style="font-size:.8rem;color:var(--muted);margin-bottom:8px;">
+   Check if a value is a valid IPv4/IPv6 address and see if it's public, private or reserved. Fully offline.
+  </p>
+
+  <input type="text" id="ipValInput" class="input" placeholder="e.g. 192.168.1.1">
+
+  <button class="btn" style="margin-top:10px;" onclick="validateIP()">Check IP</button>
+
+  <div id="ipValOut" class="util-out hidden"></div>
+
+ </div>
+
+ <div class="card glass">
+
+  <h3>🔢 Secure PIN Generator</h3>
+
+  <p style="font-size:.8rem;color:var(--muted);margin-bottom:8px;">
+   Generate a random numeric PIN for cards, locks or 2FA backup codes.
+  </p>
+
+  <div class="field" style="margin-bottom:8px;">
+   <label>PIN Length: <span id="pinLenVal">6</span></label>
+   <input type="range" id="pinLen" min="4" max="12" value="6" class="input" oninput="document.getElementById('pinLenVal').textContent=this.value">
+  </div>
+
+  <button class="btn" onclick="generatePIN()">🔢 Generate PIN</button>
+
+  <div id="pinOut" class="util-out hidden"></div>
+
+ </div>
+
+ <div class="card glass">
+
+  <h3>🍪 Cookie Scanner</h3>
+
+  <p style="font-size:.8rem;color:var(--muted);margin-bottom:8px;">
+   See which cookies are currently set for this page. Offline — reads only this browser tab.
+  </p>
+
+  <button class="btn" onclick="scanCookies()">🔍 Scan Cookies</button>
+
+  <div id="cookieOut" class="util-out hidden"></div>
+
+ </div>
+
+ <div class="card glass">
+
+  <h3>📋 Clipboard Privacy Checker</h3>
+
+  <p style="font-size:.8rem;color:var(--muted);margin-bottom:8px;">
+   Checks your current clipboard content for emails, phone numbers or card numbers before you paste it somewhere public.
+  </p>
+
+  <button class="btn" onclick="checkClipboard()">📋 Check My Clipboard</button>
+
+  <div id="clipOut" class="util-out hidden"></div>
+
+ </div>
+
+ <div class="card glass">
+
+  <h3>📶 Wi-Fi Password Advisor</h3>
+
+  <p style="font-size:.8rem;color:var(--muted);margin-bottom:8px;">
+   Check your Wi-Fi (WPA/WPA2) password strength against best-practice router security rules.
+  </p>
+
+  <input type="password" id="wifiPassInput" class="input" placeholder="Enter Wi-Fi password" oninput="checkWifiStrength()">
+
+  <div id="wifiOut" class="util-out hidden"></div>
+
+ </div>
+
+ <div class="card glass">
+
+  <h3>🔗 Shortened Link Risk Advisor</h3>
+
+  <p style="font-size:.8rem;color:var(--muted);margin-bottom:8px;">
+   Flags known link-shortener domains that hide the real destination — advises how to preview them safely. This does not resolve the link (no network call).
+  </p>
+
+  <input type="text" id="shortLinkInput" class="input" placeholder="Paste a shortened link...">
+
+  <button class="btn" style="margin-top:10px;" onclick="checkShortLink()">Check Link</button>
+
+  <div id="shortLinkOut" class="util-out hidden"></div>
+
+ </div>
+
+ <div class="card glass">
+
+  <h3>✅ Security Self-Audit Checklist</h3>
+
+  <p style="font-size:.8rem;color:var(--muted);margin-bottom:8px;">
+   A quick personal digital-hygiene checklist. Your answers stay on this device.
+  </p>
+
+  <div id="auditList"></div>
+
+  <div id="auditScore" class="audit-score" style="display:none;"></div>
+
+ </div>
+
+</section>
+
+<!-- QR -->
+
+<!-- CHAT -->
+
+<section id="chatView" class="view chat">
+
+ <div
+  id="aiFlashcard"
+  class="ai-flashcard"
+  onclick="openSettings()">
+
+  <div class="fc-icon">🧠</div>
+
+  <div class="fc-text">
+   <strong>Choose Your AI Brain</strong>
+   <span>Tap to pick a free AI model (Gemini, Groq & more)</span>
+  </div>
+
+  <button
+   class="fc-close"
+   onclick="dismissFlashcard(event)">
+   ✕
+  </button>
+
+ </div>
+
+ <div class="modebar">
+
+  <button class="mode active" data-mode="quick">
+   ⚡ Quick
+  </button>
+
+  <button class="mode" data-mode="deep">
+   🧠 Deep Think
+  </button>
+
+  <button class="mode" data-mode="learn">
+   🧑‍🏫 Learn
+  </button>
+
+  <button class="mode" data-mode="research">
+   🔬 Research
+  </button>
+
+  <button class="mode" data-mode="solve">
+   🧮 Solve
+  </button>
+
+  <button class="mode" data-mode="writer">
+   📝 Writer
+  </button>
+
+  <button class="mode" data-mode="coder">
+   💻 Coder
+  </button>
+
+  <button class="mode" data-mode="debate">
+   ⚖️ Debate
+  </button>
+
+ </div>
+
+ <div id="chatBox" class="chatbox">
+
+  <div
+   id="welcome"
+   class="welcome glass">
+
+   <div class="big">🧠</div>
+
+   <h2>
+    Academic Tutor Ready
+   </h2>
+
+   <p>
+    Ask a question, solve a problem, analyze a topic,
+    write an essay, review code or learn something new.
+   </p>
+
+  </div>
+
+ </div>
+
+ <div class="input-area">
+
+  <div
+   id="filePreview"
+   class="file-preview">
+
+   <span id="fileName">
+    file
+   </span>
+
+   <button
+    onclick="removeAttachedFile()"
+    style="
+    background:none;
+    border:0;
+    color:var(--danger);
+    font-weight:bold;">
+    ✕
+   </button>
+
+  </div>
+
+  <div class="input-wrap">
+
+   <label
+    class="attach-btn"
+    title="Attach file">
+
+    📎
+
+    <input
+     type="file"
+     id="fileInput"
+     style="display:none"
+     onchange="handleFileAttach(event)">
+
+   </label>
+
+   <textarea
+    id="userInput"
+    class="chat-input"
+    rows="1"
+    maxlength="10000"
+    placeholder="Ask ULTRA AI anything...">
+   </textarea>
+
+   <button
+    id="sendBtn"
+    class="send"
+    onclick="handleSendClick()">
+    ➤
+   </button>
+
+  </div>
+
+  <div
+   style="
+   display:flex;
+   justify-content:space-between;
+   padding:5px;
+   font-size:.62rem;
+   color:var(--muted);">
+
+   <span id="modeStatus">
+    ⚡ Quick
+   </span>
+
+   <span>
+    Enter = Send · Shift+Enter = New line
+   </span>
+
+  </div>
+
+ </div>
+
+</section>
+
+<!-- TOOLS -->
+
+<section id="toolsView" class="view tools">
+
+ <h2>🧰 Academic & Productivity Tools</h2>
+
+ <div class="tool-grid">
+
+  <div class="tool" onclick="toolPrompt('research')">
+   <div class="emoji">🌐</div>
+   <h4>Research Assistant</h4>
+   <p>Research topics</p>
+  </div>
+
+  <div class="tool" onclick="toolPrompt('summarize')">
+   <div class="emoji">📄</div>
+   <h4>Summarizer</h4>
+   <p>Summarize content</p>
+  </div>
+
+  <div class="tool" onclick="toolPrompt('quiz')">
+   <div class="emoji">❓</div>
+   <h4>Quiz Generator</h4>
+   <p>Practice tests</p>
+  </div>
+
+  <div class="tool" onclick="toolPrompt('planner')">
+   <div class="emoji">🎯</div>
+   <h4>Study Planner</h4>
+   <p>Study schedules</p>
+  </div>
+
+  <div class="tool" onclick="toolPrompt('solve')">
+   <div class="emoji">🧮</div>
+   <h4>Math Solver</h4>
+   <p>Step-by-step</p>
+  </div>
+
+  <div class="tool" onclick="toolPrompt('explain')">
+   <div class="emoji">💡</div>
+   <h4>Explain Simply</h4>
+   <p>Easy explanations</p>
+  </div>
+
+  <div class="tool" onclick="toolPrompt('essay')">
+   <div class="emoji">✍️</div>
+   <h4>Essay Assistant</h4>
+   <p>Academic writing</p>
+  </div>
+
+  <div class="tool" onclick="toolPrompt('code')">
+   <div class="emoji">💻</div>
+   <h4>Code Reviewer</h4>
+   <p>Debug code</p>
+  </div>
+
+  <div class="tool" onclick="toolPrompt('language')">
+   <div class="emoji">🌍</div>
+   <h4>Language Coach</h4>
+   <p>Grammar & translation</p>
+  </div>
+
+  <div class="tool" onclick="toolPrompt('brainstorm')">
+   <div class="emoji">💭</div>
+   <h4>Brainstormer</h4>
+   <p>Generate ideas</p>
+  </div>
+
+  <div class="tool" onclick="toolPrompt('presentation')">
+   <div class="emoji">📊</div>
+   <h4>Presentation Builder</h4>
+   <p>Slide structures</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('calcModal')">
+   <div class="emoji">🖩</div>
+   <h4>Calculator</h4>
+   <p>Quick math</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('convModal')">
+   <div class="emoji">📐</div>
+   <h4>Unit Converter</h4>
+   <p>Length, weight, temp</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('bmiModal')">
+   <div class="emoji">⚖️</div>
+   <h4>BMI Calculator</h4>
+   <p>Health check</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('wordModal')">
+   <div class="emoji">🔤</div>
+   <h4>Word Counter</h4>
+   <p>Words & characters</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('ageModal')">
+   <div class="emoji">🎂</div>
+   <h4>Age Calculator</h4>
+   <p>Date difference</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('colorModal')">
+   <div class="emoji">🎨</div>
+   <h4>Color & Contrast <span class="new-badge">NEW</span></h4>
+   <p>Palette & WCAG check</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('regexModal')">
+   <div class="emoji">🧩</div>
+   <h4>Regex Tester <span class="new-badge">NEW</span></h4>
+   <p>Test patterns live</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('jsonModal')">
+   <div class="emoji">🗂️</div>
+   <h4>JSON Formatter <span class="new-badge">NEW</span></h4>
+   <p>Format & validate</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('mdModal')">
+   <div class="emoji">📝</div>
+   <h4>Markdown Preview <span class="new-badge">NEW</span></h4>
+   <p>Live preview editor</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('snippetModal')">
+   <div class="emoji">💾</div>
+   <h4>Code Snippets <span class="new-badge">NEW</span></h4>
+   <p>Save & format code</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('pomodoroModal')">
+   <div class="emoji">⏱️</div>
+   <h4>Focus Timer <span class="new-badge">NEW</span></h4>
+   <p>Pomodoro study sessions</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('currencyModal')">
+   <div class="emoji">💱</div>
+   <h4>Currency Converter <span class="new-badge">NEW</span></h4>
+   <p>Live exchange rates</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('ocrModal')">
+   <div class="emoji">🖼️</div>
+   <h4>OCR Text Scanner <span class="new-badge">NEW</span></h4>
+   <p>Image → text, on-device</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('pdfModal')">
+   <div class="emoji">📑</div>
+   <h4>PDF Merge Toolkit <span class="new-badge">NEW</span></h4>
+   <p>Combine PDFs locally</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('flashModal')">
+   <div class="emoji">🗃️</div>
+   <h4>Flashcards + SR</h4>
+   <p>Spaced repetition</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('gpaModal')">
+   <div class="emoji">🎓</div>
+   <h4>GPA Calculator</h4>
+   <p>Course grades</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('citeModal')">
+   <div class="emoji">📌</div>
+   <h4>Citation Generator</h4>
+   <p>APA / MLA format</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('formulaModal')">
+   <div class="emoji">📘</div>
+   <h4>Formula Sheet</h4>
+   <p>Math/Physics/Chem</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('streakModal')">
+   <div class="emoji">🔥</div>
+   <h4>Study Streak</h4>
+   <p>Daily check-in</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('randomModal')">
+   <div class="emoji">🎲</div>
+   <h4>Group Randomizer</h4>
+   <p>Shuffle & pick names</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('dictModal')">
+   <div class="emoji">📖</div>
+   <h4>Dictionary</h4>
+   <p>Academic word bank</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('percentModal')">
+   <div class="emoji">💯</div>
+   <h4>Percentage Calculator</h4>
+   <p>Quick % math</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('gradeModal')">
+   <div class="emoji">🏅</div>
+   <h4>Grade Converter</h4>
+   <p>Score → letter grade</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('examModal')">
+   <div class="emoji">⏳</div>
+   <h4>Exam Countdown</h4>
+   <p>Deadline tracker</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('notesModal')">
+   <div class="emoji">🗒️</div>
+   <h4>Note Organizer</h4>
+   <p>Tagged quick notes</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('tzModal')">
+   <div class="emoji">🌍</div>
+   <h4>Timezone Converter</h4>
+   <p>Group study across TZ</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('sciModal')">
+   <div class="emoji">🔬</div>
+   <h4>Scientific Calculator</h4>
+   <p>sin/cos/log/√</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('ttsModal')">
+   <div class="emoji">🔊</div>
+   <h4>Text-to-Speech Reader</h4>
+   <p>Listen to any text</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('vocabModal')">
+   <div class="emoji">🧠</div>
+   <h4>Vocabulary Builder</h4>
+   <p>Build & self-quiz</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('todoModal')">
+   <div class="emoji">✅</div>
+   <h4>To-Do List</h4>
+   <p>Task manager</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('stopwatchModal')">
+   <div class="emoji">⏱️</div>
+   <h4>Stopwatch & Laps</h4>
+   <p>Timing with laps</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('caseModal')">
+   <div class="emoji">🔠</div>
+   <h4>Text Case Converter</h4>
+   <p>UPPER/lower/Title</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('quoteModal')">
+   <div class="emoji">💬</div>
+   <h4>Motivation Quotes</h4>
+   <p>Study inspiration</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('baseModal')">
+   <div class="emoji">🔢</div>
+   <h4>Number Base Converter</h4>
+   <p>Binary/Hex/Decimal</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('diffModal')">
+   <div class="emoji">📝</div>
+   <h4>Text Diff Checker</h4>
+   <p>Compare two texts</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('primeModal')">
+   <div class="emoji">🔍</div>
+   <h4>Prime Number Checker</h4>
+   <p>Check & factorize</p>
+  </div>
+
+  <div class="tool" onclick="openUtilModal('habitModal')">
+   <div class="emoji">🎯</div>
+   <h4>Habit Tracker</h4>
+   <p>Multi-habit daily log</p>
+  </div>
+
+ </div>
+
+</section>
+
+<!-- GAMES -->
+
+<section id="gamesView" class="view games">
+
+ <h2>🎮 Educational Games</h2>
+
+ <div id="gamesHome">
+
+  <div class="game-grid">
+
+   <div class="game-card" onclick="openGame('mathGame')">
+    <div class="emoji">🧮</div>
+    <h4>Math Sprint</h4>
+    <p>60s arithmetic challenge</p>
+   </div>
+
+   <div class="game-card" onclick="openGame('scrambleGame')">
+    <div class="emoji">🔤</div>
+    <h4>Word Scramble</h4>
+    <p>Unscramble academic words</p>
+   </div>
+
+   <div class="game-card" onclick="openGame('memoryGame')">
+    <div class="emoji">🧠</div>
+    <h4>Memory Match</h4>
+    <p>Flip & match pairs</p>
+   </div>
+
+   <div class="game-card" onclick="openGame('typingGame')">
+    <div class="emoji">⌨️</div>
+    <h4>Typing Test</h4>
+    <p>Speed & accuracy check</p>
+   </div>
+
+   <div class="game-card" onclick="openGame('quizGame')">
+    <div class="emoji">❓</div>
+    <h4>Knowledge Quiz</h4>
+    <p>General knowledge test</p>
+   </div>
+
+   <div class="game-card" onclick="openGame('hangmanGame')">
+    <div class="emoji">🪢</div>
+    <h4>Hangman</h4>
+    <p>Guess the academic word</p>
+   </div>
+
+   <div class="game-card" onclick="openGame('guessGame')">
+    <div class="emoji">🔢</div>
+    <h4>Number Guess</h4>
+    <p>Higher or lower hints</p>
+   </div>
+
+   <div class="game-card" onclick="openGame('triviaGame')">
+    <div class="emoji">⚡</div>
+    <h4>Trivia Speed Round</h4>
+    <p>Fast true/false rounds</p>
+   </div>
+
+   <div class="game-card" onclick="openGame('anagramGame')">
+    <div class="emoji">🔀</div>
+    <h4>Anagram Challenge</h4>
+    <p>Unscramble with hints</p>
+   </div>
+
+   <div class="game-card" onclick="openGame('reactionGame')">
+    <div class="emoji">⏱️</div>
+    <h4>Reaction Test</h4>
+    <p>Tap-speed reflex test</p>
+   </div>
+
+  </div>
+
+ </div>
+
+ <!-- MATH SPRINT -->
+ <div id="mathGame" class="card glass" style="display:none;">
+
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+   <h3>🧮 Math Sprint</h3>
+   <button class="mini-btn" onclick="closeGame('mathGame')">✕ Exit</button>
+  </div>
+
+  <div class="game-stat-row">
+   <div class="game-stat"><b id="mathScore">0</b><span>SCORE</span></div>
+   <div class="game-stat"><b id="mathTime">60</b><span>SECONDS</span></div>
+  </div>
+
+  <div id="mathQuestion" class="game-question">Tap Start to begin</div>
+
+  <input type="number" id="mathAnswer" class="input" placeholder="Your answer" disabled onkeydown="if(event.key==='Enter')submitMathAnswer()">
+
+  <div class="util-row" style="margin-top:8px;">
+   <button class="btn" style="flex:1" id="mathStartBtn" onclick="startMathGame()">▶ Start</button>
+   <button class="btn secondary" style="flex:1" onclick="submitMathAnswer()">Submit</button>
+  </div>
+
+ </div>
+
+ <!-- WORD SCRAMBLE -->
+ <div id="scrambleGame" class="card glass" style="display:none;">
+
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+   <h3>🔤 Word Scramble</h3>
+   <button class="mini-btn" onclick="closeGame('scrambleGame')">✕ Exit</button>
+  </div>
+
+  <div class="game-stat-row">
+   <div class="game-stat"><b id="scrambleScore">0</b><span>SCORE</span></div>
+   <div class="game-stat"><b id="scrambleLeft">—</b><span>WORDS LEFT</span></div>
+  </div>
+
+  <div id="scrambleWord" class="game-question">Tap Start</div>
+
+  <input type="text" id="scrambleAnswer" class="input" placeholder="Type the unscrambled word" disabled onkeydown="if(event.key==='Enter')submitScramble()">
+
+  <div class="util-row" style="margin-top:8px;">
+   <button class="btn" style="flex:1" id="scrambleStartBtn" onclick="startScrambleGame()">▶ Start</button>
+   <button class="btn secondary" style="flex:1" onclick="submitScramble()">Check</button>
+  </div>
+
+  <div id="scrambleMsg" style="margin-top:8px;font-size:.8rem;"></div>
+
+ </div>
+
+ <!-- MEMORY MATCH -->
+ <div id="memoryGame" class="card glass" style="display:none;">
+
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+   <h3>🧠 Memory Match</h3>
+   <button class="mini-btn" onclick="closeGame('memoryGame')">✕ Exit</button>
+  </div>
+
+  <div class="game-stat-row">
+   <div class="game-stat"><b id="memoryMoves">0</b><span>MOVES</span></div>
+   <div class="game-stat"><b id="memoryMatches">0/8</b><span>MATCHES</span></div>
+  </div>
+
+  <button class="btn" style="width:100%;" onclick="startMemoryGame()">🔄 New Game</button>
+
+  <div id="memoryGrid" class="memory-grid"></div>
+
+ </div>
+
+ <!-- TYPING TEST -->
+ <div id="typingGame" class="card glass" style="display:none;">
+
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+   <h3>⌨️ Typing Speed Test</h3>
+   <button class="mini-btn" onclick="closeGame('typingGame')">✕ Exit</button>
+  </div>
+
+  <div class="game-stat-row">
+   <div class="game-stat"><b id="typingWPM">0</b><span>WPM</span></div>
+   <div class="game-stat"><b id="typingAcc">100%</b><span>ACCURACY</span></div>
+   <div class="game-stat"><b id="typingTime">30</b><span>SECONDS</span></div>
+  </div>
+
+  <div id="typingSample" class="typing-sample">Tap Start to get a sample sentence.</div>
+
+  <textarea id="typingInput" class="textarea" style="min-height:70px;" placeholder="Start typing here..." disabled oninput="updateTyping()"></textarea>
+
+  <button class="btn" style="width:100%;margin-top:8px;" id="typingStartBtn" onclick="startTypingGame()">▶ Start</button>
+
+ </div>
+
+ <!-- KNOWLEDGE QUIZ -->
+ <div id="quizGame" class="card glass" style="display:none;">
+
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+   <h3>❓ Knowledge Quiz</h3>
+   <button class="mini-btn" onclick="closeGame('quizGame')">✕ Exit</button>
+  </div>
+
+  <div class="game-stat-row">
+   <div class="game-stat"><b id="quizScore">0</b><span>SCORE</span></div>
+   <div class="game-stat"><b id="quizProgress">0/10</b><span>PROGRESS</span></div>
+  </div>
+
+  <div id="quizQuestion" class="game-question">Tap Start</div>
+
+  <div id="quizOptions" class="game-options"></div>
+
+  <button class="btn" style="width:100%;margin-top:10px;" id="quizStartBtn" onclick="startQuizGame()">▶ Start</button>
+
+ </div>
+
+ <!-- HANGMAN -->
+ <div id="hangmanGame" class="card glass" style="display:none;">
+
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+   <h3>🪢 Hangman</h3>
+   <button class="mini-btn" onclick="closeGame('hangmanGame')">✕ Exit</button>
+  </div>
+
+  <div class="game-stat-row">
+   <div class="game-stat"><b id="hangmanWrong">0/6</b><span>WRONG</span></div>
+   <div class="game-stat"><b id="hangmanWins">0</b><span>WINS</span></div>
+  </div>
+
+  <div id="hangmanDisplay" class="hangman-display">_ _ _ _</div>
+
+  <div id="hangmanKeys" class="hangman-keys"></div>
+
+  <button class="btn" style="width:100%;margin-top:10px;" onclick="startHangman()">▶ New Word</button>
+
+ </div>
+
+ <!-- NUMBER GUESS -->
+ <div id="guessGame" class="card glass" style="display:none;">
+
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+   <h3>🔢 Number Guess</h3>
+   <button class="mini-btn" onclick="closeGame('guessGame')">✕ Exit</button>
+  </div>
+
+  <div class="game-stat-row">
+   <div class="game-stat"><b id="guessAttempts">0</b><span>ATTEMPTS</span></div>
+   <div class="game-stat"><b id="guessBest">—</b><span>BEST</span></div>
+  </div>
+
+  <div id="guessHint" class="game-question">I'm thinking of 1–100. Tap Start!</div>
+
+  <input type="number" id="guessInput" class="input" placeholder="Your guess" disabled onkeydown="if(event.key==='Enter')submitGuess()">
+
+  <div class="util-row" style="margin-top:8px;">
+   <button class="btn" style="flex:1" id="guessStartBtn" onclick="startGuessGame()">▶ Start</button>
+   <button class="btn secondary" style="flex:1" onclick="submitGuess()">Guess</button>
+  </div>
+
+ </div>
+
+ <!-- TRIVIA SPEED ROUND -->
+ <div id="triviaGame" class="card glass" style="display:none;">
+
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+   <h3>⚡ Trivia Speed Round</h3>
+   <button class="mini-btn" onclick="closeGame('triviaGame')">✕ Exit</button>
+  </div>
+
+  <div class="game-stat-row">
+   <div class="game-stat"><b id="triviaScore">0</b><span>SCORE</span></div>
+   <div class="game-stat"><b id="triviaTimeLeft">5</b><span>SEC LEFT</span></div>
+  </div>
+
+  <div id="triviaQuestion" class="game-question">Tap Start — true/false, 5s each!</div>
+
+  <div class="game-options">
+   <button class="game-opt-btn" onclick="answerTrivia(true)">✅ True</button>
+   <button class="game-opt-btn" onclick="answerTrivia(false)">❌ False</button>
+  </div>
+
+  <button class="btn" style="width:100%;margin-top:10px;" id="triviaStartBtn" onclick="startTriviaGame()">▶ Start</button>
+
+ </div>
+
+ <!-- ANAGRAM CHALLENGE -->
+ <div id="anagramGame" class="card glass" style="display:none;">
+
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+   <h3>🔀 Anagram Challenge</h3>
+   <button class="mini-btn" onclick="closeGame('anagramGame')">✕ Exit</button>
+  </div>
+
+  <div class="game-stat-row">
+   <div class="game-stat"><b id="anagramScore">0</b><span>SCORE</span></div>
+   <div class="game-stat"><b id="anagramHints">0</b><span>HINTS USED</span></div>
+  </div>
+
+  <div id="anagramWord" class="game-question">Tap Start</div>
+
+  <input type="text" id="anagramAnswer" class="input" placeholder="Type your answer" disabled onkeydown="if(event.key==='Enter')submitAnagram()">
+
+  <div class="util-row" style="margin-top:8px;">
+   <button class="btn" style="flex:1" id="anagramStartBtn" onclick="startAnagramGame()">▶ Start</button>
+   <button class="btn secondary" style="flex:1" onclick="submitAnagram()">Check</button>
+  </div>
+
+  <button class="btn secondary" style="width:100%;margin-top:6px;" onclick="anagramHint()">💡 Hint (reveal 1 letter)</button>
+
+  <div id="anagramMsg" class="hint-box"></div>
+
+ </div>
+
+ <!-- REACTION TEST -->
+ <div id="reactionGame" class="card glass" style="display:none;">
+
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+   <h3>⏱️ Reaction Time Test</h3>
+   <button class="mini-btn" onclick="closeGame('reactionGame')">✕ Exit</button>
+  </div>
+
+  <div class="game-stat-row">
+   <div class="game-stat"><b id="reactionLast">—</b><span>LAST (ms)</span></div>
+   <div class="game-stat"><b id="reactionBest">—</b><span>BEST (ms)</span></div>
+  </div>
+
+  <div id="reactionBox" class="reaction-box" onclick="reactionTap()">Tap Start to begin</div>
+
+  <button class="btn" style="width:100%;" onclick="startReactionGame()">▶ Start</button>
+
+ </div>
+
+</section>
+
+<!-- EXPLORE -->
+
+<section id="exploreView" class="view" style="padding:18px;gap:14px;overflow-y:auto;">
+
+ <div class="explore-hero glass">
+  <h1>📚 Explore & Learn</h1>
+  <p>Browse Science, History, Technology and more — real articles pulled live from Wikipedia, with a quick preview before you dive in.</p>
+ </div>
+
+ <div id="categoryCarousel" class="provider-carousel">
+
+  <button class="provider-chip active" data-cat="science" onclick="selectExploreCategory('science')">
+   <span class="pc-icon">🔬</span>
+   <span class="pc-name">Science</span>
+   <span class="pc-tag">Explore topics</span>
+  </button>
+
+  <button class="provider-chip" data-cat="history" onclick="selectExploreCategory('history')">
+   <span class="pc-icon">🏛️</span>
+   <span class="pc-name">History</span>
+   <span class="pc-tag">Explore topics</span>
+  </button>
+
+  <button class="provider-chip" data-cat="technology" onclick="selectExploreCategory('technology')">
+   <span class="pc-icon">💻</span>
+   <span class="pc-name">Technology</span>
+   <span class="pc-tag">Explore topics</span>
+  </button>
+
+  <button class="provider-chip" data-cat="math" onclick="selectExploreCategory('math')">
+   <span class="pc-icon">📐</span>
+   <span class="pc-name">Mathematics</span>
+   <span class="pc-tag">Explore topics</span>
+  </button>
+
+  <button class="provider-chip" data-cat="literature" onclick="selectExploreCategory('literature')">
+   <span class="pc-icon">📖</span>
+   <span class="pc-name">Literature</span>
+   <span class="pc-tag">Explore topics</span>
+  </button>
+
+  <button class="provider-chip" data-cat="general" onclick="selectExploreCategory('general')">
+   <span class="pc-icon">🌐</span>
+   <span class="pc-name">General</span>
+   <span class="pc-tag">Explore topics</span>
+  </button>
+
+ </div>
+
+ <div class="explore-search-wrap">
+  <input type="text" id="exploreSearchInput" class="input" placeholder="Search any topic on Wikipedia..." onkeydown="if(event.key==='Enter')runExploreSearch()">
+  <button class="btn" onclick="runExploreSearch()">🔍</button>
+ </div>
+
+ <div id="exploreCatLabel" class="explore-cat-label">Showing: <strong>Science</strong></div>
+
+ <div id="exploreResults" class="explore-results"></div>
+
+</section>
+
+<!-- PROFILE -->
+
+<section id="profileView" class="view profile">
+
+ <h2>👤 My Profile</h2>
+
+ <div class="profile-card glass">
+
+  <div id="avatar" class="avatar">
+   ST
+  </div>
+
+  <div style="flex:1">
+
+   <div
+    id="profileName"
+    class="profile-name">
+    Student
+   </div>
+
+   <div
+    id="profileEmail"
+    class="profile-email">
+    Not configured
+   </div>
+
+  </div>
+
+ </div>
+
+ <div class="section glass">
+
+  <div class="field">
+
+   <label>Name</label>
+
+   <input
+    id="nameInput"
+    class="input"
+    placeholder="Your name">
+
+  </div>
+
+  <div class="field">
+
+   <label>Email</label>
+
+   <input
+    id="emailInput"
+    class="input"
+    type="email"
+    placeholder="Your email">
+
+  </div>
+
+  <div class="field">
+
+   <label>Profile Picture</label>
+
+   <input
+    id="avatarInput"
+    class="input"
+    type="file"
+    accept="image/*"
+    onchange="changeAvatar(event)">
+
+  </div>
+
+  <button
+   class="btn"
+   onclick="saveProfile()">
+   Save Profile
+  </button>
+
+ </div>
+
+ <div class="section glass">
+
+  <h3 style="font-size:.9rem;margin-bottom:10px">
+   📦 Data
+  </h3>
+
+  <button
+   class="btn secondary"
+   onclick="exportChat()">
+   📤 Export Chat
+  </button>
+
+  <button
+   class="btn secondary"
+   onclick="clearChat()"
+   style="margin-left:5px;">
+   🗑️ Clear Chat
+  </button>
+
+ </div>
+
+</section>
+
+<!-- =================================
+     ABOUT / APK DOWNLOAD
+     ================================= -->
+
+<section id="aboutView" class="view about">
+
+ <h2>
+  📲 ULTRA AI on Google Play
+ </h2>
+
+ <div class="play-card">
+
+  <div class="apk-glow"></div>
+
+  <div class="play-icon">
+   ▶️
+  </div>
+
+  <div class="apk-title">
+   Coming Soon
+  </div>
+
+  <div class="apk-subtitle">
+   🚀 ULTRA AI is heading to the Google Play Store
+  </div>
+
+  <div class="play-badge">
+   <span class="play-dot"></span>
+   In Review — Almost Ready
+  </div>
+
+  <p class="apk-description">
+   We're putting the finishing touches on the official
+   Android app. Once it's live, you'll get faster
+   performance, offline access and push notifications —
+   right from the Play Store.
+  </p>
+
+  <div class="play-progress">
+
+   <strong style="font-size:.78rem;">
+    📦 Submission Progress
+   </strong>
+
+   <div class="play-progress-track">
+    <div class="play-progress-fill"></div>
+   </div>
+
+   <p style="font-size:.68rem;color:var(--muted);margin-top:6px;">
+    78% complete · Google Play review in progress
+   </p>
+
+  </div>
+
+  <div class="security-message">
+
+   <div class="security-message-icon">
+    🌐
+   </div>
+
+   <div>
+
+    <strong>
+     No need to wait!
+    </strong>
+
+    <p>
+     ULTRA AI already works great right here in your
+     browser. Add it to your home screen for an
+     app-like experience today.
+    </p>
+
+   </div>
+
+  </div>
+
+  <button
+   class="play-continue-btn"
+   onclick="switchView('chat')">
+   <span>💬</span>
+   <span>Continue Using ULTRA AI on Web</span>
+   <span class="arrow">→</span>
+  </button>
+
+  <div class="apk-note">
+   🔔 We'll announce the Play Store link here first
+  </div>
+
+ </div>
+
+</section>
+
+</main>
+
+<!-- NAVIGATION -->
+
+<nav class="nav glass">
+
+ <button
+  class="active"
+  onclick="switchView('home')">
+  <span>🏠</span>
+  Home
+ </button>
+
+ <button onclick="switchView('chat')">
+  <span>💬</span>
+  Chat
+ </button>
+
+ <button onclick="switchView('explore')">
+  <span>📚</span>
+  Explore
+ </button>
+
+ <button onclick="switchView('tools')">
+  <span>🧰</span>
+  Tools
+ </button>
+
+ <button onclick="switchView('games')">
+  <span>🎮</span>
+  Games
+ </button>
+
+ <button onclick="switchView('security')">
+  <span>🛡️</span>
+  Security
+ </button>
+
+ <button onclick="switchView('about')">
+  <span>📲</span>
+  Play
+ </button>
+
+</nav>
+
+</div><!-- /#app -->
+
+<!-- SETTINGS -->
+
+<div id="settingsModal" class="modal">
+
+ <div class="modal-box glass">
+
+  <div class="modal-head">
+
+   <h3>⚙️ Settings</h3>
+
+   <button
+    class="icon"
+    onclick="closeSettings()">
+    ✕
+   </button>
+
+  </div>
+
+  <div class="setting-title">
+   🎨 Appearance
+  </div>
+
+  <div class="theme-grid">
+
+   <button class="theme" onclick="setTheme('cyan')">
+    🩵 Cyan
+   </button>
+
+   <button class="theme" onclick="setTheme('purple')">
+    💜 Purple
+   </button>
+
+   <button class="theme" onclick="setTheme('emerald')">
+    💚 Emerald
+   </button>
+
+   <button class="theme" onclick="setTheme('sunset')">
+    🧡 Sunset
+   </button>
+
+   <button class="theme" onclick="setTheme('rose')">
+    🌹 Rose
+   </button>
+
+   <button class="theme" onclick="setTheme('blue')">
+    💙 Blue
+   </button>
+
+   <button class="theme" onclick="setTheme('amoled')">
+    🖤 AMOLED
+   </button>
+
+  </div>
+
+  <div class="setting-title">
+   🔤 Typography
+  </div>
+
+  <div class="field">
+
+   <label>
+    Font Size
+   </label>
+
+   <select
+    id="fontSize"
+    class="select"
+    onchange="changeFont(this.value)">
+
+    <option value="13px">
+     Small
+    </option>
+
+    <option value="15px" selected>
+     Standard
+    </option>
+
+    <option value="17px">
+     Large
+    </option>
+
+    <option value="19px">
+     Extra Large
+    </option>
+
+   </select>
+
+  </div>
+
+  <div class="field">
+
+   <label>
+    Chat Density
+   </label>
+
+   <select
+    id="density"
+    class="select"
+    onchange="changeDensity(this.value)">
+
+    <option value="normal">
+     Comfortable
+    </option>
+
+    <option value="compact">
+     Compact
+    </option>
+
+   </select>
+
+  </div>
+
+  <!-- ===== BYOK: AI PROVIDER SECTION ===== -->
+
+  <div class="setting-title">
+   🔑 AI Provider <span class="provider-badge">Free Options</span>
+  </div>
+
+  <div class="field">
+
+   <label>
+    Choose AI Provider — slide to pick
+   </label>
+
+   <div id="providerCarousel" class="provider-carousel">
+
+    <button class="provider-chip" data-provider="default" onclick="selectProvider('default')">
+     <span class="pc-icon">🧠</span>
+     <span class="pc-name">ULTRA Default</span>
+     <span class="pc-tag">Wikipedia-based</span>
+    </button>
+
+    <button class="provider-chip" data-provider="gemini" onclick="selectProvider('gemini')">
+     <span class="pc-icon">✨</span>
+     <span class="pc-name">Gemini</span>
+     <span class="pc-tag">Free · Google</span>
+    </button>
+
+    <button class="provider-chip" data-provider="groq" onclick="selectProvider('groq')">
+     <span class="pc-icon">⚡</span>
+     <span class="pc-name">Groq</span>
+     <span class="pc-tag">Free · Fast</span>
+    </button>
+
+    <button class="provider-chip" data-provider="openrouter" onclick="selectProvider('openrouter')">
+     <span class="pc-icon">🌐</span>
+     <span class="pc-name">OpenRouter</span>
+     <span class="pc-tag">Free models</span>
+    </button>
+
+   </div>
+
+   <select
+    id="aiProviderSelect"
+    class="select"
+    style="display:none;"
+    onchange="onProviderChange()">
+
+    <option value="default">
+     ULTRA AI Default (Wikipedia-based)
+    </option>
+
+    <option value="gemini">
+     Google Gemini (Free)
+    </option>
+
+    <option value="groq">
+     Groq (Free & Fast)
+    </option>
+
+    <option value="openrouter">
+     OpenRouter (Free Models)
+    </option>
+
+   </select>
+
+  </div>
+
+  <div
+   id="apiKeyFieldWrap"
+   class="field"
+   style="display:none;">
+
+   <label>
+    Your API Key
+   </label>
+
+   <div style="display:flex;gap:6px;">
+
+    <input
+     type="password"
+     id="userApiKeyInput"
+     class="input"
+     placeholder="Paste your API key here">
+
+    <button
+     class="btn secondary"
+     style="white-space:nowrap;"
+     onclick="openApiKeyGuide()">
+     Get Key
+    </button>
+
+   </div>
+
+   <button
+    class="btn"
+    style="margin-top:8px;"
+    onclick="saveApiKey()">
+    Save Key
+   </button>
+
+   <div
+    id="apiKeyStatus"
+    style="font-size:.7rem;color:var(--success);margin-top:5px;">
+   </div>
+
+  </div>
+
+  <!-- ===== END BYOK SECTION ===== -->
+
+  <div class="setting-title">
+   🧠 AI Preferences
+  </div>
+
+  <div class="field">
+
+   <label>
+    Academic Level
+   </label>
+
+   <select
+    id="academicLevel"
+    class="select">
+
+    <option>
+     School Student
+    </option>
+
+    <option selected>
+     University Student
+    </option>
+
+    <option>
+     Researcher
+    </option>
+
+    <option>
+     Professional
+    </option>
+
+   </select>
+
+  </div>
+
+  <div class="field">
+
+   <label>
+    Response Style
+   </label>
+
+   <select
+    id="responseStyle"
+    class="select">
+
+    <option value="balanced">
+     Balanced
+    </option>
+
+    <option value="concise">
+     Concise
+    </option>
+
+    <option value="detailed">
+     Detailed
+    </option>
+
+    <option value="academic">
+     Academic
+    </option>
+
+    <option value="simple">
+     Simple & Easy
+    </option>
+
+   </select>
+
+  </div>
+
+  <div class="field">
+
+   <label>
+    Custom AI Instructions
+   </label>
+
+   <textarea
+    id="customInstructions"
+    class="textarea"
+    maxlength="5000"
+    placeholder="Tell ULTRA AI how you want it to behave...">
+   </textarea>
+
+  </div>
+
+  <div class="toggle-row">
+
+   <span>
+    ✨ Animations
+   </span>
+
+   <div
+    id="motionToggle"
+    class="toggle on"
+    onclick="toggleSetting('motion')">
+   </div>
+
+  </div>
+
+  <div class="toggle-row">
+
+   <span>
+    🔊 Text-to-Speech
+   </span>
+
+   <div
+    id="ttsToggle"
+    class="toggle on"
+    onclick="toggleSetting('tts')">
+   </div>
+
+  </div>
+
+  <div class="toggle-row">
+
+   <span>
+    💾 Save conversations locally
+   </span>
+
+   <div
+    id="memoryToggle"
+    class="toggle on"
+    onclick="toggleSetting('memory')">
+   </div>
+
+  </div>
+
+  <div
+   style="
+   display:flex;
+   gap:7px;
+   margin-top:15px;">
+
+   <button
+    class="btn"
+    style="flex:1"
+    onclick="saveSettings()">
+    Save Settings
+   </button>
+
+   <button
+    class="btn secondary"
+    onclick="resetSettings()">
+    Reset
+   </button>
+
+  </div>
+
+ </div>
+
+</div>
+
+<!-- API KEY GUIDE MODAL -->
+
+<div id="apiKeyGuideModal" class="modal">
+
+ <div class="modal-box glass" style="max-width:400px;">
+
+  <div class="modal-head">
+
+   <h3 id="guideTitle">
+    Get API Key
+   </h3>
+
+   <button
+    class="icon"
+    onclick="closeApiKeyGuide()">
+    ✕
+   </button>
+
+  </div>
+
+  <ol
+   id="guideSteps"
+   class="guide-steps">
+  </ol>
+
+  <button
+   class="btn"
+   style="width:100%;margin-top:12px;"
+   id="guideOpenBtn">
+   Create API Key →
+  </button>
+
+  <p
+   style="
+   font-size:.65rem;
+   color:var(--muted);
+   margin-top:10px;
+   text-align:center;">
+   🔒 Your key is stored only in your browser. It is never sent to our servers.
+  </p>
+
+ </div>
+
+</div>
+
+<!-- CALCULATOR MODAL -->
+<div id="calcModal" class="modal">
+ <div class="modal-box glass" style="max-width:360px;">
+  <div class="modal-head">
+   <h3>🖩 Calculator</h3>
+   <button class="icon" onclick="closeUtilModal('calcModal')">✕</button>
+  </div>
+  <div id="calcDisplay" class="calc-display">0</div>
+  <div class="calc-grid">
+   <button class="calc-btn op" onclick="calcInput('C')">C</button>
+   <button class="calc-btn op" onclick="calcInput('back')">⌫</button>
+   <button class="calc-btn op" onclick="calcInput('%')">%</button>
+   <button class="calc-btn op" onclick="calcInput('/')">÷</button>
+
+   <button class="calc-btn" onclick="calcInput('7')">7</button>
+   <button class="calc-btn" onclick="calcInput('8')">8</button>
+   <button class="calc-btn" onclick="calcInput('9')">9</button>
+   <button class="calc-btn op" onclick="calcInput('*')">×</button>
+
+   <button class="calc-btn" onclick="calcInput('4')">4</button>
+   <button class="calc-btn" onclick="calcInput('5')">5</button>
+   <button class="calc-btn" onclick="calcInput('6')">6</button>
+   <button class="calc-btn op" onclick="calcInput('-')">−</button>
+
+   <button class="calc-btn" onclick="calcInput('1')">1</button>
+   <button class="calc-btn" onclick="calcInput('2')">2</button>
+   <button class="calc-btn" onclick="calcInput('3')">3</button>
+   <button class="calc-btn op" onclick="calcInput('+')">+</button>
+
+   <button class="calc-btn wide" onclick="calcInput('0')">0</button>
+   <button class="calc-btn" onclick="calcInput('.')">.</button>
+   <button class="calc-btn eq" onclick="calcInput('=')">=</button>
+  </div>
+ </div>
+</div>
+
+<!-- UNIT CONVERTER MODAL -->
+<div id="convModal" class="modal">
+ <div class="modal-box glass" style="max-width:400px;">
+  <div class="modal-head">
+   <h3>📐 Unit Converter</h3>
+   <button class="icon" onclick="closeUtilModal('convModal')">✕</button>
+  </div>
+
+  <div class="field">
+   <label>Category</label>
+   <select id="convCategory" class="select" onchange="updateConvUnits()">
+    <option value="length">Length</option>
+    <option value="weight">Weight</option>
+    <option value="temp">Temperature</option>
+   </select>
+  </div>
+
+  <div class="util-row">
+   <div class="field" style="flex:1">
+    <label>From</label>
+    <select id="convFrom" class="select"></select>
+   </div>
+   <div class="field" style="flex:1">
+    <label>To</label>
+    <select id="convTo" class="select"></select>
+   </div>
+  </div>
+
+  <div class="field">
+   <label>Value</label>
+   <input type="number" id="convValue" class="input" placeholder="Enter value" oninput="runConvert()">
+  </div>
+
+  <div id="convOut" class="util-out hidden"></div>
+ </div>
+</div>
+
+<!-- BMI MODAL -->
+<div id="bmiModal" class="modal">
+ <div class="modal-box glass" style="max-width:380px;">
+  <div class="modal-head">
+   <h3>⚖️ BMI Calculator</h3>
+   <button class="icon" onclick="closeUtilModal('bmiModal')">✕</button>
+  </div>
+
+  <div class="field">
+   <label>Height (cm)</label>
+   <input type="number" id="bmiHeight" class="input" placeholder="e.g. 170">
+  </div>
+
+  <div class="field">
+   <label>Weight (kg)</label>
+   <input type="number" id="bmiWeight" class="input" placeholder="e.g. 65">
+  </div>
+
+  <button class="btn" style="width:100%;" onclick="calcBMI()">Calculate BMI</button>
+
+  <div id="bmiOut" class="util-out hidden"></div>
+ </div>
+</div>
+
+<!-- WORD COUNTER MODAL -->
+<div id="wordModal" class="modal">
+ <div class="modal-box glass" style="max-width:440px;">
+  <div class="modal-head">
+   <h3>🔤 Word & Character Counter</h3>
+   <button class="icon" onclick="closeUtilModal('wordModal')">✕</button>
+  </div>
+
+  <textarea id="wordInput" class="textarea" style="min-height:130px;" placeholder="Paste or type your text..." oninput="updateWordCount()"></textarea>
+
+  <div id="wordOut" class="util-out"></div>
+ </div>
+</div>
+
+<!-- AGE CALCULATOR MODAL -->
+<div id="ageModal" class="modal">
+ <div class="modal-box glass" style="max-width:380px;">
+  <div class="modal-head">
+   <h3>🎂 Age Calculator</h3>
+   <button class="icon" onclick="closeUtilModal('ageModal')">✕</button>
+  </div>
+
+  <div class="field">
+   <label>Date of Birth</label>
+   <input type="date" id="ageDob" class="input">
+  </div>
+
+  <button class="btn" style="width:100%;" onclick="calcAge()">Calculate Age</button>
+
+  <div id="ageOut" class="util-out hidden"></div>
+ </div>
+</div>
+
+<!-- COLOR & CONTRAST MODAL -->
+<div id="colorModal" class="modal">
+ <div class="modal-box glass" style="max-width:420px;">
+  <div class="modal-head">
+   <h3>🎨 Color & Contrast Checker</h3>
+   <button class="icon" onclick="closeUtilModal('colorModal')">✕</button>
+  </div>
+
+  <div class="util-row">
+   <div class="field" style="flex:1">
+    <label>Text Color</label>
+    <input type="color" id="colorFg" class="input" value="#00f2fe" oninput="updateContrast()" style="height:42px;padding:4px;">
+   </div>
+   <div class="field" style="flex:1">
+  
