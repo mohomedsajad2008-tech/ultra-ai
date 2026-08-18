@@ -1253,114 +1253,37 @@ body.compact .chatbox{
    <span>About</span>
   </button>
  </div>
-
- <div class="modal glass" id="settingsModal">
-  <div class="modal-box">
-   <div class="modal-head">
-    <h3>Settings</h3>
-    <button style="border:0;background:0;color:var(--text);font-size:1.2rem;cursor:pointer;">✕</button>
-   </div>
-   <div class="setting-title">THEME</div>
-   <div class="theme-grid">
-    <button class="theme" data-theme="default">Cyan</button>
-    <button class="theme" data-theme="theme-purple">Purple</button>
-    <button class="theme" data-theme="theme-emerald">Emerald</button>
-    <button class="theme" data-theme="theme-sunset">Sunset</button>
-    <button class="theme" data-theme="theme-rose">Rose</button>
-    <button class="theme" data-theme="theme-blue">Blue</button>
-   </div>
-   <div class="setting-title">DISPLAY</div>
-   <div class="toggle-row">
-    <span>Compact Mode</span>
-    <div class="toggle" id="compactToggle"></div>
-   </div>
-   <div class="toggle-row">
-    <span>Dark Mode</span>
-    <div class="toggle on"></div>
-   </div>
-   <div class="toggle-row">
-    <span>Notifications</span>
-    <div class="toggle on"></div>
-   </div>
-  </div>
- </div>
 </div>
 
 <script>
-// ============================================
-// ULTRA AI - Main Application Script
-// ============================================
-
-// DOM Elements
-const app = document.getElementById('app');
-const sidebar = document.getElementById('sidebar');
+// Navigation
+const navItems = document.querySelectorAll('.nav-item');
+const views = document.querySelectorAll('.view');
 const menuBtn = document.getElementById('menuBtn');
-const settingsBtn = document.getElementById('settingsBtn');
-const settingsModal = document.getElementById('settingsModal');
+const sidebar = document.getElementById('sidebar');
 const chatInput = document.getElementById('chatInput');
 const sendBtn = document.getElementById('sendBtn');
 const chatbox = document.getElementById('chatbox');
-const navItems = document.querySelectorAll('.nav-item');
-const views = document.querySelectorAll('.view');
-const themeButtons = document.querySelectorAll('[data-theme]');
-const compactToggle = document.getElementById('compactToggle');
-const newChatBtn = document.getElementById('newChatBtn');
 
-// Navigation
 navItems.forEach(item => {
  item.addEventListener('click', () => {
   const viewId = item.dataset.view;
-  showView(viewId);
-  updateNavActive(item);
-  sidebar.classList.remove('open');
+  switchView(viewId);
  });
 });
 
-function showView(viewId) {
+function switchView(viewId) {
  views.forEach(v => v.classList.remove('active'));
  document.getElementById(viewId).classList.add('active');
-}
-
-function updateNavActive(item) {
  navItems.forEach(btn => btn.classList.remove('active'));
- item.classList.add('active');
+ document.querySelector(`[data-view="${viewId}"]`).classList.add('active');
+ sidebar.classList.remove('open');
 }
 
-// Sidebar
 menuBtn.addEventListener('click', () => {
  sidebar.classList.toggle('open');
 });
 
-// Settings Modal
-settingsBtn.addEventListener('click', () => {
- settingsModal.classList.add('active');
-});
-
-settingsModal.querySelector('button').addEventListener('click', () => {
- settingsModal.classList.remove('active');
-});
-
-// Theme Selection
-themeButtons.forEach(btn => {
- btn.addEventListener('click', () => {
-  const theme = btn.dataset.theme;
-  if (theme === 'default') {
-   document.body.className = '';
-  } else {
-   document.body.className = theme;
-  }
-  localStorage.setItem('theme', theme);
- });
-});
-
-// Compact Mode
-compactToggle.addEventListener('click', () => {
- compactToggle.classList.toggle('on');
- document.body.classList.toggle('compact');
- localStorage.setItem('compact', document.body.classList.contains('compact'));
-});
-
-// Chat Functionality
 function addMessage(text, isUser = true) {
  const messageDiv = document.createElement('div');
  messageDiv.className = `message ${isUser ? 'user' : 'ai'}`;
@@ -1380,9 +1303,8 @@ sendBtn.addEventListener('click', () => {
   addMessage(message, true);
   chatInput.value = '';
   
-  // Simulate AI response
   setTimeout(() => {
-   addMessage('Thank you for your message! This is a demo response. Connect your API for real functionality.', false);
+   addMessage('Thank you for your message! Connect your API for real functionality.', false);
   }, 500);
  }
 });
@@ -1392,28 +1314,6 @@ chatInput.addEventListener('keypress', (e) => {
   e.preventDefault();
   sendBtn.click();
  }
-});
-
-// Load saved settings
-window.addEventListener('load', () => {
- const savedTheme = localStorage.getItem('theme') || 'default';
- if (savedTheme !== 'default') {
-  document.body.className = savedTheme;
- }
- 
- const isCompact = localStorage.getItem('compact') === 'true';
- if (isCompact) {
-  document.body.classList.add('compact');
-  compactToggle.classList.add('on');
- }
-});
-
-// New Chat
-newChatBtn.addEventListener('click', () => {
- showView('chatView');
- const activeNavBtn = document.querySelector('[data-view="chatView"]');
- updateNavActive(activeNavBtn);
- sidebar.classList.remove('open');
 });
 </script>
 </body>
