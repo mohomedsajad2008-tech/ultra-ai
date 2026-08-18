@@ -171,6 +171,7 @@ button{
  align-items:center;
  justify-content:center;
  transition:.2s;
+ cursor:pointer;
 }
 
 .icon:hover{
@@ -228,6 +229,7 @@ button{
  font-size:.66rem;
  font-weight:600;
  transition:.2s;
+ cursor:pointer;
 }
 
 .nav button span{
@@ -304,6 +306,7 @@ button{
  border:0;
  color:var(--muted);
  padding:2px 6px;
+ cursor:pointer;
 }
 
 /* BUTTONS */
@@ -317,6 +320,7 @@ button{
  background:linear-gradient(135deg,var(--accent),var(--accent2));
  color:#061018;
  transition:.2s;
+ cursor:pointer;
 }
 
 .btn:hover{
@@ -335,6 +339,8 @@ button{
 .home{
  padding:18px;
  gap:16px;
+ display:flex;
+ flex-direction:column;
 }
 
 .hero{
@@ -416,6 +422,7 @@ button{
  padding:7px 10px;
  font-size:.7rem;
  font-weight:700;
+ cursor:pointer;
 }
 
 .mode.active{
@@ -542,6 +549,7 @@ button{
  padding:4px 8px;
  border-radius:7px;
  font-size:.7rem;
+ cursor:pointer;
 }
 
 .typing{
@@ -612,6 +620,7 @@ textarea.chat-input{
  display:flex;
  align-items:center;
  justify-content:center;
+ cursor:pointer;
 }
 
 .attach-btn{
@@ -620,6 +629,7 @@ textarea.chat-input{
  color:var(--muted);
  font-size:1.1rem;
  padding:6px;
+ cursor:pointer;
 }
 
 .file-preview{
@@ -640,6 +650,8 @@ textarea.chat-input{
 .tools{
  padding:17px;
  gap:14px;
+ display:flex;
+ flex-direction:column;
 }
 
 .tools h2,
@@ -664,6 +676,7 @@ textarea.chat-input{
  border:1px solid var(--border);
  background:rgba(20,30,48,.6);
  transition:.3s;
+ cursor:pointer;
 }
 
 .tool:hover{
@@ -692,6 +705,8 @@ textarea.chat-input{
 .about{
  padding:18px;
  gap:14px;
+ display:flex;
+ flex-direction:column;
 }
 
 .profile-card{
@@ -769,490 +784,203 @@ textarea.chat-input{
  min-height:90px;
 }
 
-/* SECURITY */
+/* RESPONSIVE */
 
-.security-shield-animate{
- font-size:5rem;
- text-align:center;
- margin:20px 0;
- animation:shieldPulse 2s ease-in-out infinite;
- display:block;
-}
-
-@keyframes shieldPulse{
- 0%,100%{
-  transform:scale(1);
-  filter:drop-shadow(0 0 5px var(--accent));
- }
- 50%{
-  transform:scale(1.1);
-  filter:drop-shadow(0 0 25px var(--accent));
- }
-}
-
-/* QR */
-
-#reader{
- width:100%;
- max-width:380px;
- margin:10px auto;
- border-radius:12px;
- overflow:hidden;
- border:1px solid var(--border);
-}
-
-/* MODAL */
-
-.modal{
- position:absolute;
- inset:0;
- background:rgba(0,0,0,.72);
- display:none;
- align-items:center;
- justify-content:center;
- padding:12px;
- z-index:100;
-}
-
-.modal.active{
- display:flex;
- backdrop-filter:blur(8px);
- animation:modalFadeIn .18s ease;
-}
-
-@keyframes modalFadeIn{
- from{opacity:0}
- to{opacity:1}
-}
-
-.modal-box{
- width:100%;
- max-width:520px;
- max-height:92vh;
- overflow-y:auto;
- border-radius:20px;
- padding:18px;
-}
-
-.modal-head{
- display:flex;
- align-items:center;
- justify-content:space-between;
- margin-bottom:15px;
-}
-
-.setting-title{
- color:var(--accent);
- font-size:.78rem;
- font-weight:700;
- margin:15px 0 7px;
-}
-
-.theme-grid{
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:8px;
-}
-
-.theme{
- padding:10px 8px;
- border-radius:10px;
- border:1px solid var(--border);
- background:rgba(255,255,255,.04);
- color:var(--text);
- font-size:.82rem;
- font-weight:600;
-}
-
-.toggle-row{
- display:flex;
- align-items:center;
- justify-content:space-between;
- gap:10px;
- padding:9px 0;
-}
-
-.toggle-row span{
- font-size:.8rem;
-}
-
-.toggle{
- width:42px;
- height:23px;
- border-radius:20px;
- border:1px solid var(--border);
- background:#1e293b;
- position:relative;
- cursor:pointer;
-}
-
-.toggle::after{
- content:"";
- position:absolute;
- width:17px;
- height:17px;
- top:2px;
- left:2px;
- border-radius:50%;
- background:#94a3b8;
- transition:.2s;
-}
-
-.toggle.on{
- background:var(--accent);
-}
-
-.toggle.on::after{
- left:21px;
- background:#071018;
-}
-
-/* THEMES */
-
-body.theme-purple{
- --accent:#a855f7;
- --accent2:#c084fc;
- --glow:rgba(168,85,247,.22);
-}
-
-body.theme-emerald{
- --accent:#10b981;
- --accent2:#34d399;
- --glow:rgba(16,185,129,.22);
-}
-
-body.theme-sunset{
- --accent:#f59e0b;
- --accent2:#f97316;
- --glow:rgba(245,158,11,.22);
-}
-
-body.theme-rose{
- --accent:#f43f5e;
- --accent2:#fb7185;
- --glow:rgba(244,63,94,.22);
-}
-
-body.theme-blue{
- --accent:#3b82f6;
- --accent2:#60a5fa;
- --glow:rgba(59,130,246,.22);
-}
-
-body.theme-amoled{
- --bg:#000;
- --bg2:#000;
- --surface:rgba(8,8,8,.92);
-}
-
-body.compact .bubble{
- padding:9px 12px;
-}
-
-body.compact .chatbox{
- gap:8px;
-}
-
-/* =========================================
-   APK DOWNLOAD CARD
-   ========================================= */
-
-.apk-card{
- position:relative;
- overflow:hidden;
- padding:28px 20px;
- border-radius:24px;
- border:1px solid rgba(0,242,254,.35);
- background:
- radial-gradient(
-  circle at 50% -20%,
-  rgba(0,242,254,.18),
-  transparent 55%
- ),
- rgba(10,17,30,.92);
- box-shadow:
- 0 15px 45px rgba(0,0,0,.45),
- 0 0 25px rgba(0,242,254,.08),
- inset 0 0 25px rgba(255,255,255,.025);
- text-align:center;
- animation:apkCardIn .65s cubic-bezier(.175,.885,.32,1.275);
-}
-
-@keyframes apkCardIn{
- from{
-  opacity:0;
-  transform:translateY(25px) scale(.96);
- }
- to{
-  opacity:1;
-  transform:translateY(0) scale(1);
- }
-}
-
-.apk-glow{
- position:absolute;
- width:180px;
- height:180px;
- left:50%;
- top:-90px;
- transform:translateX(-50%);
- border-radius:50%;
- background:radial-gradient(circle,rgba(0,242,254,.4),transparent);
- filter:blur(40px);
- animation:glowPulse 3s ease-in-out infinite;
-}
-
-@keyframes glowPulse{
- 0%,100%{transform:translateX(-50%) scale(1)}
- 50%{transform:translateX(-50%) scale(1.2)}
-}
-
-.apk-content{
- position:relative;
- z-index:2;
-}
-
-.apk-icon{
- font-size:3rem;
- margin-bottom:12px;
-}
-
-.apk-title{
- font-size:1.3rem;
- font-weight:800;
- margin-bottom:6px;
- background:linear-gradient(135deg,var(--accent),var(--accent2));
- -webkit-background-clip:text;
- color:transparent;
-}
-
-.apk-desc{
- color:var(--muted);
- font-size:.85rem;
- margin-bottom:18px;
- line-height:1.5;
-}
-
-.apk-btn{
- padding:11px 24px;
- border:0;
- border-radius:12px;
- background:linear-gradient(135deg,var(--accent),var(--accent2));
- color:#071018;
- font-weight:700;
- font-size:.9rem;
- cursor:pointer;
- transition:.2s;
- box-shadow:0 4px 15px rgba(0,242,254,.25);
-}
-
-.apk-btn:hover{
- transform:translateY(-2px);
- box-shadow:0 8px 25px rgba(0,242,254,.35);
-}
-
-.badge{
- display:inline-block;
- padding:4px 10px;
- border-radius:6px;
- background:rgba(0,242,254,.15);
- color:var(--accent);
- font-size:.7rem;
- font-weight:700;
- margin-top:12px;
+@media(max-width:600px){
+ .logo{font-size:.95rem}
+ .message{max-width:94%}
+ .tool-grid{grid-template-columns:repeat(2,1fr)}
+ .nav button{padding-left:5px;padding-right:5px}
 }
 </style>
 </head>
+
 <body>
+
 <div id="app">
- <div class="header glass">
-  <div class="brand">
-   <div class="status-dot"></div>
-   <div class="logo">ULTRA AI</div>
+
+<!-- HEADER -->
+
+<header class="header glass">
+ <div class="brand">
+  <button class="icon" id="menuBtn" title="Menu">☰</button>
+  <div class="status-dot"></div>
+  <div class="logo">ULTRA AI</div>
+ </div>
+ <div class="header-actions">
+  <button class="icon" id="settingsBtn" title="Settings">⚙️</button>
+ </div>
+</header>
+
+<!-- MAIN CONTENT -->
+
+<div class="main">
+
+ <!-- SIDEBAR -->
+ <div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+   <button class="btn" id="newChatBtn">+ New Chat</button>
   </div>
-  <div class="header-actions">
-   <button class="icon" id="menuBtn" title="Menu">☰</button>
-   <button class="icon" id="settingsBtn" title="Settings">⚙️</button>
+  <div class="chat-list" id="chatList">
+   <div class="chat-item active">
+    <span class="chat-item-title">Welcome</span>
+    <button class="chat-item-del">×</button>
+   </div>
   </div>
  </div>
 
- <div class="main">
-  <div class="sidebar glass" id="sidebar">
-   <div class="sidebar-header">
-    <button class="btn" id="newChatBtn">+ New Chat</button>
+ <!-- HOME VIEW -->
+ <div class="view active" id="homeView">
+  <div class="home">
+   <div class="hero glass">
+    <h1>Welcome to ULTRA AI</h1>
+    <p>Your secure academic AI assistant. Get help with research, writing, coding, and more.</p>
    </div>
-   <div class="chat-list" id="chatList">
-    <div class="chat-item active">
-     <span class="chat-item-title">Welcome Chat</span>
-     <button class="chat-item-del">×</button>
+   <div class="cards">
+    <div class="card">
+     <h3>🔒 Secure</h3>
+     <p>Enterprise-grade encryption for your conversations</p>
     </div>
-   </div>
-  </div>
-
-  <div class="view active" id="homeView">
-   <div class="home">
-    <div class="hero glass">
-     <h1>Welcome to ULTRA AI</h1>
-     <p>Your secure academic AI assistant for learning, research, and productivity. Powered by advanced AI technology with enterprise-grade security.</p>
+    <div class="card">
+     <h3>📚 Academic</h3>
+     <p>Specialized tools for students and researchers</p>
     </div>
-    <div class="cards">
-     <div class="card">
-      <h3>🔐 Secure</h3>
-      <p>End-to-end encrypted conversations with industry-leading security protocols</p>
-     </div>
-     <div class="card">
-      <h3>📚 Academic</h3>
-      <p>Optimized for students and researchers with academic integrity features</p>
-     </div>
-     <div class="card">
-      <h3>⚡ Fast</h3>
-      <p>Lightning-fast responses powered by cutting-edge AI models</p>
-     </div>
-     <div class="card">
-      <h3>🎨 Customizable</h3>
-      <p>Personalize your experience with themes and settings</p>
-     </div>
+    <div class="card">
+     <h3>⚡ Fast</h3>
+     <p>Instant responses powered by advanced AI</p>
     </div>
-   </div>
-  </div>
-
-  <div class="view" id="chatView">
-   <div class="chat glass">
-    <div class="modebar">
-     <div class="mode active">GPT-4</div>
-     <div class="mode">Claude</div>
-     <div class="mode">Gemini</div>
-    </div>
-    <div class="chatbox" id="chatbox">
-     <div class="welcome glass">
-      <div class="big">👋</div>
-      <h2>Start a Conversation</h2>
-      <p>Ask me anything. I'm here to help with your academic and professional needs.</p>
-     </div>
-    </div>
-    <div class="input-area">
-     <div class="file-preview" id="filePreview">
-      <span>📎 File attached</span>
-      <button style="border:0;background:0;color:var(--accent);cursor:pointer;padding:0;">✕</button>
-     </div>
-     <div class="input-wrap">
-      <button class="attach-btn" id="attachBtn">📎</button>
-      <textarea class="chat-input" id="chatInput" placeholder="Type your message..."></textarea>
-      <button class="send" id="sendBtn">➤</button>
-     </div>
-    </div>
-   </div>
-  </div>
-
-  <div class="view" id="toolsView">
-   <div class="tools">
-    <h2>Available Tools</h2>
-    <div class="tool-grid">
-     <div class="tool">
-      <div class="emoji">🔍</div>
-      <h4>Research</h4>
-      <p>Deep research assistance</p>
-     </div>
-     <div class="tool">
-      <div class="emoji">✍️</div>
-      <h4>Writing</h4>
-      <p>Content and essay writing</p>
-     </div>
-     <div class="tool">
-      <div class="emoji">🧮</div>
-      <h4>Math</h4>
-      <p>Math problem solving</p>
-     </div>
-     <div class="tool">
-      <div class="emoji">🔬</div>
-      <h4>Science</h4>
-      <p>Scientific explanations</p>
-     </div>
-     <div class="tool">
-      <div class="emoji">💻</div>
-      <h4>Code</h4>
-      <p>Programming assistance</p>
-     </div>
-     <div class="tool">
-      <div class="emoji">🌐</div>
-      <h4>Translation</h4>
-      <p>Multi-language support</p>
-     </div>
-    </div>
-   </div>
-  </div>
-
-  <div class="view" id="profileView">
-   <div class="profile">
-    <h2>Profile</h2>
-    <div class="profile-card glass">
-     <div class="avatar">👤</div>
-     <div>
-      <div class="profile-name">User Profile</div>
-      <div class="profile-email">user@example.com</div>
-     </div>
-    </div>
-    <div class="section glass">
-     <div class="field">
-      <label>Display Name</label>
-      <input type="text" class="input" value="Your Name" />
-     </div>
-     <div class="field">
-      <label>Email</label>
-      <input type="email" class="input" value="user@example.com" />
-     </div>
-     <button class="btn">Save Changes</button>
-    </div>
-   </div>
-  </div>
-
-  <div class="view" id="aboutView">
-   <div class="about">
-    <h2>About ULTRA AI</h2>
-    <div class="apk-card">
-     <div class="apk-glow"></div>
-     <div class="apk-content">
-      <div class="apk-icon">📱</div>
-      <div class="apk-title">ULTRA AI Mobile</div>
-      <div class="apk-desc">Get the full power of ULTRA AI on your mobile device. Fast, secure, and always in your pocket.</div>
-      <button class="apk-btn">Download APK</button>
-      <div class="badge">v2.1.0</div>
-     </div>
-    </div>
-    <div class="section glass" style="margin-top:18px;">
-     <p style="color:var(--muted);font-size:.9rem;line-height:1.6;">
-      <strong>ULTRA AI</strong> is an advanced artificial intelligence platform designed specifically for academic and professional use. Our commitment to security, accuracy, and user privacy sets us apart.<br><br>
-      <strong>Features:</strong> End-to-end encryption, Multi-model support, Real-time collaboration, Academic integrity tools<br><br>
-      <strong>Version:</strong> 2.1.0<br>
-      <strong>Last Updated:</strong> 2026-08-18
-     </p>
+    <div class="card">
+     <h3>🎨 Customizable</h3>
+     <p>Personalize your experience with themes</p>
     </div>
    </div>
   </div>
  </div>
 
- <div class="nav">
-  <button class="nav-item active" data-view="homeView">
-   <span>🏠</span>
-   <span>Home</span>
-  </button>
-  <button class="nav-item" data-view="chatView">
-   <span>💬</span>
-   <span>Chat</span>
-  </button>
-  <button class="nav-item" data-view="toolsView">
-   <span>🛠️</span>
-   <span>Tools</span>
-  </button>
-  <button class="nav-item" data-view="profileView">
-   <span>👤</span>
-   <span>Profile</span>
-  </button>
-  <button class="nav-item" data-view="aboutView">
-   <span>ℹ️</span>
-   <span>About</span>
-  </button>
+ <!-- CHAT VIEW -->
+ <div class="view" id="chatView">
+  <div class="chat">
+   <div class="modebar">
+    <div class="mode active">GPT-4</div>
+    <div class="mode">Claude</div>
+    <div class="mode">Gemini</div>
+   </div>
+   <div class="chatbox" id="chatbox">
+    <div class="welcome glass">
+     <div class="big">💬</div>
+     <h2>Start Chatting</h2>
+     <p>Ask me anything. I'm ready to help!</p>
+    </div>
+   </div>
+   <div class="input-area">
+    <div class="input-wrap">
+     <button class="attach-btn" id="attachBtn">📎</button>
+     <textarea class="chat-input" id="chatInput" placeholder="Type your message..."></textarea>
+     <button class="send" id="sendBtn">→</button>
+    </div>
+   </div>
+  </div>
  </div>
+
+ <!-- TOOLS VIEW -->
+ <div class="view" id="toolsView">
+  <div class="tools">
+   <h2>Tools & Features</h2>
+   <div class="tool-grid">
+    <div class="tool">
+     <div class="emoji">🔍</div>
+     <h4>Search</h4>
+     <p>Research assistance</p>
+    </div>
+    <div class="tool">
+     <div class="emoji">✍️</div>
+     <h4>Write</h4>
+     <p>Content creation</p>
+    </div>
+    <div class="tool">
+     <div class="emoji">🧮</div>
+     <h4>Math</h4>
+     <p>Problem solving</p>
+    </div>
+    <div class="tool">
+     <div class="emoji">💻</div>
+     <h4>Code</h4>
+     <p>Programming help</p>
+    </div>
+   </div>
+  </div>
+ </div>
+
+ <!-- PROFILE VIEW -->
+ <div class="view" id="profileView">
+  <div class="profile">
+   <h2>Profile</h2>
+   <div class="profile-card glass">
+    <div class="avatar">👤</div>
+    <div>
+     <div class="profile-name">Your Name</div>
+     <div class="profile-email">user@example.com</div>
+    </div>
+   </div>
+   <div class="section glass">
+    <div class="field">
+     <label>Name</label>
+     <input class="input" type="text" value="Your Name" />
+    </div>
+    <div class="field">
+     <label>Email</label>
+     <input class="input" type="email" value="user@example.com" />
+    </div>
+    <button class="btn">Save Changes</button>
+   </div>
+  </div>
+ </div>
+
+ <!-- ABOUT VIEW -->
+ <div class="view" id="aboutView">
+  <div class="about">
+   <h2>About ULTRA AI</h2>
+   <div class="section glass">
+    <p style="color:var(--muted);line-height:1.6;">
+     <strong>ULTRA AI</strong> is a comprehensive AI platform designed for academic and professional use.
+    </p>
+    <p style="color:var(--muted);line-height:1.6;margin-top:12px;">
+     <strong>Features:</strong> Secure encryption, Multi-model AI, Real-time chat, Theme customization
+    </p>
+    <p style="color:var(--muted);line-height:1.6;margin-top:12px;">
+     <strong>Version:</strong> 2.1.0
+    </p>
+   </div>
+  </div>
+ </div>
+
+</div>
+
+<!-- NAVIGATION BAR -->
+
+<div class="nav">
+ <button class="nav-item active" data-view="homeView">
+  <span>🏠</span>
+  <span>Home</span>
+ </button>
+ <button class="nav-item" data-view="chatView">
+  <span>💬</span>
+  <span>Chat</span>
+ </button>
+ <button class="nav-item" data-view="toolsView">
+  <span>🛠️</span>
+  <span>Tools</span>
+ </button>
+ <button class="nav-item" data-view="profileView">
+  <span>👤</span>
+  <span>Profile</span>
+ </button>
+ <button class="nav-item" data-view="aboutView">
+  <span>ℹ️</span>
+  <span>About</span>
+ </button>
+</div>
+
 </div>
 
 <script>
@@ -1261,10 +989,13 @@ const navItems = document.querySelectorAll('.nav-item');
 const views = document.querySelectorAll('.view');
 const menuBtn = document.getElementById('menuBtn');
 const sidebar = document.getElementById('sidebar');
+const settingsBtn = document.getElementById('settingsBtn');
 const chatInput = document.getElementById('chatInput');
 const sendBtn = document.getElementById('sendBtn');
 const chatbox = document.getElementById('chatbox');
+const newChatBtn = document.getElementById('newChatBtn');
 
+// Switch between views
 navItems.forEach(item => {
  item.addEventListener('click', () => {
   const viewId = item.dataset.view;
@@ -1275,15 +1006,30 @@ navItems.forEach(item => {
 function switchView(viewId) {
  views.forEach(v => v.classList.remove('active'));
  document.getElementById(viewId).classList.add('active');
+ 
  navItems.forEach(btn => btn.classList.remove('active'));
  document.querySelector(`[data-view="${viewId}"]`).classList.add('active');
+ 
  sidebar.classList.remove('open');
 }
 
+// Menu toggle
 menuBtn.addEventListener('click', () => {
  sidebar.classList.toggle('open');
 });
 
+// Settings button
+settingsBtn.addEventListener('click', () => {
+ alert('Settings coming soon!');
+});
+
+// New chat button
+newChatBtn.addEventListener('click', () => {
+ chatbox.innerHTML = '<div class="welcome glass"><div class="big">💬</div><h2>New Chat</h2><p>Start a new conversation</p></div>';
+ switchView('chatView');
+});
+
+// Send message
 function addMessage(text, isUser = true) {
  const messageDiv = document.createElement('div');
  messageDiv.className = `message ${isUser ? 'user' : 'ai'}`;
@@ -1304,17 +1050,24 @@ sendBtn.addEventListener('click', () => {
   chatInput.value = '';
   
   setTimeout(() => {
-   addMessage('Thank you for your message! Connect your API for real functionality.', false);
+   addMessage('Thanks for your message! Connect your API for real responses.', false);
   }, 500);
  }
 });
 
+// Enter key to send
 chatInput.addEventListener('keypress', (e) => {
  if (e.key === 'Enter' && !e.shiftKey) {
   e.preventDefault();
   sendBtn.click();
  }
 });
+
+// Attach button
+document.getElementById('attachBtn').addEventListener('click', () => {
+ alert('File upload coming soon!');
+});
 </script>
+
 </body>
 </html>
